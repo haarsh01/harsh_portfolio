@@ -2,9 +2,11 @@ import React from 'react'
 import {useRef} from "react";
 import gsap from "gsap";
 import {Tooltip} from "react-tooltip";
-import{dockApps} from "#constants/index.js";
+import {dockApps} from "#constants/index.js";
 import {useGSAP} from "@gsap/react";
+import useWindowStore from "#store/window.js"
 const Dock = () => {
+  const{openWindow, closeWindow, windows} = useWindowStore();
   const dockRef = useRef(null);
 
 useGSAP(() => {
@@ -15,18 +17,16 @@ useGSAP(() => {
     const {left} = dock.getBoundingClientRect();
 
     icons.forEach((icon) => {
-      icons.forEach((icon) => {
-        const {left:iconLeft, width} = icon.getBoundingClientRect();
-        const center = iconLeft - left + width / 2;
-        const distance = Math.abs(mouseX - center);
+      const {left:iconLeft, width} = icon.getBoundingClientRect();
+      const center = iconLeft - left + width / 2;
+      const distance = Math.abs(mouseX - center);
 
-        const intesnity = Math.exp(-(distance ** 2) / 20000);
-        gsap.to(icon,{
-          scale: 1 + 0.25 * intesnity,
-          y: -15 * intesnity,
-          duration: 0.2,
-          ease:"power1.out",
-        });
+      const intensity = Math.exp(-(distance ** 2) / 20000);
+      gsap.to(icon, {
+        scale: 1 + 0.25 * intensity,
+        y: -15 * intensity,
+        duration: 0.2,
+        ease: "power1.out",
       });
     });
   };
@@ -59,8 +59,18 @@ useGSAP(() => {
   const toggleApp = (app) => {
 
     // TODO Implement Open Window Logic
+    if(!app.canOpen) return;
+    const window = windows[app.id];
+    if(!window){
+      console.error(`window not found for app: ${app.id}`);
+      return;
+    }
+    if(window.isOpen){
+      closeWindow(app.id);
+    }else{
+      openWindow(app.id);
+    }
   };
-  console.log('Dock component rendered, ref:', dockRef);
 
   return <section id="dock">
     <div ref={dockRef} className="dock-container">
@@ -74,7 +84,7 @@ useGSAP(() => {
           data-tooltip-content={name}
           data-tooltip-delay-show={150}
           disabled={!canOpen}
-          onClick={() => toggleApp(id, canOpen)}
+          onClick={() => toggleApp({id, name, icon, canOpen})}
           >
             <img
             src={`/images/${icon}`}
