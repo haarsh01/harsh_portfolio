@@ -1,12 +1,16 @@
 
+import { techStack } from "#constants";
 import WindowWarpper from "#hoc/WindowWarpper.jsx";
+import { Check } from "lucide-react";
 import React from 'react'
+import WindowControls from "#components/WindowControls.jsx";
+
 
 const Terminal = () => {
   return (
     <>
     <div id="window-header">
-        <p>Window Controls</p>
+    <WindowControls target ="terminal"/>
         <h2>Tech Stack</h2>
     </div>
 
@@ -21,7 +25,27 @@ const Terminal = () => {
           <p>Technologies</p>
           
         </div>
-   
+        <ul className="content">
+          {techStack.map(({category, items}) => (
+            <li key={category} className="flex items-center">
+              <Check className="check" size={20}/>
+              <h3>{category}</h3>
+              <ul>
+                {items.map((item, i)=> (
+                  <li key={i}>{item}{i < items.length -1 ? "," : ""}</li>
+                ))}
+              </ul>
+               
+            </li>
+          ))}
+    
+        </ul>
+        <div className="footnote">
+                <p>
+                  <Check size={20} /> 5 of 5 stacks loaded successfully (100%)
+                </p>
+
+              </div>
 
     </div>
     </>
