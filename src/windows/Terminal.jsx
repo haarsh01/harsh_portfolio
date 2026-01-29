@@ -15,6 +15,12 @@ const Terminal = () => {
             <span className="font-bold">@harsh %</span>
             show tech stack
         </p>
+
+        <div className="label">
+          <p className="w-32">Category</p>
+          <p>Technologies</p>
+          
+        </div>
    
 
     </div>
