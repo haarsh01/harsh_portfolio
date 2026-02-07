@@ -15,6 +15,8 @@ const Finder = () => {
         if(item.fileType === 'folder') return setActiveLocation(item);
         if(["fig" , "url"].includes(item.fileType) && item.href)
             return window.open(item.href, "blank");
+
+        openWindow("txtfile", item);
     };
 
     const renderList = (name, items) => 
