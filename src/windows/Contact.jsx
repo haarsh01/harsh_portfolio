@@ -18,6 +18,7 @@ const Contact = () => {
 
         <h3>Lets Connect</h3>
         <p>Hasjd djdkdkdk djdkdk</p>
+        <p>hr424144@dal.ca</p>
 
         <ul>
 
