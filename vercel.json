@@ -1,0 +1,7 @@
+{
+  "functions": {
+    "api/harshbot.js": {
+      "maxDuration": 30
+    }
+  }
+}

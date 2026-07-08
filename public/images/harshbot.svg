@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128" role="img" aria-label="HarshBot">
+  <defs>
+    <linearGradient id="harshbot-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#6366f1" />
+      <stop offset="100%" stop-color="#8b5cf6" />
+    </linearGradient>
+  </defs>
+  <rect x="4" y="4" width="120" height="120" rx="27" fill="url(#harshbot-bg)" />
+  <!-- Restrained chat-bubble glyph (a plain rounded rect + tail, not a
+       downloaded logo or a literal robot illustration) with three dots
+       standing in for "conversation," matching the flat, iconographic
+       style of this dock's other custom marks. -->
+  <path d="M32 40a12 12 0 0 1 12-12h40a12 12 0 0 1 12 12v26a12 12 0 0 1-12 12H56l-14 12v-12h-2a12 12 0 0 1-12-12V40z" fill="#ffffff" />
+  <circle cx="52" cy="53" r="4.5" fill="#6366f1" />
+  <circle cx="68" cy="53" r="4.5" fill="#6366f1" />
+  <circle cx="84" cy="53" r="4.5" fill="#6366f1" />
+</svg>

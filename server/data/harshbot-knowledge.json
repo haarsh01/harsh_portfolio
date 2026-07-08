@@ -1,0 +1,796 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-07-08T12:26:12.967Z",
+  "owner": "Harsh Kaushik",
+  "chunks": [
+    {
+      "id": "overview-role",
+      "category": "overview",
+      "title": "Who Harsh Kaushik is",
+      "text": "Harsh Kaushik is a computer science researcher and engineer at Dalhousie University. His work sits at the intersection of trustworthy artificial intelligence, cybersecurity, machine learning, and product engineering. He is based in Halifax, Canada.",
+      "keywords": [
+        "who is harsh",
+        "harsh kaushik",
+        "overview",
+        "introduction",
+        "about harsh",
+        "what does harsh do",
+        "role",
+        "engineer",
+        "researcher"
+      ],
+      "aliases": [
+        "Who is Harsh?",
+        "What does Harsh work on?",
+        "Tell me about Harsh."
+      ],
+      "priority": 100,
+      "lastVerified": "2026-07-08",
+      "source": {
+        "label": "About Me",
+        "action": {
+          "type": "open-destination",
+          "destination": {
+            "app": "finder",
+            "location": "about",
+            "item": "about-me-txt"
+          }
+        }
+      }
+    },
+    {
+      "id": "research-interests",
+      "category": "research-interests",
+      "title": "Harsh's research interests",
+      "text": "Beyond image authenticity, Harsh is interested in intelligent systems that have to earn the user's trust: machine-learning pipelines, multi-agent architectures, secure backends, distributed systems, and interfaces that turn complicated research into useful products. He enjoys the entire journey — from asking the research question and designing the experiment to engineering the system that eventually reaches someone's screen.",
+      "keywords": [
+        "research interests",
+        "interests",
+        "what does he research",
+        "machine learning",
+        "distributed systems",
+        "multi-agent",
+        "secure backends",
+        "product engineering"
+      ],
+      "aliases": [
+        "What is Harsh interested in researching?",
+        "What kind of systems does he build?"
+      ],
+      "priority": 90,
+      "lastVerified": "2026-07-08",
+      "source": {
+        "label": "About Me",
+        "action": {
+          "type": "open-destination",
+          "destination": {
+            "app": "finder",
+            "location": "about",
+            "item": "about-me-txt"
+          }
+        }
+      }
+    },
+    {
+      "id": "nexai-overview",
+      "category": "nexai",
+      "title": "What NexAI is",
+      "text": "NexAI is Harsh's flagship research project: An evidence-driven framework for investigating whether an image is human-captured, AI-generated, or manipulated. The research question driving it is: \"Can an image be trusted — and what evidence would make that judgment understandable to the person relying on it?\" Ongoing research, developed in collaboration with Nextria Inc. through Dalhousie University's NSERC CREATE Cybersecurity Program.",
+      "keywords": [
+        "nexai",
+        "image authenticity",
+        "ai generated images",
+        "deepfake",
+        "image forensics",
+        "is this image real",
+        "trustworthy ai project"
+      ],
+      "aliases": [
+        "What is NexAI?",
+        "What does Harsh do with AI images?",
+        "Tell me about his image authenticity research."
+      ],
+      "priority": 100,
+      "lastVerified": "2026-07-08",
+      "source": {
+        "label": "NexAI",
+        "action": {
+          "type": "open-window",
+          "windowId": "nexai"
+        }
+      }
+    },
+    {
+      "id": "nexai-evidence",
+      "category": "nexai",
+      "title": "How NexAI reasons about evidence",
+      "text": "NexAI evaluates an image using several categories of evidence: Visual patterns (Low-level and structural signals present in the image itself.); Forensic traces (Artifacts a capture device, an editing tool, or a generative model tends to leave behind.); Metadata (What the file itself claims about its own origin and history.); Provenance (Where an image came from and how it has moved before reaching this decision.); Transformation behaviour (How an image responds to controlled transformations — a signal genuine and generated images don't always share.); Calibrated uncertainty (How confident the framework actually is, and honest about it when it isn't.). Based on that evidence, it reaches one of these decision states: Human-captured, AI-generated, Manipulated, Unknown or uncertain. This overview describes the problem NexAI addresses and how it reasons about evidence — consistent with how the project has been presented publicly. Implementation-specific and model-architecture details are intentionally not published here.",
+      "keywords": [
+        "nexai evidence",
+        "how nexai works",
+        "decision states",
+        "forensic traces",
+        "metadata",
+        "provenance",
+        "calibrated uncertainty"
+      ],
+      "aliases": [
+        "How does NexAI decide if an image is fake?",
+        "What evidence does NexAI look at?"
+      ],
+      "priority": 80,
+      "lastVerified": "2026-07-08",
+      "source": {
+        "label": "NexAI",
+        "action": {
+          "type": "open-window",
+          "windowId": "nexai"
+        }
+      }
+    },
+    {
+      "id": "education",
+      "category": "education",
+      "title": "Harsh's education",
+      "text": "Harsh is a computer science researcher and engineer at Dalhousie University. The portfolio does not publish a specific degree name or enrollment dates — his full, structured education history is available in his downloadable résumé.",
+      "keywords": [
+        "education",
+        "degree",
+        "university",
+        "dalhousie",
+        "school",
+        "academic background",
+        "where did he study"
+      ],
+      "aliases": [
+        "Where did Harsh study?",
+        "What is Harsh's education?",
+        "What degree does Harsh have?"
+      ],
+      "priority": 100,
+      "lastVerified": "2026-07-08",
+      "source": {
+        "label": "Résumé",
+        "action": {
+          "type": "open-window",
+          "windowId": "resume"
+        }
+      }
+    },
+    {
+      "id": "work-research-experience",
+      "category": "work-research-experience",
+      "title": "Work and research experience",
+      "text": "Harsh conducts research at Dalhousie University. His current research (NexAI) is developed in collaboration with Nextria Inc. through Dalhousie University's NSERC CREATE Cybersecurity Program. Full, structured work history is available in his downloadable résumé.",
+      "keywords": [
+        "work experience",
+        "research experience",
+        "job",
+        "employer",
+        "nextria",
+        "nserc create",
+        "career",
+        "internship"
+      ],
+      "aliases": [
+        "What is his work experience?",
+        "Where has Harsh worked?",
+        "Who does he do research with?"
+      ],
+      "priority": 100,
+      "lastVerified": "2026-07-08",
+      "source": {
+        "label": "Résumé",
+        "action": {
+          "type": "open-window",
+          "windowId": "resume"
+        }
+      }
+    },
+    {
+      "id": "resume-location",
+      "category": "work-research-experience",
+      "title": "Harsh's résumé",
+      "text": "Harsh's résumé is available directly in this portfolio as a downloadable PDF, with his full structured work history and education details.",
+      "keywords": [
+        "resume",
+        "résumé",
+        "cv",
+        "curriculum vitae",
+        "download resume",
+        "find his resume"
+      ],
+      "aliases": [
+        "Where can I find his résumé?",
+        "Do you have his resume?",
+        "Can I download his CV?"
+      ],
+      "priority": 100,
+      "lastVerified": "2026-07-08",
+      "source": {
+        "label": "Résumé",
+        "action": {
+          "type": "open-window",
+          "windowId": "resume"
+        }
+      }
+    },
+    {
+      "id": "technical-skills",
+      "category": "technical-skills",
+      "title": "Harsh's technical skills",
+      "text": "Frontend: React.js, Next.js, TypeScript. Mobile: React Native, Expo. Styling: Tailwind CSS, Sass, CSS. Backend: Node.js, Express, NestJS, Hono. Database: MongoDB, PostgreSQL. Dev Tools: Git, GitHub, Docker",
+      "keywords": [
+        "technologies",
+        "tech stack",
+        "skills",
+        "programming languages",
+        "frameworks",
+        "tools",
+        "what does he use"
+      ],
+      "aliases": [
+        "What technologies does Harsh use?",
+        "What is his tech stack?",
+        "What programming languages does he know?"
+      ],
+      "priority": 90,
+      "lastVerified": "2026-07-08",
+      "source": {
+        "label": "Skills",
+        "action": {
+          "type": "open-window",
+          "windowId": "terminal"
+        }
+      }
+    },
+    {
+      "id": "projects-overview",
+      "category": "projects",
+      "title": "Harsh's featured projects",
+      "text": "The two projects Harsh features are NexAI, his image-authenticity research framework, and this portfolio itself — a macOS-inspired interface built from scratch, not a template with a theme applied, with its own window manager, Mission Control, Spotlight search, and Control Center. His full list of public repositories is on GitHub.",
+      "keywords": [
+        "projects",
+        "what has he built",
+        "featured projects",
+        "portfolio project",
+        "built from scratch"
+      ],
+      "aliases": [
+        "What projects has Harsh built?",
+        "What has he made?"
+      ],
+      "priority": 90,
+      "lastVerified": "2026-07-08",
+      "source": {
+        "label": "About This Portfolio",
+        "action": {
+          "type": "open-window",
+          "windowId": "aboutPortfolio"
+        }
+      }
+    },
+    {
+      "id": "portfolio-engineering",
+      "category": "portfolio-engineering",
+      "title": "How this portfolio itself is engineered",
+      "text": "This portfolio is a portfolio interface inspired by desktop operating systems, not a real one. It is built around one shared window manager (every app opens, closes, focuses, drags, resizes, minimizes, and maximizes through the same lifecycle), a Mission Control that shows a live overview of open windows, Control Center preferences that persist appearance and wallpaper choices, Handoff shareable links that restore the exact window and section being shared, an accessible keyboard-driven Spotlight search, a dynamic time-of-day wallpaper, and a responsive architecture where the same window registry powers both the desktop shell and the mobile app grid.",
+      "keywords": [
+        "portfolio engineering",
+        "how is this site built",
+        "window manager",
+        "mission control",
+        "spotlight",
+        "control center",
+        "handoff",
+        "macos portfolio"
+      ],
+      "aliases": [
+        "How is this portfolio built?",
+        "What is this website made with?",
+        "Is this a real operating system?"
+      ],
+      "priority": 70,
+      "lastVerified": "2026-07-08",
+      "source": {
+        "label": "About This Portfolio",
+        "action": {
+          "type": "open-window",
+          "windowId": "aboutPortfolio"
+        }
+      }
+    },
+    {
+      "id": "github-profile",
+      "category": "github",
+      "title": "Harsh's GitHub",
+      "text": "Harsh's GitHub profile is @haarsh01 (https://github.com/haarsh01), which lists his public repositories and contribution activity.",
+      "keywords": [
+        "github",
+        "github profile",
+        "repositories",
+        "open source",
+        "code",
+        "source code"
+      ],
+      "aliases": [
+        "What is his GitHub?",
+        "Where can I see his code?",
+        "Does Harsh have public repositories?"
+      ],
+      "priority": 90,
+      "lastVerified": "2026-07-08",
+      "source": {
+        "label": "GitHub",
+        "action": {
+          "type": "open-window",
+          "windowId": "github"
+        }
+      }
+    },
+    {
+      "id": "contact",
+      "category": "contact",
+      "title": "How to contact Harsh",
+      "text": "Harsh can be reached by email at hr424144@dal.ca, or found on GitHub (@haarsh01) and LinkedIn.",
+      "keywords": [
+        "contact",
+        "email",
+        "reach him",
+        "get in touch",
+        "linkedin"
+      ],
+      "aliases": [
+        "How can I contact him?",
+        "What is Harsh's email?",
+        "Does he have LinkedIn?"
+      ],
+      "priority": 100,
+      "lastVerified": "2026-07-08",
+      "source": {
+        "label": "Contact",
+        "action": {
+          "type": "open-window",
+          "windowId": "contact"
+        }
+      }
+    },
+    {
+      "id": "linkedin",
+      "category": "contact",
+      "title": "Harsh's LinkedIn",
+      "text": "Harsh's LinkedIn profile is linked from the Contact section of this portfolio (https://www.linkedin.com/in/haarsh01/).",
+      "keywords": [
+        "linkedin",
+        "professional profile",
+        "connect on linkedin"
+      ],
+      "aliases": [
+        "What is Harsh's LinkedIn?",
+        "Can I connect with him on LinkedIn?"
+      ],
+      "priority": 70,
+      "lastVerified": "2026-07-08",
+      "source": {
+        "label": "LinkedIn",
+        "action": {
+          "type": "external-link",
+          "url": "https://www.linkedin.com/in/haarsh01/"
+        }
+      }
+    },
+    {
+      "id": "location",
+      "category": "location",
+      "title": "Where Harsh is based",
+      "text": "Harsh is based in Halifax, Canada.",
+      "keywords": [
+        "location",
+        "where is he based",
+        "city",
+        "halifax",
+        "canada"
+      ],
+      "aliases": [
+        "Where is Harsh based?",
+        "What city does he live in?"
+      ],
+      "priority": 90,
+      "lastVerified": "2026-07-08",
+      "source": {
+        "label": "About Me",
+        "action": {
+          "type": "open-destination",
+          "destination": {
+            "app": "finder",
+            "location": "about",
+            "item": "about-me-txt"
+          }
+        }
+      }
+    },
+    {
+      "id": "outside-interests-overview",
+      "category": "overview",
+      "title": "What Harsh enjoys outside technology",
+      "text": "Outside the screen: Harsh photographs skies, streets, and ordinary moments; spends longer in bookstores than planned and prefers physical books; writes poetry and journal entries; collects postcards, coffee mugs, and vinyl records; runs on weekends; and maintains an optimistic relationship with tennis. These interests are not separate from my technical work.",
+      "keywords": [
+        "hobbies",
+        "interests",
+        "outside work",
+        "outside technology",
+        "spare time",
+        "free time",
+        "personal interests",
+        "what does he enjoy",
+        "life outside coding"
+      ],
+      "aliases": [
+        "What does Harsh enjoy outside technology?",
+        "What are his hobbies?",
+        "What does he do for fun?"
+      ],
+      "priority": 90,
+      "lastVerified": "2026-07-08",
+      "source": {
+        "label": "About Me",
+        "action": {
+          "type": "open-destination",
+          "destination": {
+            "app": "finder",
+            "location": "about",
+            "item": "about-me-txt"
+          }
+        }
+      }
+    },
+    {
+      "id": "photography",
+      "category": "photography",
+      "title": "Photography",
+      "text": "Harsh photographs skies, streets, and ordinary moments that deserve a second look.",
+      "keywords": [
+        "photography",
+        "photos",
+        "photographer",
+        "pictures",
+        "camera"
+      ],
+      "aliases": [
+        "Does Harsh take photos?",
+        "Is he a photographer?"
+      ],
+      "priority": 60,
+      "lastVerified": "2026-07-08",
+      "source": {
+        "label": "Photos",
+        "action": {
+          "type": "open-window",
+          "windowId": "photos",
+          "data": {
+            "section": "library"
+          }
+        }
+      }
+    },
+    {
+      "id": "books-reading",
+      "category": "books-reading",
+      "title": "Reading",
+      "text": "Harsh spends longer in bookstores than planned and prefers physical books.",
+      "keywords": [
+        "reading",
+        "books",
+        "bookstores",
+        "what does he read"
+      ],
+      "aliases": [
+        "Does Harsh read?",
+        "What does he read?"
+      ],
+      "priority": 50,
+      "lastVerified": "2026-07-08",
+      "source": {
+        "label": "About Me",
+        "action": {
+          "type": "open-destination",
+          "destination": {
+            "app": "finder",
+            "location": "about",
+            "item": "about-me-txt"
+          }
+        }
+      }
+    },
+    {
+      "id": "writing-poetry",
+      "category": "writing-poetry",
+      "title": "Writing",
+      "text": "Harsh writes poetry and journal entries. As he puts it: \"taught me that precision can still contain feeling.\"",
+      "keywords": [
+        "writing",
+        "poetry",
+        "journaling",
+        "does he write"
+      ],
+      "aliases": [
+        "Does Harsh write?",
+        "Does he write poetry?"
+      ],
+      "priority": 50,
+      "lastVerified": "2026-07-08",
+      "source": {
+        "label": "About Me",
+        "action": {
+          "type": "open-destination",
+          "destination": {
+            "app": "finder",
+            "location": "about",
+            "item": "about-me-txt"
+          }
+        }
+      }
+    },
+    {
+      "id": "running",
+      "category": "running",
+      "title": "Running",
+      "text": "Harsh runs on weekends. As he puts it: \"taught me that difficult systems are built one patient mile at a time.\"",
+      "keywords": [
+        "running",
+        "runner",
+        "exercise",
+        "fitness"
+      ],
+      "aliases": [
+        "Does Harsh run?",
+        "Is he a runner?"
+      ],
+      "priority": 50,
+      "lastVerified": "2026-07-08",
+      "source": {
+        "label": "About Me",
+        "action": {
+          "type": "open-destination",
+          "destination": {
+            "app": "finder",
+            "location": "about",
+            "item": "about-me-txt"
+          }
+        }
+      }
+    },
+    {
+      "id": "film-interests",
+      "category": "film-interests",
+      "title": "Film",
+      "text": "Harsh logs films on Letterboxd (@harshh2001). Recent activity there includes Peaky Blinders: The Immortal Man.",
+      "keywords": [
+        "film",
+        "movies",
+        "letterboxd",
+        "what does he watch"
+      ],
+      "aliases": [
+        "Does Harsh watch movies?",
+        "What is his Letterboxd?"
+      ],
+      "priority": 50,
+      "lastVerified": "2026-07-08",
+      "source": {
+        "label": "Letterboxd",
+        "action": {
+          "type": "open-window",
+          "windowId": "letterboxd"
+        }
+      }
+    },
+    {
+      "id": "music-interests",
+      "category": "music-interests",
+      "title": "Music",
+      "text": "Harsh collects vinyl records. He has a public Spotify playlist, \"Harsh's Favorite Playlist,\" described as a collection of songs he keeps coming back to.",
+      "keywords": [
+        "music",
+        "spotify",
+        "vinyl",
+        "playlist",
+        "what does he listen to"
+      ],
+      "aliases": [
+        "What music does Harsh like?",
+        "Does he have a Spotify playlist?"
+      ],
+      "priority": 50,
+      "lastVerified": "2026-07-08",
+      "source": {
+        "label": "Spotify",
+        "action": {
+          "type": "open-window",
+          "windowId": "spotify"
+        }
+      }
+    },
+    {
+      "id": "publications-overview",
+      "category": "publications",
+      "title": "Harsh's publications",
+      "text": "Harsh has 3 verified publications, listed on his Google Scholar profile: \"Design and Development of a Solar-Based Wireless Electric Vehicle Charging System\" (2024); \"Hybrid Image Processing Device as Wearable Aide for Visually Impaired\" (2022); \"A Review of Technologies Trending Towards 5G Networks for Smart Healthcare Using IoT\" (2022).",
+      "keywords": [
+        "publications",
+        "papers",
+        "research papers",
+        "what has he published",
+        "google scholar"
+      ],
+      "aliases": [
+        "What has Harsh published?",
+        "Does he have research papers?"
+      ],
+      "priority": 100,
+      "lastVerified": "2026-07-08",
+      "source": {
+        "label": "Publications",
+        "action": {
+          "type": "open-window",
+          "windowId": "publications"
+        }
+      }
+    },
+    {
+      "id": "publication-solar-based-wireless-ev-charging-2024",
+      "category": "publications",
+      "title": "Design and Development of a Solar-Based Wireless Electric Vehicle Charging System",
+      "text": "\"Design and Development of a Solar-Based Wireless Electric Vehicle Charging System\" by Sanyam Jain, Samyak Jain, Sanjay Kumar, Harsh Kaushik, Neelu Nagpal, Ravi Sharma. Published in Renewable Power for Sustainable Growth (Springer, Singapore), 2024, pages 481-494. DOI: 10.1007/978-981-99-6749-0_32.",
+      "keywords": [
+        "design and development of a solar-based wireless electric vehicle charging system",
+        "renewable power for sustainable growth",
+        "2024",
+        "sanyam jain",
+        "samyak jain",
+        "sanjay kumar",
+        "harsh kaushik",
+        "neelu nagpal",
+        "ravi sharma"
+      ],
+      "aliases": [
+        "Tell me about \"Design and Development of a Solar-Based Wireless Electric Vehicle Charging System\"."
+      ],
+      "priority": 70,
+      "lastVerified": "2026-07-08",
+      "source": {
+        "label": "Publications",
+        "action": {
+          "type": "open-window",
+          "windowId": "publications",
+          "data": {
+            "publicationId": "solar-based-wireless-ev-charging-2024"
+          }
+        }
+      }
+    },
+    {
+      "id": "publication-hybrid-image-processing-wearable-aide-2022",
+      "category": "publications",
+      "title": "Hybrid Image Processing Device as Wearable Aide for Visually Impaired",
+      "text": "\"Hybrid Image Processing Device as Wearable Aide for Visually Impaired\" by Ashish Papanai, Harsh Kaushik. Published in 2022 8th International Conference on Advanced Computing and Communication Systems, 2022, pages 733-738. DOI: 10.1109/ICACCS54159.2022.9785118.",
+      "keywords": [
+        "hybrid image processing device as wearable aide for visually impaired",
+        "2022 8th international conference on advanced computing and communication systems",
+        "2022",
+        "ashish papanai",
+        "harsh kaushik"
+      ],
+      "aliases": [
+        "Tell me about \"Hybrid Image Processing Device as Wearable Aide for Visually Impaired\"."
+      ],
+      "priority": 70,
+      "lastVerified": "2026-07-08",
+      "source": {
+        "label": "Publications",
+        "action": {
+          "type": "open-window",
+          "windowId": "publications",
+          "data": {
+            "publicationId": "hybrid-image-processing-wearable-aide-2022"
+          }
+        }
+      }
+    },
+    {
+      "id": "publication-5g-networks-smart-healthcare-iot-review-2022",
+      "category": "publications",
+      "title": "A Review of Technologies Trending Towards 5G Networks for Smart Healthcare Using IoT",
+      "text": "\"A Review of Technologies Trending Towards 5G Networks for Smart Healthcare Using IoT\" by Harsh Kaushik, Neelam Sharma, Nitish Pathak. Published in Futuristic Trends for Sustainable Development and Sustainable Ecosystems (IGI Global), 2022, pages 48-59. DOI: 10.4018/978-1-6684-4225-8.ch003.",
+      "keywords": [
+        "a review of technologies trending towards 5g networks for smart healthcare using iot",
+        "futuristic trends for sustainable development and sustainable ecosystems",
+        "2022",
+        "harsh kaushik",
+        "neelam sharma",
+        "nitish pathak"
+      ],
+      "aliases": [
+        "Tell me about \"A Review of Technologies Trending Towards 5G Networks for Smart Healthcare Using IoT\"."
+      ],
+      "priority": 70,
+      "lastVerified": "2026-07-08",
+      "source": {
+        "label": "Publications",
+        "action": {
+          "type": "open-window",
+          "windowId": "publications",
+          "data": {
+            "publicationId": "5g-networks-smart-healthcare-iot-review-2022"
+          }
+        }
+      }
+    },
+    {
+      "id": "talks-overview",
+      "category": "talks",
+      "title": "Has Harsh given talks?",
+      "text": "Harsh has given one featured talk, presented to an industry audience: \"From the Research Lab to the Industry Room\" at the NSERC Industry Advisory Board Meeting 2026, Dalhousie University, on 2026-06-18.",
+      "keywords": [
+        "talks",
+        "presentations",
+        "has he spoken",
+        "public speaking",
+        "nserc talk"
+      ],
+      "aliases": [
+        "Has Harsh spoken publicly?",
+        "What talks has he given?",
+        "What did he present at NSERC?"
+      ],
+      "priority": 100,
+      "lastVerified": "2026-07-08",
+      "source": {
+        "label": "Talks",
+        "action": {
+          "type": "open-window",
+          "windowId": "talks",
+          "data": {
+            "talkId": "nserc-industry-advisory-board-2026"
+          }
+        }
+      }
+    },
+    {
+      "id": "talk-nserc-industry-advisory-board-2026",
+      "category": "talks",
+      "title": "From the Research Lab to the Industry Room",
+      "text": "Harsh presented research developed in collaboration with Nextria Inc. at the NSERC Industry Advisory Board Meeting 2026. The talk, titled \"From the Research Lab to the Industry Room,\" was a three-minute research talk and live demonstration at Dalhousie University on 2026-06-18. It introduced the growing difficulty of determining whether digital images can be trusted, and how forensic and contextual signals can be examined together to support more reliable assessments of image authenticity.",
+      "keywords": [
+        "nserc",
+        "nserc create",
+        "industry advisory board",
+        "industry advisory board meeting 2026",
+        "cybersecurity talk",
+        "research talk",
+        "dalhousie presentation",
+        "nextria",
+        "image authenticity talk",
+        "three-minute presentation",
+        "live demonstration",
+        "from the research lab to the industry room"
+      ],
+      "aliases": [
+        "What was the NSERC talk about?",
+        "What did Harsh present at Dalhousie?"
+      ],
+      "priority": 80,
+      "lastVerified": "2026-07-08",
+      "source": {
+        "label": "NSERC Talk",
+        "action": {
+          "type": "open-window",
+          "windowId": "talks",
+          "data": {
+            "talkId": "nserc-industry-advisory-board-2026"
+          }
+        }
+      }
+    }
+  ]
+}

@@ -3,11 +3,28 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "imports": {
+    "#components/*": "./components/*",
+    "#constants/*": "./src/constants/*",
+    "#store/*": "./src/store/*",
+    "#hoc/*": "./src/hoc/*",
+    "#windows/*": "./src/windows/*",
+    "#utils/*": "./src/utils/*",
+    "#hooks/*": "./src/hooks/*",
+    "#services/*": "./src/services/*"
+  },
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
+    "dev": "node scripts/dev.mjs",
+    "dev:vite-only": "vite",
+    "dev:api": "node scripts/dev-api-server.mjs",
+    "build": "npm run harshbot:knowledge && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "github:sync": "node scripts/update-github-data.mjs",
+    "github:validate": "node scripts/validate-github-data.mjs",
+    "harshbot:knowledge": "node scripts/build-harshbot-knowledge.mjs",
+    "harshbot:validate": "node scripts/validate-harshbot-knowledge.mjs",
+    "harshbot:test": "node --test test/harshbot*.test.mjs"
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",

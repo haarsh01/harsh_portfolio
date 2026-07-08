@@ -2,12 +2,136 @@
 
 @import "tailwindcss";
 
+:root {
+  --window-radius: 1.1rem;
+  --window-border: rgba(255, 255, 255, 0.4);
+  --window-border-inactive: rgba(255, 255, 255, 0.22);
+  --window-shadow-strength: 1;
+  --window-shadow: 0 24px 48px -16px rgba(15, 23, 42, calc(0.45 * var(--window-shadow-strength))), 0 8px 20px -10px rgba(15, 23, 42, calc(0.3 * var(--window-shadow-strength)));
+  --window-shadow-focused: 0 32px 64px -18px rgba(15, 23, 42, calc(0.55 * var(--window-shadow-strength))), 0 12px 28px -10px rgba(15, 23, 42, calc(0.35 * var(--window-shadow-strength)));
+
+  /* Glass surfaces are expressed through numeric --glass-alpha* variables
+     (not baked into the rgba() strings directly) specifically so Control
+     Center's transparency slider and "Reduce Transparency" toggle can
+     rewrite them from JS (PreferencesBridge) without touching any
+     component's own CSS. */
+  --glass-alpha: 0.68;
+  --glass-alpha-inactive: 0.5;
+  --glass-blur-amount: 28px;
+  --glass-bg: rgb(255 255 255 / var(--glass-alpha));
+  --glass-bg-inactive: rgb(255 255 255 / var(--glass-alpha-inactive));
+  --glass-blur: blur(var(--glass-blur-amount));
+  --glass-saturate: saturate(1.7);
+  --header-bg: rgba(250, 250, 252, 0.65);
+  --sidebar-bg: rgba(248, 248, 251, 0.55);
+  --desktop-menu-height: 56px;
+  --desktop-dock-safe-area: 112px;
+  --desktop-text-color: rgba(255, 255, 255, 0.92);
+  --accent-color: #2f6fed;
+
+  /* System-overlay stacking order (highest first): Screen Saver > Navbar
+     /system menus > Command-Tab > Quick Look > Mission Control chrome >
+     normal windows (1000+, set inline per window) > desktop widgets/Dock >
+     desktop background. Mission Control's dim backdrop sits just under
+     the window range so windows stay visibly "above" the dimmed desktop
+     without needing their own z-index touched. */
+  --z-screen-saver: 10000;
+  --z-navbar: 9999;
+  --z-control-center: 9750;
+  --z-live-activity: 9700;
+  --z-app-switcher: 9500;
+  --z-spotlight: 9400;
+  --z-handoff: 9450;
+  --z-quick-look: 9000;
+  --z-context-menu: 8950;
+  --z-get-info: 8900;
+  --z-widget-gallery: 8700;
+  --z-mission-control-chrome: 8500;
+  --z-widget: 10;
+  --z-mission-control-backdrop: 999;
+
+  /* ---- Consolidated design tokens (Phase D) ----
+     These extend, rather than replace, the window/glass tokens above.
+     Existing per-window custom-property sets (--gh-*, --about-*, --lb-*,
+     --nexai-*) may migrate to reference these directly over time; nothing
+     here breaks them today since they don't reference these names. */
+  --surface-base: #f6f7f9;
+  --surface-raised: #ffffff;
+  --surface-elevated: #ffffff;
+  --surface-glass: var(--glass-bg);
+  --surface-hover: rgba(15, 23, 42, 0.05);
+
+  --text-primary: #1f2328;
+  --text-secondary: #59636e;
+  --text-tertiary: #818b94;
+  --text-inverse: #ffffff;
+
+  --border-subtle: rgba(15, 23, 42, 0.08);
+  --border-default: rgba(15, 23, 42, 0.14);
+  --border-strong: rgba(15, 23, 42, 0.28);
+
+  --radius-xs: 4px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+  --radius-window: var(--window-radius);
+
+  --shadow-xs: 0 1px 2px rgba(15, 23, 42, 0.06);
+  --shadow-sm: 0 4px 10px -4px rgba(15, 23, 42, 0.18);
+  --shadow-md: 0 10px 24px -8px rgba(15, 23, 42, 0.22);
+  --shadow-window: var(--window-shadow);
+  --shadow-window-focused: var(--window-shadow-focused);
+
+  --control-height-sm: 28px;
+  --control-height-md: 36px;
+  --control-padding-inline: 14px;
+  --focus-ring: 0 0 0 2px rgba(37, 99, 235, 0.55);
+}
+
+:root[data-theme="dark"] {
+  --window-border: rgba(255, 255, 255, 0.16);
+  --window-border-inactive: rgba(255, 255, 255, 0.08);
+  --glass-bg: rgb(32 32 38 / var(--glass-alpha));
+  --glass-bg-inactive: rgb(28 28 34 / var(--glass-alpha-inactive));
+  --header-bg: rgba(26, 26, 32, 0.7);
+  --sidebar-bg: rgba(22, 22, 28, 0.6);
+
+  --surface-base: #121214;
+  --surface-raised: #1c1c1f;
+  --surface-elevated: #232326;
+  --surface-hover: rgba(255, 255, 255, 0.08);
+
+  --text-primary: #f2f2f3;
+  --text-secondary: #b8b8bd;
+  --text-tertiary: #86868c;
+  --text-inverse: #16161a;
+
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --border-default: rgba(255, 255, 255, 0.14);
+  --border-strong: rgba(255, 255, 255, 0.28);
+
+  color-scheme: dark;
+}
+
+:root[data-high-contrast="true"] {
+  --window-border: rgba(0, 0, 0, 0.6);
+  --window-border-inactive: rgba(0, 0, 0, 0.4);
+  --glass-blur-amount: 4px;
+}
+
+:root[data-theme="dark"][data-high-contrast="true"] {
+  --window-border: rgba(255, 255, 255, 0.55);
+  --window-border-inactive: rgba(255, 255, 255, 0.35);
+}
+
 html,
 body {
   width: 100dvw;
   overflow: hidden;
   height: 100dvh;
-  background-image: url("/images/wallpaper.png");
+  background-color: #0b0b10;
+  background-image: url("/images/wallpaper.jpg");
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
@@ -17,6 +141,42 @@ body {
   --font-georama: "Georama", sans-serif;
   --font-roboto: "Roboto Mono", monospace;
   --breakpoint-3xl: 1920px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Site-level "Decorative Animations" toggle (Control Center) — combined
+   with the OS media query above by PreferencesBridge into one attribute,
+   so System preferences always take priority (this rule is additive, never
+   weaker than the OS one) while the site toggle can independently ask for
+   the same reduction. */
+[data-reduce-motion="true"] *,
+[data-reduce-motion="true"] *::before,
+[data-reduce-motion="true"] *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+}
+
+/* Accent color (Control Center) — re-expressing the small set of Tailwind
+   utility classes this app already uses for "primary/selected" affordances
+   (buttons, active tabs, selection text) in terms of --accent-color,
+   instead of rewriting every component that uses them. Deliberately scoped
+   to solid background/text utilities only — Tailwind's ring/opacity-variant
+   utilities compose color through internal custom properties that aren't
+   safe to blanket-override here, so selection rings intentionally keep
+   their original blue. */
+@layer utilities {
+  .bg-blue-600, .bg-blue-500 { background-color: var(--accent-color) !important; }
+  .bg-blue-700 { background-color: color-mix(in srgb, var(--accent-color) 82%, black) !important; }
+  .text-blue-600, .text-blue-700 { color: var(--accent-color) !important; }
+  .hover\:bg-blue-700:hover { background-color: color-mix(in srgb, var(--accent-color) 82%, black) !important; }
 }
 
 @utility flex-center {
@@ -37,14 +197,78 @@ body {
   }
 
   nav {
-    @apply flex justify-between items-center bg-white/50 backdrop-blur-3xl p-2 px-5 select-none;
+    @apply flex justify-between items-center h-14 px-5 select-none relative z-50;
+    /* Was a hardcoded rgba()/blur(30px) pair that never moved with the
+       theme toggle, the transparency slider, or Reduce Transparency — the
+       site's single most visible piece of chrome didn't participate in
+       its own transparency system. Now uses the same tokens every window
+       surface does. */
+    background: var(--glass-bg);
+    backdrop-filter: var(--glass-blur) var(--glass-saturate);
+    -webkit-backdrop-filter: var(--glass-blur) var(--glass-saturate);
+    border-bottom: 1px solid var(--window-border);
+    box-shadow: 0 1px 0 rgba(15, 23, 42, 0.04);
 
     div {
       @apply flex items-center max-sm:w-full max-sm:justify-center gap-5;
+    }
 
-      &:last-child {
-        @apply max-sm:hidden;
+    .nav-system-menu {
+      @apply relative inline-flex items-center;
+    }
+
+    .nav-system-menu-button {
+      @apply flex items-center gap-2 px-1.5 py-1 rounded-md cursor-pointer transition-colors hover:bg-black/5;
+
+      img {
+        @apply size-5;
       }
+    }
+
+    .nav-system-menu-panel {
+      @apply absolute top-full left-0 mt-2 min-w-48 py-1.5 rounded-xl overflow-hidden z-50;
+      border: 1px solid var(--window-border);
+      background: var(--glass-bg);
+      box-shadow: var(--window-shadow-focused);
+      backdrop-filter: var(--glass-blur) var(--glass-saturate);
+      -webkit-backdrop-filter: var(--glass-blur) var(--glass-saturate);
+      animation: dropdown-in 0.14s ease-out;
+    }
+
+    .nav-system-menu-item {
+      @apply flex items-center gap-2 w-full px-3 py-2 text-sm text-gray-700 text-left cursor-pointer transition-colors hover:bg-black/5;
+    }
+
+    .nav-spotlight-button,
+    .nav-mission-control-button,
+    .nav-control-center-button,
+    .nav-appearance-button {
+      @apply flex items-center justify-center size-7 rounded-md text-gray-700 cursor-pointer transition-colors hover:bg-black/5;
+
+      &[aria-pressed="true"] {
+        @apply bg-blue-500/15 text-blue-700;
+      }
+    }
+
+    .nav-appearance-button:focus-visible,
+    .nav-spotlight-button:focus-visible,
+    .nav-mission-control-button:focus-visible,
+    .nav-control-center-button:focus-visible {
+      @apply outline-none ring-2 ring-blue-400;
+    }
+
+    /* Was `div:last-child { max-sm:hidden }` — that hid Spotlight, Control
+       Center, the appearance toggle, and the clock entirely below the
+       mobile breakpoint, leaving no way to search or change settings on a
+       phone at all. Only Mission Control is mobile-inappropriate (there's
+       only ever one full-screen app in view at a time on mobile, so an
+       "all open windows" overview has nothing extra to show) and stays
+       hidden; everything else remains reachable. Placed after the shared
+       `.nav-spotlight-button, .nav-mission-control-button, ...` rule above
+       so this `display:none` isn't overridden by that rule's `flex` at
+       equal specificity (later same-specificity rule wins the cascade). */
+    .nav-mission-control-button {
+      @apply max-sm:hidden;
     }
 
     ul {
@@ -66,23 +290,262 @@ body {
     @apply p-1 hover:bg-gray-200 rounded hover:cursor-default;
   }
 
+  /* ---------- Shared UI primitives (Phase D2) ----------
+     components/Button.jsx, IconButton.jsx, ExternalLink.jsx, EmptyState.jsx,
+     Badge.jsx. New call sites should use these instead of hand-rolling
+     another near-duplicate pill button/card — see each component's own
+     comment for which pre-existing per-window styles this consolidates. */
+
+  .ui-button {
+    @apply inline-flex items-center justify-center gap-1.5 font-semibold rounded-full cursor-pointer transition-colors;
+
+    &:disabled { @apply cursor-default opacity-60; }
+    &:focus-visible { @apply outline-none ring-2 ring-offset-1; ring-color: var(--accent-color); }
+  }
+
+  .ui-button--small { @apply text-xs; height: var(--control-height-sm); padding-inline: 12px; }
+  .ui-button--medium { @apply text-sm; height: var(--control-height-md); padding-inline: var(--control-padding-inline); }
+
+  .ui-button--primary {
+    color: var(--text-inverse);
+    background: var(--accent-color);
+
+    &:hover:not(:disabled) { filter: brightness(1.08); }
+  }
+
+  .ui-button--secondary {
+    color: var(--text-primary);
+    background: var(--surface-raised);
+    border: 1px solid var(--border-default);
+
+    &:hover:not(:disabled) { background: var(--surface-hover); }
+  }
+
+  .ui-button--ghost {
+    color: var(--text-secondary);
+    background: transparent;
+
+    &:hover:not(:disabled) { background: var(--surface-hover); color: var(--text-primary); }
+  }
+
+  .ui-button--danger {
+    color: var(--text-inverse);
+    background: #dc2626;
+
+    &:hover:not(:disabled) { filter: brightness(1.08); }
+  }
+
+  .ui-button__spinner { animation: ui-spin 0.8s linear infinite; }
+
+  @keyframes ui-spin { to { transform: rotate(360deg); } }
+
+  .ui-icon-button {
+    @apply flex items-center justify-center rounded-full cursor-pointer transition-colors;
+    color: var(--text-secondary);
+
+    &:hover { background: var(--surface-hover); color: var(--text-primary); }
+    &:focus-visible { @apply outline-none ring-2 ring-offset-1; ring-color: var(--accent-color); }
+  }
+
+  .ui-icon-button--small { @apply size-6; }
+  .ui-icon-button--medium { @apply size-7; }
+
+  .ui-external-link {
+    @apply inline-flex items-center gap-1 cursor-pointer;
+    color: var(--accent-color);
+
+    &:hover { text-decoration: underline; }
+    &:focus-visible { @apply outline-none ring-2 rounded-sm; ring-color: var(--accent-color); }
+  }
+
+  .ui-empty-state {
+    @apply flex flex-col items-center justify-center text-center gap-2;
+    padding: 32px 16px;
+    color: var(--text-tertiary);
+
+    &__message { @apply text-sm; color: var(--text-secondary); margin: 0; }
+    &__secondary { @apply text-xs; color: var(--text-tertiary); }
+    &__action { margin-top: 8px; }
+  }
+
+  .ui-badge {
+    @apply inline-flex items-center gap-1 text-[10px] font-medium uppercase rounded-full;
+    letter-spacing: 0.03em;
+    padding: 2px 8px;
+    border: 1px solid var(--border-default);
+    color: var(--text-secondary);
+  }
+
+  .ui-badge--accent { color: var(--accent-color); border-color: var(--accent-color); }
+  .ui-badge--success { color: #3f9142; border-color: #3f9142; }
+  .ui-badge--warning { color: #a85a2e; border-color: #a85a2e; }
+  .ui-badge--danger { color: #b8433f; border-color: #b8433f; }
+
+  /* ---------- Brand-icon frame (Phase D3) ----------
+     Normalizes visual size/alignment for third-party brand marks (GitHub,
+     Letterboxd, Spotify) without distorting the original artwork —
+     object-fit: contain scales each mark to fit the frame, never stretching
+     a non-square logo to fill a square box. */
+  .ui-brand-icon {
+    @apply inline-flex items-center justify-center rounded-lg overflow-hidden flex-none;
+    background: var(--surface-raised);
+    border: 1px solid var(--border-subtle);
+
+    img { @apply size-full object-contain; }
+  }
+
+  .ui-brand-icon--small { @apply size-6; padding: 3px; }
+  .ui-brand-icon--medium { @apply size-9; padding: 5px; }
+  .ui-brand-icon--large { @apply size-12; padding: 7px; }
+
   #welcome {
-    @apply text-gray-200 flex flex-col justify-center items-center absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 select-none max-sm:h-screen max-sm:w-full max-sm:px-10;
+    @apply text-gray-200 flex flex-col justify-center items-center absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 select-none text-center px-6 z-10 max-sm:hidden;
+    /* #home (the desktop-icons layer) sits at z-0 but its <ul> is a
+       full-bleed `inset-0` hit-target (so empty desktop space still reaches
+       its own right-click context menu) — without z-10 here, that empty UL
+       was confirmed (via elementFromPoint) to intercept clicks aimed at the
+       hero's own buttons, even where no icon is visually anywhere near
+       them. But raising the whole container's stacking order alone would
+       *also* make its empty flex gaps swallow right-clicks meant for the
+       desktop context menu underneath — so the container itself stays
+       `pointer-events: none` (fully click-through) and only the three real
+       buttons opt back in below. z-10 is comfortably below the Dock/Navbar
+       (z-50) and windows (z-index 1000+), which must still stack above the
+       hero regardless.
+       Bounded to the visible desktop area (minus Navbar/Dock safe zones) at
+       every width, so the hero column never has to fight the Dock/Navbar
+       for space and never needs its own separate mobile layout branch.
+       Hidden below the mobile breakpoint: it visually overlapped the
+       MobileHome app grid (#home is a positioned sibling, not a parent),
+       and the desktop already carries the full hero experience — Take a
+       Tour gets its own tile in the mobile grid instead of being lost. */
+    width: min(640px, calc(100vw - 48px));
+    max-height: calc(100dvh - 180px);
+    color: var(--desktop-text-color);
+    pointer-events: none;
 
-    .small-screen {
-      @apply sm:hidden m-7 bg-red-300/20 backdrop-blur-lg p-3 rounded-md absolute top-10;
+    .welcome-eyebrow {
+      @apply text-xs font-semibold uppercase;
+      letter-spacing: 0.08em;
+      color: var(--desktop-text-color);
+      opacity: 0.75;
+      margin: 0 0 14px;
+    }
 
-      p {
-        @apply flex-1 text-[16px] text-center font-roboto text-gray-400;
-      }
+    .welcome-statement {
+      @apply font-georama italic font-medium;
+      font-size: clamp(1.5rem, 1rem + 2.6vw, 2.75rem);
+      line-height: 1.25;
+      margin: 0 0 14px;
+    }
+
+    .welcome-support {
+      font-size: clamp(0.85rem, 0.7rem + 0.6vw, 1rem);
+      color: var(--desktop-text-color);
+      opacity: 0.8;
+      max-width: 46ch;
+      margin: 0 auto 26px;
+    }
+
+    .welcome-actions {
+      @apply flex flex-wrap items-center justify-center gap-3;
+      margin-bottom: 34px;
+      pointer-events: none;
+    }
+
+    /* These three render via the shared Button primitive (.ui-button and
+       friends supply the structural/variant styling) — the container chain
+       above is click-through (see #welcome's own pointer-events:none), so
+       only these three real controls opt back in, and only the wallpaper-
+       specific color/contrast treatment is overridden here (the shared
+       component's default tokens assume a window surface, not sitting
+       directly on the colorful desktop background). */
+    .welcome-action-primary,
+    .welcome-action-secondary,
+    .welcome-action-text {
+      pointer-events: auto;
+    }
+
+    .welcome-action-secondary {
+      color: var(--desktop-text-color);
+      background: rgba(255, 255, 255, 0.16) !important;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+
+      &:hover:not(:disabled) { background: rgba(255, 255, 255, 0.26) !important; }
+    }
+
+    .welcome-action-primary:focus-visible,
+    .welcome-action-secondary:focus-visible {
+      @apply ring-white/70 ring-offset-2 ring-offset-transparent;
+    }
+
+    .welcome-action-text {
+      color: var(--desktop-text-color);
+      opacity: 0.85;
+
+      &:hover { text-decoration: underline; }
+      &:focus-visible { @apply ring-white/70; }
+    }
+
+    /* A restrained secondary wordmark, not the primary hero message — sized
+       with clamp() (never a fixed text-9xl) and forced to a single line so
+       it can never wrap mid-word or overflow, from a 320px phone through a
+       large desktop. `white-space: nowrap` also defends against a real
+       browser quirk: adjacent `display: inline-block` letters (below) get
+       their own soft line-break opportunities even with no whitespace
+       between them, unlike plain inline text — confirmed live at ~834px
+       width before this fix, where "portfolio" broke into "portfoli" + an
+       orphaned "o" on its own line. */
+    .welcome-wordmark {
+      @apply font-georama italic;
+      font-size: clamp(1.75rem, 1rem + 4vw, 4.5rem);
+      white-space: nowrap;
+      max-width: 100%;
+      overflow: hidden;
+      opacity: 0.9;
+      margin: 0;
+    }
+
+    /* Pre-animation state for the "portfolio" entrance (Welcome.jsx) — set
+       here, not only via GSAP, so the letters are already hidden on the
+       very first paint (behind the Hello overlay) instead of flashing
+       their final state before the entrance timeline runs. */
+    .portfolio-letter {
+      display: inline-block;
+      opacity: 0;
+      transform: translateY(0.35em);
+      filter: blur(10px);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #welcome .portfolio-letter {
+      opacity: 1;
+      transform: none;
+      filter: none;
     }
   }
 
   #dock {
-    @apply absolute bottom-5 left-1/2 -translate-x-1/2 z-50 select-none max-sm:hidden;
+    @apply absolute bottom-5 left-1/2 -translate-x-1/2 z-50 select-none;
+    /* Was `max-sm:hidden` — the Dock was the *only* always-visible launch
+       point on desktop, yet disappeared entirely below the mobile
+       breakpoint with nothing replacing it (MobileHome's app grid is the
+       primary mobile launcher now, but the Dock staying reachable too
+       matches "keep the Dock usable through scrolling," not remove it). */
+    max-width: calc(100vw - 16px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
 
     .dock-container {
-      @apply bg-white/20 backdrop-blur-md justify-between rounded-2xl p-1.5 flex items-end gap-1.5;
+      @apply justify-between rounded-[1.4rem] p-2 flex items-end gap-1.5;
+      background: rgba(255, 255, 255, 0.22);
+      border: 1px solid rgba(255, 255, 255, 0.35);
+      box-shadow: 0 18px 40px -14px rgba(15, 23, 42, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+      backdrop-filter: var(--glass-blur) var(--glass-saturate);
+      -webkit-backdrop-filter: var(--glass-blur) var(--glass-saturate);
+      max-width: 100%;
+      overflow-x: auto;
+      overscroll-behavior-x: contain;
     }
 
     .tooltip {
@@ -90,54 +553,204 @@ body {
     }
 
     .dock-icon {
-      @apply size-14 3xl:size-20 cursor-pointer;
+      /* No transition-transform here: GSAP (Dock.jsx) drives this same
+         `transform` property continuously via quickTo() on every pointer
+         move. A competing CSS transition on `transform` would restart
+         itself on every one of GSAP's own per-frame writes, stacking a
+         second, unintended lag on top of GSAP's already-eased motion —
+         confirmed live as the real cause of the magnification feeling
+         delayed, not the tween durations themselves. */
+      @apply size-14 3xl:size-20 cursor-pointer rounded-xl active:scale-90;
 
       img {
-        @apply object-cover object-center;
+        @apply object-cover object-center rounded-xl;
       }
+    }
+
+    .dock-indicator {
+      @apply absolute -bottom-1.5 left-1/2 -translate-x-1/2 size-1 rounded-full bg-white/90;
     }
   }
 
   #window-controls {
-    @apply flex gap-2;
+    @apply flex gap-2 px-0.5;
+
+    .close, .minimize, .maximize {
+      @apply relative size-3.5 rounded-full cursor-pointer transition-all duration-150 hover:scale-110 active:scale-90;
+      box-shadow: inset 0 0 0 0.5px rgba(0, 0, 0, 0.12);
+    }
 
     .close {
-      @apply size-3.5 rounded-full bg-[#ff6157] cursor-pointer;
+      @apply bg-[#ff6157];
     }
 
     .minimize {
-      @apply size-3.5 rounded-full bg-[#ffc030];
+      @apply bg-[#ffc030];
     }
 
     .maximize {
-      @apply size-3.5 rounded-full bg-[#2acb42];
+      @apply bg-[#2acb42];
     }
   }
 
   #window-header {
-    @apply flex items-center justify-between px-4 py-3 rounded-t-lg bg-gray-50 border-b border-gray-200 select-none text-sm text-gray-400;
+    @apply flex items-center justify-between gap-3 px-4 py-3 select-none text-sm text-gray-500 border-b flex-none;
+    background: var(--header-bg);
+    border-color: rgba(15, 23, 42, 0.08);
+    backdrop-filter: blur(20px) saturate(1.4);
+    -webkit-backdrop-filter: blur(20px) saturate(1.4);
   }
 
+  .window-surface {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    border-radius: var(--window-radius);
+    border: 1px solid var(--window-border-inactive);
+    box-shadow: var(--window-shadow);
+    background: var(--glass-bg-inactive);
+    backdrop-filter: var(--glass-blur) var(--glass-saturate);
+    -webkit-backdrop-filter: var(--glass-blur) var(--glass-saturate);
+    overflow: hidden;
+    opacity: 0.94;
+    transition: opacity 0.2s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+  }
+
+  /* ---------- Dark-theme content coverage (Phase D4) ----------
+     Window chrome (.window-surface/#window-header/sidebar) already reacts
+     to the theme toggle via --glass-bg/--header-bg/--sidebar-bg. Body
+     *content*, though, was mostly authored with plain Tailwind grays
+     (text-gray-900, bg-white, ...) rather than theme-aware tokens, so
+     toggling dark mode previously only darkened each window's frame while
+     its content stayed light-mode-colored underneath (confirmed across
+     Contact, Finder, Photos, Resume, Terminal, Publications, Talks, Time
+     Machine, Activity Monitor, Field Notes/Safari). Rather than rewrite
+     every window's markup to a bespoke token set (the pattern GitHub/About/
+     NexAI already use), this scoped, dark-mode-only override remaps the
+     common hardcoded utility classes wherever they appear inside any
+     window to the shared surface/text tokens — real semantic colors, not a
+     blanket "make everything black." Letterboxd is deliberately excluded:
+     its always-dark cinematic interior is an intentional exception (see
+     its own section below), not a forgotten one. */
+  :root[data-theme="dark"] .window-surface:not(#letterboxd) {
+    .bg-white, .bg-white\/40, .bg-white\/70 { background-color: var(--surface-raised) !important; }
+    .bg-gray-50, .bg-gray-100, .bg-gray-200 { background-color: var(--surface-hover) !important; }
+    .text-gray-900, .text-gray-800, .text-gray-700 { color: var(--text-primary) !important; }
+    .text-gray-600, .text-gray-500 { color: var(--text-secondary) !important; }
+    .text-gray-400, .text-gray-300 { color: var(--text-tertiary) !important; }
+    .border-gray-200, .border-gray-300 { border-color: var(--border-default) !important; }
+  }
+
+  /* The overrides above only reach classes Tailwind compiles as real,
+     independently-selectable utility classes. Several windows instead
+     author their own semantic class (e.g. Publications' .publication-line)
+     that bakes a gray/white Tailwind color in via @apply — that color is
+     inlined directly into the custom class's own declaration block at
+     build time, so it never exists as a separately-targetable selector for
+     the sweep above to catch. Publications' citation text is fixed
+     directly here as the highest-traffic case found; the same gap likely
+     recurs in other windows' own @apply-authored classes and was not
+     exhaustively hunted down given the scope of this pass. */
+  :root[data-theme="dark"] {
+    .publication-line { color: var(--text-primary) !important; }
+    .publication-author-owner, .publication-title-link { color: var(--text-primary) !important; }
+    .publication-venue { color: var(--text-secondary) !important; }
+  }
+
+  /* Same @apply-baked-class gap as above, fixed directly for About This
+     Portfolio: this window is almost entirely custom classes (no direct
+     Tailwind utility classes in its JSX), so the broad sweep above had no
+     surface to catch here at all and the whole panel stayed unreadable
+     (dark text on a dark surface) in dark mode. */
+  :root[data-theme="dark"] #aboutPortfolio {
+    .about-tabs { border-color: var(--border-default) !important; }
+    .about-tab { color: var(--text-secondary) !important; }
+    .about-tab.active { color: var(--text-inverse) !important; }
+    .about-overview-hero h3,
+    .about-overview-facts dd,
+    .about-overview-engineering-title,
+    .about-app-info p,
+    .about-tech-core span:first-child,
+    .about-storage-legend-label,
+    .about-credits-line { color: var(--text-primary) !important; }
+    .about-overview-description,
+    .about-overview-facts dt,
+    .about-overview-engineering-detail,
+    .about-tech-skills li p,
+    .about-credits-section p,
+    .about-credits-section ul { color: var(--text-secondary) !important; }
+    .about-overview-product,
+    .about-overview-engineering h4,
+    .about-app-status,
+    .about-app-fallback-icon,
+    .about-tech h4,
+    .about-tech-core span:last-child,
+    .about-storage-disclaimer,
+    .about-storage-legend-count,
+    .about-credits-section h4 { color: var(--text-tertiary) !important; }
+    .about-overview-facts div,
+    .about-overview-engineering li { border-color: var(--border-subtle) !important; }
+    .about-tech-core li { background: var(--surface-hover) !important; }
+    .about-storage-bar { background: var(--surface-hover) !important; }
+  }
+
+  /* Several windows cap their normal size with a max-width/max-height
+     class (e.g. #contact's max-w-2xl). That constraint always wins over a
+     larger inline width/height, which was silently capping maximize far
+     short of the intended edge-to-edge size. Lift the cap only while
+     maximized. !important is required: each window's own #id rule is an
+     ID selector, which always outranks this class+attribute selector on
+     specificity alone, regardless of source order. */
+  .window-surface[data-maximized="true"] {
+    max-width: none !important;
+    max-height: none !important;
+  }
+
+  .window-surface:focus-within,
+  .window-surface:hover {
+    opacity: 1;
+    border-color: var(--window-border);
+    box-shadow: var(--window-shadow-focused);
+    background: var(--glass-bg);
+  }
+
+  .resize-handles {
+    @apply absolute inset-0 z-10 pointer-events-none;
+  }
+
+  .resize-handle {
+    @apply absolute pointer-events-auto;
+  }
+
+  .resize-handle.resize-n { @apply top-0 left-3 right-3 h-2.5 cursor-ns-resize; }
+  .resize-handle.resize-s { @apply bottom-0 left-3 right-3 h-2.5 cursor-ns-resize; }
+  .resize-handle.resize-e { @apply right-0 top-3 bottom-3 w-2.5 cursor-ew-resize; }
+  .resize-handle.resize-w { @apply left-0 top-3 bottom-3 w-2.5 cursor-ew-resize; }
+  .resize-handle.resize-ne { @apply top-0 right-0 size-4 cursor-nesw-resize; }
+  .resize-handle.resize-nw { @apply top-0 left-0 size-4 cursor-nwse-resize; }
+  .resize-handle.resize-se { @apply bottom-0 right-0 size-4 cursor-nwse-resize; }
+  .resize-handle.resize-sw { @apply bottom-0 left-0 size-4 cursor-nesw-resize; }
+
   #safari {
-    @apply w-4xl absolute top-40 left-2/12 bg-white shadow-2xl drop-shadow-2xl rounded-xl overflow-hidden;
+    @apply w-4xl top-40 left-2/12;
 
     .search {
-      @apply flex items-center gap-3 w-2/3 bg-white border border-gray-300 rounded-lg px-3 py-2;
+      @apply flex items-center gap-3 w-2/3 bg-white/70 border border-white/60 rounded-lg px-3 py-2;
 
       input {
-        @apply placeholder:text-gray-400;
+        @apply placeholder:text-gray-400 bg-transparent;
       }
     }
 
     .blog {
-      @apply bg-white p-10 max-w-3xl mx-auto;
+      @apply flex-1 min-h-0 overflow-y-auto p-10 max-w-3xl mx-auto w-full;
 
       h2 {
         @apply text-xl font-bold text-pink-600 mb-10;
       }
 
       .blog-post {
-        @apply grid grid-cols-12 space-x-5;
+        @apply grid grid-cols-12 space-x-5 rounded-lg transition-colors duration-300;
 
         img {
           @apply size-full rounded-md object-cover;
@@ -157,20 +770,41 @@ body {
           a {
             @apply text-blue-600 text-xs hover:underline flex items-center gap-3;
           }
+
+          .blog-post-share {
+            @apply flex-none flex items-center justify-center size-6 rounded-full text-gray-400 cursor-pointer transition-colors hover:bg-black/5 hover:text-blue-600;
+          }
         }
+
+        &.post-highlight {
+          @apply bg-pink-50 ring-2 ring-pink-300 ring-offset-2;
+        }
+      }
+
+      .field-notes-empty {
+        @apply flex flex-col items-center text-center gap-4 py-16 text-gray-400;
+
+        p {
+          @apply text-sm max-w-sm;
+        }
+      }
+
+      .field-notes-talk-link {
+        @apply inline-flex items-center gap-2 text-xs font-medium text-pink-600 cursor-pointer rounded-full px-4 py-2 transition-colors hover:bg-pink-50;
+        border: 1px solid rgba(219, 39, 119, 0.25);
       }
     }
   }
 
   #terminal {
-    @apply w-xl absolute top-32 left-1/12 bg-white shadow-2xl drop-shadow-2xl rounded-xl overflow-hidden;
+    @apply w-xl top-32 left-1/12;
 
     h2 {
       @apply font-bold text-sm text-center w-full;
     }
 
     .techstack {
-      @apply text-sm font-roboto p-5;
+      @apply flex-1 min-h-0 overflow-y-auto text-sm font-roboto p-5;
 
       .label {
         @apply flex items-center ms-10 mt-7;
@@ -180,6 +814,8 @@ body {
         @apply py-5 my-5 border-y border-dashed space-y-1;
 
         li {
+          @apply rounded-md transition-colors duration-300;
+
           .check {
             @apply text-[#00A154] w-5;
           }
@@ -190,6 +826,10 @@ body {
 
           ul {
             @apply flex items-center gap-3;
+          }
+
+          &.skill-highlight {
+            @apply bg-[#00A154]/10 ring-1 ring-[#00A154]/50;
           }
         }
       }
@@ -209,38 +849,140 @@ body {
   }
 
   #contact {
-    @apply max-w-2xl absolute top-60 left-5/12 bg-white shadow-2xl drop-shadow-2xl rounded-xl overflow-hidden;
+    @apply w-2xl max-w-[92vw] h-[620px] max-h-[85vh] top-24 left-5/12;
 
     h2 {
-      @apply font-bold text-sm text-center w-full;
+      @apply font-bold text-sm;
+    }
+  }
+
+  .contact-body {
+    @apply flex-1 min-h-0 overflow-y-auto p-6 space-y-6;
+  }
+
+  .contact-identity {
+    @apply flex items-start gap-4;
+  }
+
+  .contact-photo {
+    @apply size-16 rounded-full object-cover flex-none;
+  }
+
+  .contact-name {
+    @apply text-lg font-semibold text-gray-900;
+  }
+
+  .contact-role {
+    @apply text-sm text-gray-500 mt-0.5 leading-relaxed;
+  }
+
+  .contact-invite {
+    @apply text-sm text-gray-700 mt-2 leading-relaxed;
+  }
+
+  .contact-actions {
+    @apply space-y-2;
+  }
+
+  .contact-action {
+    @apply flex items-center gap-3 rounded-lg p-3 bg-black/[0.03] transition-colors hover:bg-black/[0.05];
+  }
+
+  .contact-action-icon {
+    @apply flex-none text-gray-500;
+  }
+
+  .contact-action-body {
+    @apply flex-1 min-w-0;
+  }
+
+  .contact-action-label {
+    @apply text-xs font-medium text-gray-400;
+  }
+
+  .contact-action-value {
+    @apply text-sm text-gray-800 truncate;
+  }
+
+  .contact-action-buttons {
+    @apply flex-none flex items-center gap-2;
+  }
+
+  .contact-action-btn {
+    @apply inline-flex items-center gap-1.5 text-xs font-medium text-gray-600 bg-white/70 border border-black/10 rounded-md px-2.5 py-1.5 cursor-pointer transition-colors hover:text-blue-600 hover:border-blue-500/40;
+
+    &:focus-visible {
+      @apply outline-none ring-2 ring-blue-500/50;
+    }
+  }
+
+  .contact-form {
+    @apply space-y-4 pt-2 border-t border-black/5;
+  }
+
+  .contact-form-title {
+    @apply text-sm font-semibold text-gray-800 pt-4;
+  }
+
+  .contact-field {
+    @apply flex flex-col gap-1.5;
+
+    label {
+      @apply text-xs font-medium text-gray-500;
     }
 
-    h3 {
-      @apply text-xl font-semibold;
-    }
+    input,
+    textarea {
+      @apply text-sm text-gray-800 bg-white/70 border border-black/10 rounded-md px-3 py-2 transition-colors;
+      resize: vertical;
 
-    ul {
-      @apply flex items-center gap-3;
-
-      li {
-        @apply rounded-lg p-3 w-60 hover:-translate-y-0.5 hover:scale-105 origin-center transition-all duration-300;
-
-        a {
-          @apply space-y-5;
-        }
-
-        p {
-          @apply font-semibold text-sm text-white;
-        }
+      &:focus-visible {
+        @apply outline-none border-blue-500/60 ring-2 ring-blue-500/20;
       }
     }
   }
 
+  .contact-field-error {
+    @apply text-xs text-red-600;
+  }
+
+  .contact-form-actions {
+    @apply flex flex-wrap items-center gap-2.5 pt-1;
+  }
+
+  .contact-submit {
+    @apply inline-flex items-center gap-1.5 text-sm font-medium text-white bg-blue-600 rounded-md px-4 py-2 cursor-pointer transition-colors hover:bg-blue-700;
+
+    &:focus-visible {
+      @apply outline-none ring-2 ring-blue-500/50 ring-offset-1;
+    }
+  }
+
+  .contact-fallback-btn {
+    @apply inline-flex items-center gap-1.5 text-xs font-medium text-gray-600 bg-black/[0.03] border border-black/10 rounded-md px-3 py-2 cursor-pointer transition-colors hover:text-blue-600;
+
+    &:focus-visible {
+      @apply outline-none ring-2 ring-blue-500/50;
+    }
+  }
+
+  .contact-status {
+    @apply text-xs text-gray-500 min-h-[1rem];
+  }
+
   #photos {
-    @apply max-w-3xl absolute top-96 left-1/2 -translate-y-1/2 bg-white shadow-2xl drop-shadow-2xl rounded-xl overflow-hidden;
+    /* A static pixel top, not a percentage-based -translate-y-1/2: that
+       transform recalculates from the element's OWN current height, so
+       maximizing (which changes the height) silently added a large,
+       unaccounted-for extra offset and sent the window off-screen. This
+       fixed value reproduces the original default position without being
+       height-dependent. */
+    @apply w-3xl max-w-[90vw] top-[88px] left-1/2;
 
     .sidebar {
-      @apply w-3/12 flex-none bg-gray-50 border-r border-gray-200 flex flex-col p-5;
+      @apply w-3/12 min-w-[9rem] max-w-[14rem] flex-none border-r flex flex-col p-5 overflow-y-auto;
+      background: var(--sidebar-bg);
+      border-color: rgba(15, 23, 42, 0.08);
 
       h2 {
         @apply text-xs font-medium text-gray-400 mb-1;
@@ -250,8 +992,12 @@ body {
         li {
           @apply flex space-y-1 items-center gap-2 px-3 py-2 rounded-md cursor-pointer transition-colors;
 
-          &:first-child {
-            @apply bg-blue-100 text-blue-700;
+          &.active {
+            @apply bg-blue-500/15 text-blue-700;
+          }
+
+          &.not-active:hover {
+            @apply bg-black/5;
           }
 
           img {
@@ -265,52 +1011,69 @@ body {
       }
     }
 
+    .gallery-empty {
+      @apply flex-1 min-h-[16rem] flex flex-col items-center justify-center gap-2 text-center text-gray-400;
+
+      p {
+        @apply text-sm;
+      }
+
+      span {
+        @apply text-xs text-gray-300;
+      }
+    }
+
     .gallery {
-      @apply p-5;
+      @apply flex-1 min-h-0 flex flex-col gap-2.5 p-5 overflow-y-auto;
 
+      .gallery-intro {
+        @apply text-xs text-gray-500;
+        margin: 0 0 4px;
+      }
+
+      /* A plain, even grid — deliberately not a hand-tuned asymmetric
+         layout, since that was tuned for exactly 4 tiles (one of which,
+         a leftover template logo, has been removed). An equal grid stays
+         balanced regardless of how many verified photos exist. */
       ul {
-        @apply grid grid-cols-5 grid-rows-5 gap-2.5;
+        @apply flex-1 min-h-[16rem] grid grid-cols-3 gap-2.5;
 
-        li {
-          img {
-            @apply size-full object-cover rounded-lg;
-          }
+        li img {
+          @apply size-full object-cover rounded-lg aspect-square;
+        }
+      }
 
-          &:first-child {
-            @apply row-start-1 row-span-3 col-start-1 col-span-3;
-          }
+      .upload-placeholder {
+        @apply flex-none flex items-center gap-2 px-3 py-2.5 rounded-lg border border-dashed border-gray-300 text-gray-400;
 
-          &:nth-child(2) {
-            @apply row-start-1 row-span-3 col-start-4 col-span-2;
-          }
-
-          &:nth-child(3) {
-            @apply row-start-4 row-span-2 col-start-3 col-span-3;
-          }
-
-          &:last-child {
-            @apply row-start-4 row-span-2 col-start-1 col-span-2;
-          }
+        p {
+          @apply text-xs;
         }
       }
     }
   }
 
   #resume {
-    @apply w-fit h-fit absolute top-16 left-7/12 bg-white shadow-2xl drop-shadow-2xl rounded-xl overflow-hidden;
+    @apply w-md max-w-[90vw] h-[80vh] max-h-[85vh] top-16 left-7/12;
 
     #window-header {
       h2 {
         @apply font-bold text-sm text-center flex-1;
       }
     }
+
+    .pdf-viewer {
+      @apply flex-1 min-h-0 overflow-auto flex items-start justify-center bg-gray-200 p-4;
+    }
   }
 
   #finder {
-    @apply absolute w-3xl left-40 top-20 shadow-2xl drop-shadow-2xl overflow-hidden rounded-xl;
+    @apply w-3xl left-40 top-20;
 
     .sidebar {
-      @apply w-48 bg-gray-50 border-r border-gray-200 flex flex-col p-5 space-y-3;
+      @apply w-48 min-w-[9rem] max-w-[14rem] flex-none border-r flex flex-col p-5 space-y-3 overflow-y-auto;
+      background: var(--sidebar-bg);
+      border-color: rgba(15, 23, 42, 0.08);
 
       h3 {
         @apply text-xs font-medium text-gray-400 mb-1;
@@ -320,11 +1083,11 @@ body {
         @apply space-y-1;
 
         .active {
-          @apply bg-blue-100 text-blue-700;
+          @apply bg-blue-500/15 text-blue-700;
         }
 
         .not-active {
-          @apply text-gray-700 hover:bg-gray-200;
+          @apply text-gray-700 hover:bg-black/5;
         }
 
         li {
@@ -334,10 +1097,10 @@ body {
     }
 
     .content {
-      @apply flex-1 p-8 bg-white max-w-2xl relative;
+      @apply flex-1 min-w-0 min-h-0 p-8 bg-white/40 relative overflow-auto;
 
       li {
-        @apply absolute flex items-center flex-col gap-3;
+        @apply absolute flex items-center flex-col gap-3 rounded-lg p-2 -m-2 outline-none transition-colors cursor-default;
 
         img {
           @apply object-contain object-center size-16 relative group-hover:scale-105;
@@ -346,39 +1109,874 @@ body {
         p {
           @apply text-sm text-center font-medium w-40;
         }
+
+        &.selected {
+          @apply bg-blue-500/15 ring-2 ring-blue-500/50;
+        }
+
+        &:focus-visible {
+          @apply ring-2 ring-blue-500/70;
+        }
+      }
+
+      .content-empty {
+        @apply static w-full h-full flex-col items-center justify-center gap-2 text-gray-400;
+
+        p {
+          @apply text-sm font-medium text-gray-400 w-auto;
+        }
       }
     }
   }
 
   #txtfile {
-    @apply w-md absolute top-36 right-32 bg-white shadow-2xl drop-shadow-2xl rounded-xl overflow-hidden;
+    @apply w-md max-w-[90vw] max-h-[85vh] top-16 right-10;
 
-    h2 {
+    /* Scoped to the title-bar heading specifically (not just any h2 in
+       this window) — the About editorial layout has its own content
+       heading (.about-section-title) that must not inherit the title
+       bar's centered, text-sm styling. */
+    #window-header h2 {
       @apply font-bold text-sm text-center w-full;
+    }
+
+    .scroll-body {
+      @apply flex-1 min-h-0 overflow-y-auto;
+    }
+
+    /* The About editorial page is a calm, mostly solid reading surface —
+       deliberately not the shared glass background — so the biography
+       stays highly readable regardless of what's behind the window. */
+    .about-scroll-body {
+      @apply overflow-x-hidden;
+      background: #fdfcfa;
+      overscroll-behavior: contain;
+
+      /* Focusable (tabIndex=0 in Text.jsx) so keyboard-only users can
+         reach and scroll the biography even though it contains no links —
+         outline only shown for keyboard focus, never on mouse click. */
+      &:focus-visible {
+        @apply outline-none;
+        box-shadow: inset 0 0 0 2px rgba(37, 99, 235, 0.5);
+      }
+    }
+  }
+
+  :root[data-theme="dark"] #txtfile .about-scroll-body {
+    background: #17171a;
+  }
+
+  /* ---------- About editorial page (about-me.txt) ---------- */
+
+  .about-page {
+    /* Establishes the container-query context this layout keys off of —
+       the About window's own width, not the browser viewport, since the
+       macOS window can be resized independently of it. */
+    container-type: inline-size;
+    container-name: about-page;
+    --about-fg: #1a1a1d;
+    --about-fg-muted: #33333a;
+    --about-fg-soft: #46464d;
+    --about-fg-faint: #5a5a63;
+    --about-border: rgba(15, 23, 42, 0.08);
+    --about-border-soft: rgba(15, 23, 42, 0.06);
+    --about-media-bg: rgba(15, 23, 42, 0.03);
+  }
+
+  :root[data-theme="dark"] .about-page {
+    --about-fg: #f1f1f0;
+    --about-fg-muted: #d3d3d6;
+    --about-fg-soft: #b4b4b9;
+    --about-fg-faint: #9b9ba1;
+    --about-border: rgba(255, 255, 255, 0.1);
+    --about-border-soft: rgba(255, 255, 255, 0.07);
+    --about-media-bg: rgba(255, 255, 255, 0.04);
+  }
+
+  .about-page-inner {
+    width: min(100%, 1180px);
+    margin-inline: auto;
+    padding: clamp(24px, 6cqi, 64px) clamp(20px, 5cqi, 56px);
+  }
+
+  .about-hero {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 26px;
+    margin-bottom: clamp(32px, 8cqi, 56px);
+  }
+
+  .about-media {
+    width: 100%;
+    max-width: 320px;
+    margin: 0;
+  }
+
+  /* The image's own intrinsic ratio (currently a 1:1 portrait) is always
+     preserved — width drives layout, height is derived, never the other
+     way around, and nothing here can stretch or crop it. */
+  .about-photo {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    border-radius: 22px;
+    border: 1px solid var(--about-border);
+    box-shadow: 0 18px 40px -22px rgba(15, 23, 42, 0.35);
+    background: var(--about-media-bg);
+  }
+
+  .about-copy {
+    width: 100%;
+    max-width: 68ch;
+  }
+
+  .about-eyebrow {
+    @apply text-xs font-semibold uppercase;
+    letter-spacing: 0.08em;
+    color: var(--about-fg-faint);
+    margin: 0 0 10px;
+  }
+
+  .about-name {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: clamp(2.25rem, 5cqi + 1rem, 3.25rem);
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    line-height: 1.1;
+    color: var(--about-fg);
+    margin: 0 0 18px;
+  }
+
+  .about-lead {
+    font-size: clamp(1.05rem, 1.4cqi + 0.85rem, 1.25rem);
+    line-height: 1.6;
+    color: var(--about-fg-muted);
+    max-width: 60ch;
+    margin: 0;
+  }
+
+  .about-copy-group p {
+    font-size: 1rem;
+    line-height: 1.7;
+    color: var(--about-fg-muted);
+    max-width: 68ch;
+    margin: 0 0 1.1em;
+  }
+
+  .about-copy-group p:last-child {
+    margin-bottom: 0;
+  }
+
+  .about-nexai-link {
+    @apply inline-flex items-center gap-1.5 text-sm font-semibold cursor-pointer;
+    color: var(--about-fg);
+    margin-top: 4px;
+    padding-bottom: 2px;
+    border-bottom: 1px solid var(--about-border);
+    transition: opacity 0.15s ease;
+
+    &:hover { opacity: 0.7; }
+    &:focus-visible { @apply outline-none ring-2 ring-offset-2 rounded-sm; ring-color: var(--about-fg); }
+  }
+
+  .about-emphasis {
+    font-style: normal;
+    font-weight: 600;
+    color: var(--about-fg);
+  }
+
+  .about-section {
+    /* Left-aligned to the page edge (matching the hero image's left edge),
+       not centered as an independent block — centering here would make
+       "Outside the screen" and everything below it drift out of alignment
+       with the hero's text column above it. */
+    max-width: 68ch;
+    margin: 0 0 clamp(24px, 6cqi, 40px);
+  }
+
+  .about-research,
+  .about-life {
+    padding-top: clamp(28px, 6cqi, 44px);
+  }
+
+  /* A real, always-present 1px line — GSAP only ever animates its
+     transform (scaleX 0 → 1, see useAboutScrollAnimations.js), so with
+     scripting or motion disabled it simply renders at its natural, fully
+     "grown" state instead of vanishing. Replaces the previous static
+     `border-top` on these sections with the same visual line, now able to
+     grow in on scroll. */
+  .about-divider {
+    display: block;
+    width: 100%;
+    height: 1px;
+    background: var(--about-border);
+    margin-bottom: clamp(20px, 4cqi, 28px);
+  }
+
+  .about-section-title {
+    font-size: clamp(1.25rem, 2cqi + 1rem, 1.625rem);
+    font-weight: 700;
+    letter-spacing: -0.005em;
+    color: var(--about-fg);
+    margin: 0 0 14px;
+  }
+
+  /* Specificity note: `.about-copy-group p` (class + type) would otherwise
+     always outrank a bare `.about-transition` (class-only) regardless of
+     source order, silently losing the color override — qualifying the
+     selector the same way keeps both properties applied. */
+  .about-copy-group p.about-transition {
+    font-style: italic;
+    color: var(--about-fg-soft);
+    margin: 0;
+  }
+
+  .about-principles-section {
+    margin-top: -10px; /* reads as a continuation of "Outside the screen", not a new topic */
+  }
+
+  .about-principles {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .about-principle {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--about-border-soft);
+
+    strong {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--about-fg);
+    }
+
+    span {
+      font-size: 0.95rem;
+      line-height: 1.6;
+      color: var(--about-fg-soft);
+    }
+  }
+
+  .about-principle:last-child {
+    border-bottom: none;
+  }
+
+  .about-vision {
+    padding-top: clamp(24px, 5cqi, 36px);
+    max-width: 58ch;
+
+    p {
+      font-size: clamp(1.125rem, 2cqi + 0.875rem, 1.375rem);
+      line-height: 1.55;
+      font-weight: 500;
+      color: var(--about-fg);
+      margin: 0;
+    }
+  }
+
+  .about-details {
+    border-top: 1px solid var(--about-border);
+    padding-top: clamp(20px, 4cqi, 28px);
+    max-width: 68ch;
+
+    dl {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin: 0;
+    }
+  }
+
+  .about-detail {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+
+    dt {
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--about-fg-faint);
+    }
+
+    dd {
+      font-size: 0.95rem;
+      color: var(--about-fg);
+      margin: 0;
+    }
+  }
+
+  /* Editorial two-column hero once the About *window* (not the browser
+     viewport) has enough internal width — the whole reason this uses a
+     container query instead of a media query. */
+  @container about-page (min-width: 640px) {
+    .about-hero {
+      flex-direction: row;
+      align-items: flex-start;
+      gap: clamp(40px, 6cqi, 64px);
+    }
+
+    .about-media {
+      flex: 0 0 38%;
+      max-width: 38%;
+      /* CSS sticky, not a GSAP pin — it only ever holds within this
+         <header>, so it can never overlap the chapters below or the
+         window's title bar. The subtle scale/y scrub (see
+         useAboutScrollAnimations.js) is layered on top via `.about-photo`'s
+         own transform, which sticky positioning doesn't interfere with. */
+      position: sticky;
+      top: clamp(12px, 3cqi, 28px);
+    }
+
+    .about-copy {
+      flex: 1 1 auto;
+      max-width: 64ch;
+    }
+
+    .about-details dl {
+      flex-direction: row;
+      gap: clamp(40px, 8cqi, 80px);
+    }
+
+    .about-detail {
+      flex: 1;
     }
   }
 
   #imgfile {
-    @apply w-xl absolute top-40 left-2/12 bg-white shadow-2xl drop-shadow-2xl rounded-xl overflow-hidden;
+    @apply w-xl max-w-[90vw] top-16 left-2/12;
 
     #window-header {
       p {
         @apply font-bold text-[#5f6266];
       }
+
+      .zoom-controls {
+        @apply flex items-center gap-1 flex-none;
+
+        button {
+          @apply cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed;
+        }
+
+        span {
+          @apply text-xs text-gray-400 w-10 text-center select-none;
+        }
+      }
     }
 
     .preview {
-      @apply p-2 bg-gray-200 max-h-[70vh];
+      @apply flex-1 min-h-0 p-4 bg-gray-200 overflow-auto flex items-center justify-center;
 
       img {
-        @apply w-full h-fit object-contain object-center;
+        @apply max-w-full max-h-full object-contain object-center transition-[width,height] duration-150 ease-out;
+      }
+    }
+  }
+
+  #spotify {
+    @apply w-[820px] max-w-[92vw] h-[620px] max-h-[85vh] top-24 left-1/3;
+
+    .spotify-app {
+      @apply flex-1 min-h-0 flex flex-col gap-3 p-4;
+      background: linear-gradient(180deg, rgba(20, 20, 23, 0.97), rgba(10, 10, 12, 0.98));
+      color: #e8e8ea;
+    }
+
+    .spotify-header {
+      @apply flex-none flex items-center justify-between gap-3 flex-wrap rounded-xl px-3.5 py-3;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .spotify-identity {
+      @apply flex items-center gap-3 min-w-0;
+    }
+
+    .spotify-icon {
+      @apply size-11 rounded-lg object-cover flex-none;
+    }
+
+    .spotify-copy {
+      @apply min-w-0;
+    }
+
+    .spotify-title {
+      @apply text-sm font-semibold text-white truncate;
+    }
+
+    .spotify-description {
+      @apply text-xs text-gray-400 truncate;
+    }
+
+    .spotify-external-link {
+      @apply flex-none inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-full cursor-pointer transition-colors;
+      background: #1ed760;
+      color: #06110a;
+
+      &:hover {
+        background: #22e065;
+      }
+
+      &:focus-visible {
+        outline: 2px solid #1ed760;
+        outline-offset: 2px;
+      }
+    }
+
+    .spotify-player-shell {
+      @apply relative flex-1 min-h-0 rounded-xl overflow-hidden;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .spotify-embed {
+      @apply block w-full h-full border-0;
+    }
+
+    .spotify-loading {
+      @apply absolute inset-0 z-10 flex flex-col items-center justify-center gap-2 text-gray-400;
+
+      .spotify-loading-icon {
+        @apply animate-pulse text-[#1ed760];
+      }
+
+      p {
+        @apply text-xs;
+      }
+    }
+
+    .spotify-fallback {
+      @apply flex-none flex items-center justify-center gap-1.5 text-[11px] text-gray-500;
+
+      button {
+        @apply text-[#1ed760] font-medium cursor-pointer hover:underline;
+      }
+    }
+  }
+
+  #aboutPortfolio {
+    @apply w-2xl max-w-[92vw] h-[560px] max-h-[85vh] top-20 left-1/4;
+
+    h2 {
+      @apply font-bold text-sm text-center w-full;
+    }
+
+    .about-portfolio-body {
+      @apply flex-1 min-h-0 flex flex-col;
+    }
+
+    .about-tabs {
+      @apply flex-none flex items-center gap-1 px-4 pt-3 pb-2 border-b overflow-x-auto;
+      border-color: rgba(15, 23, 42, 0.08);
+    }
+
+    .about-tab {
+      @apply flex-none px-3 py-1.5 rounded-full text-xs font-medium text-gray-500 cursor-pointer transition-colors hover:bg-black/5;
+
+      &.active {
+        @apply bg-blue-600 text-white;
+      }
+
+      &:focus-visible {
+        @apply ring-2 ring-blue-500/60;
+      }
+    }
+
+    .about-panel {
+      @apply flex-1 min-h-0 overflow-y-auto p-5;
+    }
+
+    .about-overview-hero {
+      @apply flex items-center gap-3.5 mb-4;
+    }
+
+    .about-overview-icon {
+      @apply size-14 rounded-2xl object-cover;
+    }
+
+    .about-overview-hero h3 {
+      @apply text-lg font-bold text-gray-900;
+    }
+
+    .about-overview-product {
+      @apply text-xs text-gray-400 mt-0.5;
+    }
+
+    .about-overview-description {
+      @apply text-sm text-gray-600 leading-relaxed mb-5;
+    }
+
+    .about-overview-facts {
+      @apply space-y-2.5;
+
+      div {
+        @apply flex items-center justify-between text-sm py-1.5 border-b;
+        border-color: rgba(15, 23, 42, 0.06);
+      }
+
+      dt {
+        @apply text-gray-500;
+      }
+
+      dd {
+        @apply font-medium text-gray-900;
+
+        &.capitalize {
+          text-transform: capitalize;
+        }
+      }
+    }
+
+    .about-overview-engineering {
+      @apply mt-5 mb-1;
+
+      h4 {
+        @apply text-xs font-semibold uppercase tracking-wide text-gray-400 mb-2;
+      }
+
+      ul {
+        @apply space-y-3;
+      }
+
+      li {
+        @apply border-b pb-2.5;
+        border-color: rgba(15, 23, 42, 0.06);
+
+        &:last-child {
+          @apply border-b-0 pb-0;
+        }
+      }
+    }
+
+    .about-overview-engineering-title {
+      @apply text-sm font-medium text-gray-900;
+    }
+
+    .about-overview-engineering-detail {
+      @apply text-xs text-gray-500 leading-relaxed mt-0.5;
+    }
+
+    .about-app-list {
+      @apply space-y-2;
+    }
+
+    .about-app-item {
+      @apply flex items-center gap-3 p-2.5 rounded-xl transition-colors hover:bg-black/5;
+
+      img {
+        @apply size-9 rounded-lg object-cover flex-none;
+      }
+    }
+
+    .about-app-fallback-icon {
+      @apply size-9 flex-none text-gray-400;
+    }
+
+    .about-app-info {
+      @apply flex-1 min-w-0;
+
+      p {
+        @apply text-sm font-medium text-gray-900 truncate;
+      }
+    }
+
+    .about-app-status {
+      @apply text-xs text-gray-400;
+
+      &.is-open {
+        @apply text-green-600;
+      }
+    }
+
+    .about-app-action {
+      @apply flex-none text-xs font-medium text-blue-600 px-3 py-1.5 rounded-full cursor-pointer transition-colors hover:bg-blue-50;
+    }
+
+    .about-tech h4 {
+      @apply text-xs font-semibold uppercase tracking-wide text-gray-400 mb-2 mt-4 first:mt-0;
+    }
+
+    .about-tech-core {
+      @apply space-y-1.5;
+
+      li {
+        @apply flex items-center justify-between text-sm px-2.5 py-2 rounded-lg bg-black/[0.03];
+      }
+
+      span:first-child {
+        @apply font-medium text-gray-800;
+      }
+
+      span:last-child {
+        @apply text-xs text-gray-400 font-roboto;
+      }
+    }
+
+    .about-tech-skills {
+      @apply space-y-3;
+
+      li p {
+        @apply text-xs font-medium text-gray-500 mb-1.5;
+      }
+    }
+
+    .about-tech-pills {
+      @apply flex flex-wrap gap-1.5;
+    }
+
+    .about-tech-pill {
+      @apply text-xs px-2.5 py-1 rounded-full bg-blue-500/10 text-blue-700;
+    }
+
+    .about-storage-disclaimer {
+      @apply text-xs text-gray-400 italic mb-3;
+    }
+
+    .about-storage-bar {
+      @apply flex w-full h-3 rounded-full overflow-hidden mb-4;
+      background: rgba(15, 23, 42, 0.06);
+
+      span {
+        @apply h-full;
+      }
+    }
+
+    .about-storage-legend {
+      @apply space-y-2;
+
+      li {
+        @apply flex items-center gap-2.5 text-sm;
+      }
+    }
+
+    .about-storage-dot {
+      @apply size-2.5 rounded-full flex-none;
+    }
+
+    .about-storage-legend-label {
+      @apply flex-1 text-gray-700;
+    }
+
+    .about-storage-legend-count {
+      @apply text-xs text-gray-400;
+    }
+
+    .about-credits-line {
+      @apply text-sm text-gray-800 mb-4;
+    }
+
+    .about-credits-section {
+      @apply mb-4;
+
+      h4 {
+        @apply text-xs font-semibold uppercase tracking-wide text-gray-400 mb-1.5;
+      }
+
+      p {
+        @apply text-sm text-gray-600 leading-relaxed;
+      }
+
+      ul {
+        @apply space-y-1 text-sm text-gray-600 list-disc list-inside;
+      }
+    }
+  }
+
+  #timeMachine {
+    @apply w-4xl max-w-[94vw] h-[600px] max-h-[85vh] top-14 left-1/6;
+
+    h2 {
+      @apply font-bold text-sm;
+    }
+
+    .tm-present-btn {
+      @apply flex-none flex items-center gap-1 text-[11px] font-medium text-gray-600 px-2.5 py-1 rounded-full cursor-pointer transition-colors hover:bg-black/5 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-transparent;
+    }
+  }
+
+  .tm-body {
+    @apply flex flex-1 min-h-0;
+  }
+
+  .tm-navigator {
+    @apply w-40 min-w-[8rem] flex-none border-r overflow-y-auto p-3 space-y-1;
+    background: var(--sidebar-bg);
+    border-color: rgba(15, 23, 42, 0.08);
+  }
+
+  .tm-nav-item {
+    @apply flex flex-col w-full items-start px-2.5 py-2 rounded-lg cursor-pointer transition-colors text-left hover:bg-black/5;
+
+    &.active {
+      @apply bg-blue-500/15;
+    }
+  }
+
+  .tm-nav-year {
+    @apply text-sm font-semibold text-gray-800;
+  }
+
+  .tm-nav-date {
+    @apply text-[11px] text-gray-400;
+  }
+
+  .tm-stage {
+    @apply relative flex-1 min-w-0 flex flex-col items-center justify-center overflow-hidden p-8;
+    background: radial-gradient(ellipse at center, rgba(40, 44, 74, 0.92) 0%, rgba(10, 10, 18, 0.97) 70%);
+  }
+
+  .tm-depth-layer {
+    @apply absolute flex flex-col items-center gap-2 w-56 text-center opacity-35 pointer-events-none;
+
+    img {
+      @apply w-full h-20 object-cover rounded-lg;
+    }
+
+    p {
+      @apply text-xs text-white/70 truncate w-full;
+    }
+  }
+
+  .tm-depth-prev {
+    @apply -translate-y-24 scale-90;
+  }
+
+  .tm-depth-next {
+    @apply translate-y-24 scale-90;
+  }
+
+  .tm-card {
+    @apply relative z-10 flex flex-col gap-2.5 w-full max-w-md max-h-full overflow-y-auto p-6 rounded-2xl;
+    background: var(--glass-bg);
+    border: 1px solid var(--window-border);
+    box-shadow: var(--window-shadow-focused);
+    backdrop-filter: var(--glass-blur) var(--glass-saturate);
+    -webkit-backdrop-filter: var(--glass-blur) var(--glass-saturate);
+  }
+
+  .tm-card-category {
+    @apply text-[11px] font-semibold uppercase tracking-wide text-blue-600;
+  }
+
+  .tm-card-title {
+    @apply text-lg font-bold text-gray-900;
+  }
+
+  .tm-card-date {
+    @apply text-xs text-gray-400;
+  }
+
+  .tm-card-image {
+    @apply w-full h-40 object-cover rounded-xl my-1;
+  }
+
+  .tm-card-description {
+    @apply text-sm text-gray-700 leading-relaxed;
+  }
+
+  .tm-card-tech {
+    @apply flex flex-wrap gap-1.5;
+
+    span {
+      @apply text-xs px-2.5 py-1 rounded-full bg-blue-500/10 text-blue-700;
+    }
+  }
+
+  /* Still a real class (not the shared Button component) because it's
+     passed straight through as ShareButton's own `className` prop — but
+     now just references the same tokens `.ui-button--primary` uses instead
+     of duplicating the raw Tailwind string a second time. */
+  .tm-card-action {
+    @apply self-start mt-1 inline-flex items-center gap-1.5 text-xs font-medium rounded-full cursor-pointer transition-colors;
+    color: var(--text-inverse);
+    background: var(--accent-color);
+    padding: 6px 12px;
+
+    &:hover { filter: brightness(1.08); }
+  }
+
+  .tm-card-footer {
+    @apply flex flex-wrap items-center gap-2;
+  }
+
+  .tm-stage-controls {
+    @apply absolute right-4 top-1/2 -translate-y-1/2 z-10 flex flex-col items-center gap-1.5;
+
+    button {
+      @apply flex items-center justify-center size-8 rounded-full text-white/80 cursor-pointer transition-colors hover:bg-white/15 disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-transparent;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+  }
+
+  .tm-stage-position {
+    @apply text-[10px] text-white/60 font-mono;
+  }
+
+  #home {
+    /* Every child here is absolutely positioned, so with no explicit size
+       this box collapses to 0 height — harmless for icons (they paint
+       outside it regardless) but it meant right-clicking genuinely empty
+       desktop space hit `<main>` instead of `#home`, never reaching the
+       desktop context menu. Sized to the visible area below the navbar
+       (h-14 = 56px) without changing position, so it stays a real
+       right-click target while every existing absolutely-positioned
+       child keeps the exact same origin (and thus the exact same visual
+       position) it always had. */
+    @apply relative z-0 w-full h-[calc(100dvh-56px)];
+
+    /* Below the mobile breakpoint, Home.jsx swaps in the MobileHome app
+       grid instead of the free-floating draggable desktop — this was
+       previously `max-sm:hidden` entirely (no desktop content of any kind
+       reached a mobile visitor). */
+    &[data-mobile="true"] {
+      @apply overflow-y-auto;
+    }
+  }
+
+  .mobile-home {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(76px, 1fr));
+    gap: 18px 8px;
+    padding: 24px 16px calc(96px + env(safe-area-inset-bottom, 0px));
+
+    &-tile {
+      @apply flex flex-col items-center justify-center gap-1.5 cursor-pointer rounded-2xl;
+      color: var(--desktop-text-color);
+      padding: 10px 4px;
+      /* Real touch target (Apple HIG minimum is 44px) even though the
+         visible icon glyph itself is smaller. */
+      min-height: 44px;
+
+      &:active {
+        background: rgba(255, 255, 255, 0.12);
+      }
+
+      &:focus-visible {
+        @apply outline-none ring-2 ring-white/70;
+      }
+
+      img {
+        @apply size-11 object-contain;
+      }
+
+      span {
+        @apply text-[11px] text-center leading-tight;
+        max-width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
       }
     }
   }
 
   #home {
-    @apply relative z-0 max-sm:hidden;
-
     ul {
       li {
         @apply absolute z-0 select-none flex items-center flex-col;
@@ -387,10 +1985,3756 @@ body {
           @apply group-hover:bg-gray-950/10 p-1 rounded-md;
         }
 
+        /* Desktop icons are normally pre-sized PNG glyphs (folder.png,
+           txt.png, pdf.png...), each already drawn at roughly the right
+           scale. A handful of desktop shortcuts (Publications, Talks) reuse
+           small vector icons designed for the Navbar/Finder sidebar instead
+           — scoped here to a consistent frame so they don't render tiny and
+           inconsistent next to the PNG icons, without resizing (or risking)
+           any of the existing raster icons. */
+        img[src$=".svg"] {
+          @apply size-11 object-contain p-3;
+        }
+
         p {
           @apply text-sm text-white text-center px-1 rounded-md group-hover:bg-blue-500 transition-colors max-w-40;
+          color: var(--desktop-text-color);
         }
       }
     }
+  }
+
+  #desktop-icons {
+    @apply absolute inset-0;
+  }
+
+  .desktop-icon {
+    /* Base absolute/flex/img/p styling already comes from the generic
+       `#home ul li` rule above — this only adds what's specific to a
+       draggable, selectable desktop icon. */
+    touch-action: none; /* consistent press-and-drag on touch, matching mouse */
+    outline: none;
+
+    p {
+      @apply group-hover:bg-blue-500;
+    }
+
+    &.selected p {
+      @apply bg-blue-500;
+    }
+
+    &:focus-visible p {
+      @apply ring-2 ring-white/80;
+    }
+  }
+
+  /* Desktop Stacks (grouped category folders) have been removed from the
+     desktop — see components/DesktopIcons.jsx and components/Home.jsx. */
+
+  .quick-look-backdrop {
+    @apply fixed inset-0 flex items-center justify-center p-6;
+    z-index: var(--z-quick-look);
+    background: rgba(15, 15, 20, 0.35);
+    backdrop-filter: blur(6px);
+    animation: quick-look-backdrop-in 0.15s ease-out;
+  }
+
+  .quick-look-panel {
+    @apply flex flex-col overflow-hidden outline-none;
+    width: min(560px, 100%);
+    max-height: min(640px, calc(100vh - 96px));
+    border-radius: var(--window-radius);
+    border: 1px solid var(--window-border);
+    background: var(--glass-bg);
+    box-shadow: var(--window-shadow-focused);
+    backdrop-filter: var(--glass-blur) var(--glass-saturate);
+    -webkit-backdrop-filter: var(--glass-blur) var(--glass-saturate);
+    animation: quick-look-panel-in 0.18s ease-out;
+
+    .quick-look-toolbar {
+      @apply flex-none flex items-center gap-3 px-4 py-3 border-b;
+      border-color: rgba(15, 23, 42, 0.08);
+
+      .quick-look-close {
+        @apply flex-none flex items-center justify-center size-7 rounded-full text-gray-500 cursor-pointer transition-colors hover:bg-black/5;
+      }
+
+      .quick-look-title {
+        @apply flex-1 min-w-0 text-center;
+      }
+
+      .quick-look-name {
+        @apply text-sm font-semibold text-gray-900 truncate;
+      }
+
+      .quick-look-kind {
+        @apply text-xs text-gray-400;
+      }
+
+      .quick-look-share {
+        @apply flex-none flex items-center justify-center size-7 rounded-full text-gray-500 cursor-pointer transition-colors hover:bg-black/5;
+      }
+    }
+
+    .quick-look-body {
+      @apply flex-1 min-h-0 overflow-auto p-5 flex items-center justify-center;
+    }
+
+    .quick-look-nav {
+      @apply flex-none flex items-center justify-center gap-3 px-4 py-2.5 border-t text-xs text-gray-500;
+      border-color: rgba(15, 23, 42, 0.08);
+
+      .quick-look-nav-btn {
+        @apply flex items-center justify-center size-7 rounded-full cursor-pointer transition-colors hover:bg-black/5 text-gray-600;
+      }
+
+      .quick-look-position {
+        @apply w-16 text-center;
+      }
+    }
+  }
+
+  .quick-look-image {
+    @apply w-full h-full flex items-center justify-center;
+
+    img {
+      @apply max-w-full max-h-[50vh] object-contain select-none;
+    }
+  }
+
+  .quick-look-text {
+    @apply w-full max-w-md space-y-3;
+
+    .quick-look-text-image {
+      @apply w-full h-auto max-h-56 object-cover rounded-lg select-none;
+    }
+
+    h3 {
+      @apply text-base font-semibold text-gray-900;
+    }
+
+    p {
+      @apply text-sm text-gray-700 leading-relaxed whitespace-pre-line;
+    }
+  }
+
+  .quick-look-pdf {
+    @apply flex items-center justify-center;
+
+    canvas {
+      @apply rounded-md shadow-md;
+    }
+  }
+
+  .quick-look-project {
+    @apply w-full max-w-md space-y-2.5;
+
+    h3 {
+      @apply text-base font-semibold text-gray-900;
+    }
+
+    p {
+      @apply text-sm text-gray-700 leading-relaxed;
+    }
+
+    .quick-look-meta {
+      @apply text-xs text-gray-400 pt-1;
+    }
+  }
+
+  .quick-look-folder,
+  .quick-look-link {
+    @apply flex flex-col items-center justify-center gap-2 text-gray-400 py-8;
+
+    p {
+      @apply text-sm text-gray-500;
+    }
+  }
+
+  .quick-look-link-url {
+    @apply max-w-xs truncate text-blue-600;
+  }
+
+  .app-switcher-overlay {
+    @apply fixed inset-0 flex items-center justify-center;
+    z-index: var(--z-app-switcher);
+    background: rgba(15, 15, 20, 0.25);
+    animation: app-switcher-in 0.12s ease-out;
+  }
+
+  .app-switcher-panel {
+    @apply flex items-center gap-3 px-5 py-4 rounded-2xl overflow-x-auto;
+    max-width: min(680px, 92vw);
+    border: 1px solid var(--window-border);
+    background: rgba(30, 30, 34, 0.75);
+    box-shadow: var(--window-shadow-focused);
+    backdrop-filter: var(--glass-blur) var(--glass-saturate);
+    -webkit-backdrop-filter: var(--glass-blur) var(--glass-saturate);
+  }
+
+  .app-switcher-item {
+    @apply relative flex-none flex flex-col items-center gap-2 p-2.5 rounded-xl transition-all opacity-55;
+
+    &.selected {
+      @apply bg-white/12 opacity-100 scale-[1.08];
+    }
+  }
+
+  .app-switcher-icon {
+    @apply size-12 rounded-xl object-cover;
+  }
+
+  .app-switcher-label {
+    @apply text-xs font-medium text-white max-w-16 truncate text-center;
+  }
+
+  .app-switcher-minimized-badge {
+    @apply absolute -top-1 -right-1 text-[9px] font-semibold px-1.5 py-0.5 rounded-full bg-amber-400 text-amber-950;
+  }
+
+  .mission-control-backdrop {
+    @apply fixed inset-0 cursor-default;
+    z-index: var(--z-mission-control-backdrop);
+    background: rgba(10, 14, 24, 0.4);
+    backdrop-filter: blur(10px) saturate(1.1);
+    -webkit-backdrop-filter: blur(10px) saturate(1.1);
+    animation: mission-control-backdrop-in 0.2s ease-out;
+  }
+
+  .mission-control-empty {
+    @apply absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-white/70 text-sm;
+    z-index: var(--z-mission-control-chrome);
+  }
+
+  .mission-control-thumb {
+    @apply fixed flex items-end justify-center rounded-xl cursor-pointer transition-shadow;
+    z-index: var(--z-mission-control-chrome);
+    border: 2px solid transparent;
+
+    &:hover,
+    &:focus-visible {
+      border-color: rgba(255, 255, 255, 0.75);
+      box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.12);
+      outline: none;
+    }
+  }
+
+  .mission-control-thumb-label {
+    @apply w-full text-center text-xs font-medium text-white px-2 py-1.5 rounded-b-[10px] truncate;
+    background: rgba(10, 10, 14, 0.55);
+    backdrop-filter: blur(8px);
+  }
+
+  .mission-control-strip {
+    @apply fixed left-1/2 -translate-x-1/2 flex items-center gap-3 px-4 py-3 rounded-2xl;
+    bottom: 28px;
+    z-index: var(--z-mission-control-chrome);
+    background: rgba(20, 20, 26, 0.55);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    backdrop-filter: var(--glass-blur) var(--glass-saturate);
+    -webkit-backdrop-filter: var(--glass-blur) var(--glass-saturate);
+  }
+
+  .mission-control-strip-item {
+    @apply flex flex-col items-center gap-1.5 px-2.5 py-2 rounded-xl cursor-pointer transition-colors hover:bg-white/10;
+  }
+
+  .mission-control-strip-icon {
+    @apply size-9 rounded-lg object-cover opacity-70;
+  }
+
+  .mission-control-strip-label {
+    @apply text-[11px] font-medium text-white/80 max-w-16 truncate;
+  }
+
+  .quick-look-blog,
+  .quick-look-music {
+    @apply w-full max-w-md flex flex-col items-center gap-2.5 text-center;
+
+    p {
+      @apply text-sm text-gray-600;
+    }
+  }
+
+  .quick-look-blog-image,
+  .quick-look-music-image {
+    @apply w-full max-h-48 object-cover rounded-lg select-none;
+  }
+
+  .context-menu {
+    @apply fixed flex flex-col py-1.5 rounded-xl overflow-hidden outline-none;
+    z-index: var(--z-context-menu);
+    border: 1px solid var(--window-border);
+    background: var(--glass-bg);
+    box-shadow: var(--window-shadow-focused);
+    backdrop-filter: var(--glass-blur) var(--glass-saturate);
+    -webkit-backdrop-filter: var(--glass-blur) var(--glass-saturate);
+    animation: quick-look-panel-in 0.12s ease-out;
+  }
+
+  .context-menu-item {
+    @apply flex items-center gap-2.5 w-full px-3.5 py-2 text-sm text-gray-700 text-left cursor-pointer transition-colors;
+
+    &:hover:not(:disabled),
+    &:focus-visible {
+      @apply bg-blue-500/12 outline-none;
+    }
+
+    &:disabled {
+      @apply text-gray-300 cursor-not-allowed;
+    }
+
+    &.destructive {
+      @apply text-red-600;
+    }
+  }
+
+  .context-menu-hint {
+    @apply ml-auto text-xs text-gray-400;
+  }
+
+  .context-menu-separator {
+    @apply my-1.5 border-t;
+    border-color: rgba(15, 23, 42, 0.08);
+  }
+
+  .get-info-panel {
+    @apply fixed flex flex-col overflow-hidden outline-none;
+    top: 76px;
+    right: 24px;
+    width: 320px;
+    max-height: min(560px, calc(100vh - 110px));
+    z-index: var(--z-get-info);
+    border-radius: var(--window-radius);
+    border: 1px solid var(--window-border);
+    background: var(--glass-bg);
+    box-shadow: var(--window-shadow-focused);
+    backdrop-filter: var(--glass-blur) var(--glass-saturate);
+    -webkit-backdrop-filter: var(--glass-blur) var(--glass-saturate);
+    animation: quick-look-panel-in 0.16s ease-out;
+  }
+
+  .get-info-header {
+    @apply flex-none flex items-center gap-2.5 px-4 py-3 border-b;
+    border-color: rgba(15, 23, 42, 0.08);
+  }
+
+  .get-info-icon {
+    @apply size-8 object-contain object-center flex-none;
+  }
+
+  .get-info-name {
+    @apply flex-1 min-w-0 text-sm font-semibold text-gray-900 truncate;
+  }
+
+  .get-info-close {
+    @apply flex-none flex items-center justify-center size-6 rounded-full text-gray-500 cursor-pointer transition-colors hover:bg-black/5;
+  }
+
+  .get-info-body {
+    @apply flex-1 min-h-0 overflow-y-auto p-4 space-y-4;
+  }
+
+  .get-info-description {
+    @apply space-y-2 text-sm text-gray-700 leading-relaxed;
+  }
+
+  .get-info-fields {
+    @apply space-y-0;
+  }
+
+  .get-info-row {
+    @apply flex items-start justify-between gap-3 py-2 text-sm border-b;
+    border-color: rgba(15, 23, 42, 0.06);
+
+    dt {
+      @apply flex-none text-gray-400;
+    }
+
+    dd {
+      @apply text-right text-gray-900 font-medium break-words min-w-0;
+
+      a {
+        @apply text-blue-600 hover:underline;
+      }
+    }
+  }
+
+  .get-info-actions {
+    @apply flex-none flex items-center gap-2 px-4 py-3 border-t;
+    border-color: rgba(15, 23, 42, 0.08);
+  }
+
+  .get-info-action {
+    @apply flex-1 flex items-center justify-center gap-1.5 text-xs font-medium text-gray-700 px-2.5 py-2 rounded-lg cursor-pointer transition-colors hover:bg-black/5;
+  }
+
+  .spotlight-backdrop {
+    @apply fixed inset-0 flex items-start justify-center p-6;
+    padding-top: 12vh;
+    z-index: var(--z-spotlight);
+    background: rgba(15, 15, 20, 0.35);
+    backdrop-filter: blur(6px);
+    animation: quick-look-backdrop-in 0.15s ease-out;
+  }
+
+  .spotlight-panel {
+    @apply flex overflow-hidden outline-none;
+    width: min(720px, 94vw);
+    max-height: min(560px, calc(100vh - 20vh));
+    border-radius: var(--window-radius);
+    border: 1px solid var(--window-border);
+    background: var(--glass-bg);
+    box-shadow: var(--window-shadow-focused);
+    backdrop-filter: var(--glass-blur) var(--glass-saturate);
+    -webkit-backdrop-filter: var(--glass-blur) var(--glass-saturate);
+    animation: quick-look-panel-in 0.16s ease-out;
+  }
+
+  .spotlight-main {
+    @apply flex flex-col flex-1 min-w-0;
+  }
+
+  .spotlight-field {
+    @apply flex items-center gap-2.5 px-4 py-3.5 flex-none border-b;
+    border-color: rgba(15, 23, 42, 0.08);
+
+    .spotlight-search-icon {
+      @apply text-gray-400 flex-none;
+    }
+
+    input {
+      @apply flex-1 bg-transparent text-base text-gray-900 placeholder:text-gray-400 outline-none;
+    }
+
+    .spotlight-clear {
+      @apply flex-none text-gray-400 hover:text-gray-700 cursor-pointer rounded-full p-1 transition-colors hover:bg-black/5;
+    }
+  }
+
+  .spotlight-results {
+    @apply flex-1 min-h-0 overflow-y-auto p-2;
+  }
+
+  .spotlight-section-label {
+    @apply flex items-center justify-between px-2.5 py-1.5 text-xs font-medium text-gray-400;
+  }
+
+  .spotlight-result {
+    @apply flex items-center gap-2.5 px-2.5 py-2 rounded-lg cursor-pointer transition-colors;
+
+    &.active {
+      @apply bg-blue-500/12;
+    }
+
+    &:not(.active):hover {
+      @apply bg-black/5;
+    }
+
+    .spotlight-result-icon {
+      @apply flex-none flex items-center justify-center size-7 text-gray-500;
+
+      img {
+        @apply size-6 rounded-md object-cover;
+      }
+    }
+
+    .spotlight-result-text {
+      @apply flex-1 min-w-0;
+    }
+
+    .spotlight-result-title {
+      @apply text-sm font-medium text-gray-900 truncate;
+
+      mark {
+        @apply bg-yellow-200 text-inherit rounded-[2px];
+      }
+    }
+
+    .spotlight-result-subtitle {
+      @apply text-xs text-gray-500 truncate;
+    }
+
+    .spotlight-result-category {
+      @apply flex-none text-[10px] font-medium uppercase tracking-wide text-gray-400 px-1.5 py-0.5 rounded-full;
+      background: rgba(15, 23, 42, 0.05);
+    }
+  }
+
+  .spotlight-empty {
+    @apply flex flex-col items-center justify-center gap-1 py-10 px-4 text-center;
+
+    p {
+      @apply text-sm font-medium text-gray-600;
+    }
+
+    span {
+      @apply text-xs text-gray-400;
+    }
+  }
+
+  .spotlight-hint {
+    @apply px-2.5 py-2 text-xs text-gray-400;
+  }
+
+  .spotlight-footer {
+    @apply flex-none flex items-center justify-center gap-4 px-3 py-2 text-[11px] text-gray-400 border-t;
+    border-color: rgba(15, 23, 42, 0.08);
+
+    kbd {
+      @apply inline-block px-1 py-0.5 rounded border text-[10px] font-mono mr-0.5;
+      border-color: rgba(15, 23, 42, 0.15);
+      background: rgba(255, 255, 255, 0.6);
+    }
+  }
+
+  .spotlight-topic {
+    @apply flex flex-col gap-2.5 p-4 overflow-y-auto;
+
+    .spotlight-topic-back {
+      @apply inline-flex items-center gap-1 self-start text-xs font-medium text-blue-600 cursor-pointer hover:underline;
+    }
+
+    .spotlight-topic-title {
+      @apply text-base font-semibold text-gray-900;
+    }
+
+    .spotlight-topic-paragraph {
+      @apply text-sm text-gray-600 leading-relaxed;
+    }
+
+    .spotlight-topic-shortcuts {
+      @apply space-y-1.5 mt-1;
+
+      li {
+        @apply flex items-center justify-between gap-3 text-xs text-gray-600;
+
+        kbd {
+          @apply px-1.5 py-0.5 rounded border text-[10px] font-mono;
+          border-color: rgba(15, 23, 42, 0.15);
+          background: rgba(255, 255, 255, 0.6);
+        }
+      }
+    }
+
+    .spotlight-topic-action {
+      @apply self-start mt-1 px-3 py-1.5 rounded-lg text-sm font-medium text-white bg-blue-600 cursor-pointer transition-colors hover:bg-blue-700;
+    }
+  }
+
+  .spotlight-preview {
+    @apply hidden flex-col flex-none w-64 border-l overflow-hidden;
+    border-color: rgba(15, 23, 42, 0.08);
+    background: rgba(255, 255, 255, 0.25);
+  }
+
+  .spotlight-preview-header {
+    @apply flex-none flex items-center gap-2.5 p-3.5 border-b;
+    border-color: rgba(15, 23, 42, 0.08);
+  }
+
+  .spotlight-preview-icon {
+    @apply size-8 rounded-md object-cover flex-none;
+  }
+
+  .spotlight-preview-heading {
+    @apply min-w-0;
+  }
+
+  .spotlight-preview-title {
+    @apply text-sm font-semibold text-gray-900 truncate;
+  }
+
+  .spotlight-preview-subtitle {
+    @apply text-xs text-gray-500 truncate;
+  }
+
+  .spotlight-preview-body {
+    @apply flex-1 min-h-0 overflow-auto p-3 flex items-center justify-center;
+  }
+
+  .spotlight-preview-share {
+    @apply ml-auto flex-none flex items-center justify-center size-7 rounded-full text-gray-500 cursor-pointer transition-colors hover:bg-black/5;
+  }
+
+  @media (min-width: 820px) {
+    .spotlight-preview {
+      @apply flex;
+    }
+  }
+
+  .live-activity-capsule {
+    @apply fixed top-2.5 flex items-center gap-1 pl-1 pr-1.5 py-1 rounded-full select-none;
+    right: 226px;
+    z-index: var(--z-live-activity);
+    border: 1px solid var(--window-border);
+    background: rgba(30, 30, 34, 0.72);
+    box-shadow: var(--window-shadow);
+    backdrop-filter: var(--glass-blur) var(--glass-saturate);
+    -webkit-backdrop-filter: var(--glass-blur) var(--glass-saturate);
+    animation: live-activity-in 0.2s ease-out;
+  }
+
+  .live-activity-main {
+    @apply flex items-center gap-2 pl-1 pr-2 py-1 rounded-full cursor-pointer transition-colors hover:bg-white/10;
+  }
+
+  .live-activity-icon {
+    @apply size-5 rounded-md object-cover flex-none;
+  }
+
+  .live-activity-text {
+    @apply flex flex-col items-start leading-tight;
+  }
+
+  .live-activity-label {
+    @apply text-[11px] font-medium text-white max-w-32 truncate;
+  }
+
+  .live-activity-progress {
+    @apply text-[10px] text-white/60;
+  }
+
+  .live-activity-controls {
+    @apply flex items-center gap-0.5;
+
+    button {
+      @apply flex items-center justify-center size-5 rounded-full text-white/80 cursor-pointer transition-colors hover:bg-white/15 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-transparent;
+    }
+  }
+
+  .live-activity-main--static {
+    @apply cursor-default;
+  }
+
+  .live-activity-text-btn {
+    @apply w-auto px-2 text-[11px] font-medium text-white rounded-full cursor-pointer transition-colors hover:bg-white/15;
+  }
+
+  .live-activity-coach {
+    @apply fixed flex flex-col gap-1 px-3.5 py-3 rounded-xl;
+    top: 46px;
+    right: 226px;
+    width: 260px;
+    z-index: var(--z-live-activity);
+    border: 1px solid var(--window-border);
+    background: var(--glass-bg);
+    box-shadow: var(--window-shadow);
+    backdrop-filter: var(--glass-blur) var(--glass-saturate);
+    -webkit-backdrop-filter: var(--glass-blur) var(--glass-saturate);
+    animation: live-activity-in 0.2s ease-out;
+  }
+
+  .live-activity-coach-title {
+    @apply text-xs font-semibold text-gray-900;
+  }
+
+  .live-activity-coach-text {
+    @apply text-xs text-gray-600 leading-relaxed;
+  }
+
+  .about-tour-button,
+  .welcome-tour-button {
+    @apply inline-flex items-center gap-1.5 text-sm font-medium text-white bg-blue-600 px-3.5 py-2 rounded-full cursor-pointer transition-colors hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .about-tour-button {
+    @apply mt-5;
+  }
+
+  .about-overview-buttons {
+    @apply flex flex-wrap items-center gap-3;
+
+    .about-tour-button {
+      @apply mt-0;
+    }
+  }
+
+  .about-tour-button--secondary {
+    @apply text-blue-700 bg-blue-500/10 hover:bg-blue-500/20;
+  }
+
+  .welcome-tour-button {
+    @apply mt-6 pointer-events-auto;
+    background: rgba(255, 255, 255, 0.14);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+
+    &:hover:not(:disabled) {
+      background: rgba(255, 255, 255, 0.22);
+    }
+  }
+
+  /* ---------- Dynamic Desktop background ---------- */
+
+  .desktop-background {
+    @apply fixed inset-0 pointer-events-none;
+    z-index: -1;
+  }
+
+  .desktop-background-layer {
+    @apply absolute inset-0 bg-cover bg-center;
+    transition: opacity 0.9s ease;
+  }
+
+  /* ---------- Control Center ---------- */
+
+  .control-center-panel {
+    @apply fixed flex flex-col gap-1 overflow-y-auto outline-none p-3;
+    top: 60px;
+    right: 16px;
+    width: 320px;
+    max-height: calc(100vh - 84px);
+    z-index: var(--z-control-center);
+    border-radius: var(--window-radius);
+    border: 1px solid var(--window-border);
+    background: var(--glass-bg);
+    box-shadow: var(--window-shadow-focused);
+    backdrop-filter: var(--glass-blur) var(--glass-saturate);
+    -webkit-backdrop-filter: var(--glass-blur) var(--glass-saturate);
+    animation: quick-look-panel-in 0.16s ease-out;
+  }
+
+  .cc-section {
+    @apply pb-3 mb-2 border-b;
+    border-color: rgba(15, 23, 42, 0.08);
+
+    &:last-child {
+      @apply border-b-0 mb-0 pb-0;
+    }
+  }
+
+  .cc-section-title {
+    @apply text-[11px] font-semibold uppercase tracking-wide text-gray-400 px-1 mb-1.5;
+  }
+
+  .cc-segmented {
+    @apply flex items-center gap-1 p-1 rounded-lg mb-2;
+    background: rgba(15, 23, 42, 0.05);
+  }
+
+  .cc-segment {
+    @apply flex-1 text-xs font-medium text-gray-600 py-1.5 rounded-md cursor-pointer transition-colors;
+
+    &.active {
+      @apply bg-white text-gray-900 shadow-sm;
+    }
+  }
+
+  .cc-field {
+    @apply px-1 py-1.5;
+  }
+
+  .cc-field-label {
+    @apply flex items-center justify-between text-xs font-medium text-gray-600 mb-1.5;
+  }
+
+  .cc-field-value {
+    @apply text-gray-400 font-normal;
+  }
+
+  .cc-field input[type="range"] {
+    @apply w-full accent-current cursor-pointer;
+    accent-color: var(--accent-color);
+  }
+
+  .cc-select {
+    @apply w-full text-sm text-gray-700 px-2.5 py-1.5 rounded-lg cursor-pointer outline-none;
+    background: rgba(15, 23, 42, 0.05);
+    border: 1px solid rgba(15, 23, 42, 0.08);
+  }
+
+  .cc-toggle-row {
+    @apply flex items-center justify-between gap-3 w-full px-1 py-2 rounded-lg cursor-pointer transition-colors text-left hover:bg-black/5;
+  }
+
+  .cc-toggle-text {
+    @apply flex flex-col min-w-0;
+  }
+
+  .cc-toggle-label {
+    @apply text-sm font-medium text-gray-800;
+  }
+
+  .cc-toggle-description {
+    @apply text-[11px] text-gray-400 truncate;
+  }
+
+  .cc-switch {
+    @apply relative flex-none w-9 h-5 rounded-full transition-colors;
+    background: rgba(15, 23, 42, 0.18);
+  }
+
+  .cc-toggle-row.is-on .cc-switch {
+    background: var(--accent-color);
+  }
+
+  .cc-switch-thumb {
+    @apply absolute top-0.5 left-0.5 size-4 rounded-full bg-white transition-transform;
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.3);
+  }
+
+  .cc-toggle-row.is-on .cc-switch-thumb {
+    transform: translateX(16px);
+  }
+
+  .cc-accent-grid {
+    @apply flex items-center gap-2 flex-wrap;
+  }
+
+  .cc-accent-swatch {
+    @apply flex-none flex items-center justify-center size-6 rounded-full cursor-pointer text-white transition-transform hover:scale-110;
+    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.1);
+  }
+
+  .cc-wallpaper-grid {
+    @apply grid grid-cols-4 gap-2;
+  }
+
+  .cc-wallpaper-swatch {
+    @apply aspect-square rounded-lg cursor-pointer transition-all;
+    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.1);
+
+    &.active {
+      box-shadow: 0 0 0 2px var(--accent-color);
+    }
+
+    &:disabled {
+      @apply opacity-40 cursor-not-allowed;
+    }
+  }
+
+  .cc-link-button {
+    @apply w-full text-left text-xs font-medium px-1 py-1.5 cursor-pointer;
+    color: var(--accent-color);
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  /* ---------- Desktop Widgets ---------- */
+
+  .desktop-widgets-layer {
+    @apply absolute inset-0 pointer-events-none;
+  }
+
+  .widget-card {
+    @apply absolute flex flex-col overflow-hidden pointer-events-auto outline-none;
+    z-index: var(--z-widget);
+    border-radius: 1.1rem;
+    border: 1px solid var(--window-border);
+    background: var(--glass-bg-inactive);
+    box-shadow: var(--window-shadow);
+    backdrop-filter: var(--glass-blur) var(--glass-saturate);
+    -webkit-backdrop-filter: var(--glass-blur) var(--glass-saturate);
+    transition: box-shadow 0.2s ease;
+
+    &:hover,
+    &:focus-visible {
+      background: var(--glass-bg);
+      box-shadow: var(--window-shadow-focused);
+    }
+
+    &.is-editing {
+      outline: 2px dashed rgba(255, 255, 255, 0.5);
+      outline-offset: 3px;
+    }
+
+    &.is-hidden {
+      @apply opacity-40;
+    }
+  }
+
+  .widget-drag-handle {
+    @apply absolute top-1.5 left-1.5 flex items-center justify-center size-6 rounded-md text-gray-400 cursor-grab active:cursor-grabbing;
+    z-index: 2;
+  }
+
+  .widget-body {
+    @apply flex-1 min-h-0 flex flex-col gap-1.5 p-4 overflow-hidden;
+  }
+
+  .widget-body--photo {
+    @apply relative p-0;
+  }
+
+  .widget-eyebrow {
+    @apply text-[10px] font-semibold uppercase tracking-wide text-gray-400;
+  }
+
+  .widget-title {
+    @apply text-sm font-semibold text-gray-900 line-clamp-2;
+  }
+
+  .widget-text {
+    @apply text-xs text-gray-600 leading-relaxed line-clamp-3;
+  }
+
+  .widget-image {
+    @apply w-full h-20 object-cover rounded-lg;
+  }
+
+  .widget-image--fill {
+    @apply absolute inset-0 size-full rounded-none;
+  }
+
+  .widget-image--square {
+    @apply size-12 rounded-lg;
+  }
+
+  .widget-pill-list {
+    @apply flex flex-wrap gap-1;
+  }
+
+  .widget-pill {
+    @apply text-[10px] px-2 py-0.5 rounded-full bg-blue-500/10 text-blue-700;
+  }
+
+  .widget-action {
+    @apply mt-auto self-start inline-flex items-center gap-1 text-[11px] font-medium px-2.5 py-1 rounded-full cursor-pointer transition-colors;
+    color: white;
+    background: var(--accent-color);
+  }
+
+  .widget-action--overlay {
+    @apply absolute bottom-2 left-2 z-10;
+    background: rgba(10, 10, 14, 0.55);
+    backdrop-filter: blur(6px);
+  }
+
+  .widget-edit-controls {
+    @apply absolute top-1.5 right-1.5 flex items-center gap-1;
+    z-index: 2;
+  }
+
+  .widget-edit-btn {
+    @apply flex items-center justify-center h-6 px-1.5 rounded-full text-[10px] font-medium text-gray-600 cursor-pointer transition-colors;
+    background: rgba(255, 255, 255, 0.75);
+
+    &:hover {
+      background: white;
+    }
+  }
+
+  .widget-edit-btn--danger {
+    @apply text-red-600;
+  }
+
+  .widget-edit-toolbar {
+    @apply fixed bottom-28 left-1/2 -translate-x-1/2 flex items-center gap-3 px-4 py-2.5 rounded-full;
+    z-index: var(--z-live-activity);
+    border: 1px solid var(--window-border);
+    background: rgba(30, 30, 34, 0.75);
+    color: white;
+    box-shadow: var(--window-shadow-focused);
+    backdrop-filter: var(--glass-blur) var(--glass-saturate);
+    -webkit-backdrop-filter: var(--glass-blur) var(--glass-saturate);
+
+    p {
+      @apply text-xs font-medium text-white/70;
+    }
+  }
+
+  .widget-edit-toolbar-btn {
+    @apply flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-full cursor-pointer transition-colors hover:bg-white/15;
+  }
+
+  .widget-gallery-panel {
+    @apply fixed flex flex-col overflow-hidden outline-none;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: min(420px, 90vw);
+    max-height: min(480px, 80vh);
+    z-index: var(--z-widget-gallery);
+    border-radius: var(--window-radius);
+    border: 1px solid var(--window-border);
+    background: var(--glass-bg);
+    box-shadow: var(--window-shadow-focused);
+    backdrop-filter: var(--glass-blur) var(--glass-saturate);
+    -webkit-backdrop-filter: var(--glass-blur) var(--glass-saturate);
+    animation: quick-look-panel-in 0.16s ease-out;
+  }
+
+  .widget-gallery-header {
+    @apply flex-none flex items-center justify-between px-4 py-3 border-b;
+    border-color: rgba(15, 23, 42, 0.08);
+
+    p {
+      @apply text-sm font-semibold text-gray-900;
+    }
+
+    button {
+      @apply flex items-center justify-center size-6 rounded-full text-gray-500 cursor-pointer hover:bg-black/5;
+    }
+  }
+
+  .widget-gallery-grid {
+    @apply flex-1 min-h-0 overflow-y-auto grid grid-cols-2 gap-2.5 p-4;
+  }
+
+  .widget-gallery-item {
+    @apply flex flex-col items-center gap-2 p-4 rounded-xl text-xs font-medium text-gray-700 cursor-pointer transition-colors;
+    background: rgba(15, 23, 42, 0.04);
+
+    &:hover {
+      background: rgba(15, 23, 42, 0.08);
+    }
+  }
+
+  /* ---------- Screen Saver ---------- */
+
+  .screen-saver {
+    @apply fixed inset-0 flex flex-col items-center justify-center overflow-hidden cursor-pointer;
+    z-index: var(--z-screen-saver);
+    background: #05050a;
+  }
+
+  .screen-saver-gradient {
+    @apply absolute inset-0;
+    background: linear-gradient(120deg, #0f2027, #203a43, #2c5364, #232526, #0f2027);
+    background-size: 400% 400%;
+    animation: screen-saver-drift 40s ease infinite;
+  }
+
+  .screen-saver-floating-label {
+    @apply absolute text-xs md:text-sm font-medium tracking-wide text-white/25 select-none whitespace-nowrap;
+    animation: screen-saver-float 9s ease-in-out infinite;
+  }
+
+  .screen-saver-clock {
+    @apply relative z-10 flex flex-col items-center gap-1 text-white select-none;
+  }
+
+  .screen-saver-time {
+    @apply text-8xl font-thin tabular-nums;
+  }
+
+  .screen-saver-date {
+    @apply text-lg text-white/70;
+  }
+
+  .screen-saver-hint {
+    @apply relative z-10 mt-8 text-xs text-white/40;
+  }
+
+  /* ---------- Share button (fallback style; most call sites pass their
+     own className such as "icon" or "get-info-action") ---------- */
+
+  .share-button {
+    @apply flex-none flex items-center justify-center size-7 rounded-full text-gray-500 cursor-pointer transition-colors hover:bg-black/5;
+  }
+
+  /* ---------- Handoff / "Continue on Phone" panel ---------- */
+
+  .handoff-backdrop {
+    @apply fixed inset-0 flex items-center justify-center p-6;
+    z-index: var(--z-handoff);
+    background: rgba(15, 15, 20, 0.35);
+    backdrop-filter: blur(6px);
+    animation: quick-look-backdrop-in 0.15s ease-out;
+  }
+
+  .handoff-panel {
+    @apply flex flex-col outline-none p-5;
+    width: min(360px, 100%);
+    border-radius: var(--window-radius);
+    border: 1px solid var(--window-border);
+    background: var(--glass-bg);
+    box-shadow: var(--window-shadow-focused);
+    backdrop-filter: var(--glass-blur) var(--glass-saturate);
+    -webkit-backdrop-filter: var(--glass-blur) var(--glass-saturate);
+    animation: quick-look-panel-in 0.16s ease-out;
+  }
+
+  .handoff-header {
+    @apply flex items-start gap-3 mb-3;
+  }
+
+  .handoff-icon {
+    @apply flex-none flex items-center justify-center size-8 rounded-full bg-blue-500/10 text-blue-600;
+  }
+
+  .handoff-heading {
+    @apply flex-1 min-w-0;
+  }
+
+  .handoff-title {
+    @apply text-sm font-semibold text-gray-900 truncate;
+  }
+
+  .handoff-subtitle {
+    @apply text-xs text-gray-400;
+  }
+
+  .handoff-close {
+    @apply flex-none flex items-center justify-center size-6 rounded-full text-gray-500 cursor-pointer transition-colors hover:bg-black/5;
+  }
+
+  .handoff-instruction {
+    @apply text-sm text-gray-600 leading-relaxed mb-3;
+  }
+
+  .handoff-url {
+    @apply w-full text-xs font-mono text-gray-700 bg-black/[0.04] border rounded-lg px-3 py-2.5 mb-3 outline-none;
+    border-color: rgba(15, 23, 42, 0.08);
+
+    &:focus-visible {
+      @apply ring-2 ring-blue-500/60;
+    }
+  }
+
+  .handoff-actions {
+    @apply flex items-center gap-2;
+  }
+
+  .handoff-action {
+    @apply flex-1 flex items-center justify-center gap-1.5 text-xs font-medium text-gray-700 px-3 py-2 rounded-lg cursor-pointer transition-colors hover:bg-black/5;
+    border: 1px solid rgba(15, 23, 42, 0.1);
+  }
+
+  .handoff-action--primary {
+    @apply text-white border-transparent bg-blue-600 hover:bg-blue-700;
+  }
+
+  .handoff-status {
+    @apply min-h-4 mt-3 text-xs text-gray-500 text-center;
+  }
+
+  /* ---------- Activity Monitor ---------- */
+
+  #activityMonitor {
+    @apply w-3xl max-w-[94vw] h-[600px] max-h-[85vh] top-16 left-1/5;
+
+    h2 {
+      @apply font-bold text-sm;
+    }
+  }
+
+  .am-body {
+    @apply flex-1 min-h-0 flex flex-col;
+  }
+
+  .am-tabs {
+    @apply flex-none flex items-center gap-1 px-4 pt-3 pb-2 border-b overflow-x-auto;
+    border-color: rgba(15, 23, 42, 0.08);
+  }
+
+  .am-tab {
+    @apply flex-none flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium text-gray-500 cursor-pointer transition-colors hover:bg-black/5;
+
+    &.active {
+      @apply bg-blue-600 text-white;
+    }
+
+    &:focus-visible {
+      @apply ring-2 ring-blue-500/60;
+    }
+  }
+
+  .am-panel {
+    @apply flex-1 min-h-0 overflow-y-auto p-4;
+  }
+
+  .am-filter {
+    @apply flex items-center gap-2 mb-3 px-3 py-2 rounded-lg text-gray-400;
+    background: rgba(15, 23, 42, 0.04);
+
+    input {
+      @apply flex-1 bg-transparent text-sm text-gray-800 placeholder:text-gray-400 outline-none;
+    }
+  }
+
+  .am-table-scroll {
+    @apply w-full overflow-x-auto rounded-lg border;
+    border-color: rgba(15, 23, 42, 0.08);
+  }
+
+  .am-table {
+    @apply w-full text-xs border-collapse;
+
+    th {
+      @apply text-left font-semibold text-gray-500 px-3 py-2 whitespace-nowrap border-b;
+      background: rgba(15, 23, 42, 0.03);
+      border-color: rgba(15, 23, 42, 0.08);
+    }
+
+    td {
+      @apply px-3 py-2 text-gray-700 whitespace-nowrap border-b align-middle;
+      border-color: rgba(15, 23, 42, 0.06);
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+  }
+
+  .am-row-closed {
+    @apply opacity-45;
+  }
+
+  .am-app-cell {
+    @apply flex items-center gap-2 font-medium text-gray-900;
+
+    img {
+      @apply size-4 object-contain flex-none;
+    }
+  }
+
+  .am-state-badge {
+    @apply inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium;
+    background: rgba(15, 23, 42, 0.06);
+    color: rgba(15, 23, 42, 0.55);
+
+    &.am-state-badge--open {
+      @apply bg-green-500/15 text-green-700;
+    }
+
+    &.am-state-badge--maximized {
+      @apply bg-blue-500/15 text-blue-700;
+    }
+
+    &.am-state-badge--minimized {
+      @apply bg-amber-500/15 text-amber-700;
+    }
+  }
+
+  .am-actions-cell {
+    @apply flex items-center gap-1.5;
+
+    button {
+      @apply text-[11px] font-medium text-gray-600 px-2 py-1 rounded-full cursor-pointer transition-colors hover:bg-black/5;
+    }
+  }
+
+  .am-metric-row {
+    @apply flex items-center justify-between gap-3 py-2 text-sm border-b;
+    border-color: rgba(15, 23, 42, 0.06);
+  }
+
+  .am-metric-label {
+    @apply text-gray-500;
+  }
+
+  .am-metric-value {
+    @apply flex items-center gap-1.5 text-gray-900 font-medium;
+  }
+
+  .am-metric-tag,
+  .am-tag {
+    @apply text-[10px] font-semibold uppercase tracking-wide px-1.5 py-0.5 rounded-full;
+    background: rgba(15, 23, 42, 0.06);
+    color: rgba(15, 23, 42, 0.5);
+  }
+
+  .am-metric-tag--real,
+  .am-tag--real {
+    @apply bg-green-500/15 text-green-700;
+  }
+
+  .am-metric-tag--estimated,
+  .am-tag--estimated {
+    @apply bg-amber-500/15 text-amber-700;
+  }
+
+  .am-metric-tag--unsupported,
+  .am-tag--unsupported {
+    @apply bg-gray-500/15 text-gray-500;
+  }
+
+  .am-footnote {
+    @apply text-xs text-gray-400 italic mt-3;
+  }
+
+  .am-chart-block {
+    @apply mb-4 p-3 rounded-lg;
+    background: rgba(15, 23, 42, 0.03);
+  }
+
+  .am-chart-title {
+    @apply text-xs font-semibold text-gray-500 mb-2;
+  }
+
+  .am-chart-caption {
+    @apply flex items-center gap-2 text-xs text-gray-600 mt-1.5;
+  }
+
+  .am-sparkline {
+    @apply w-full h-9;
+  }
+
+  .am-session-label {
+    @apply text-xs text-gray-400 italic mb-3;
+  }
+
+  .am-bar-list {
+    @apply space-y-2;
+  }
+
+  .am-bar-list li {
+    @apply flex items-center gap-2.5 text-xs;
+  }
+
+  .am-bar-label {
+    @apply w-36 flex-none truncate text-gray-500;
+  }
+
+  .am-bar-track {
+    @apply flex-1 h-2 rounded-full overflow-hidden;
+    background: rgba(15, 23, 42, 0.06);
+  }
+
+  .am-bar-fill {
+    @apply block h-full rounded-full;
+    background: var(--accent-color);
+  }
+
+  .am-bar-value {
+    @apply w-6 flex-none text-right font-medium text-gray-700;
+  }
+
+  /* ---------- Hello startup overlay ----------
+     A calm, light opening matching the site's own light-by-default theme
+     — nothing dark flashes in ahead of it, and nothing behind it (Dock,
+     Navbar, wallpaper) is visible until it exits. Simplified to just the
+     two greeting words — no decorative background field. */
+
+  #hello-intro {
+    @apply fixed inset-0 flex items-center justify-center cursor-pointer overflow-hidden select-none;
+    z-index: 20000; /* above every existing overlay tier, including the screen saver */
+    background: #f8f6f2;
+  }
+
+  .hello-intro__center {
+    @apply relative z-10 flex items-center justify-center w-full px-6;
+  }
+
+  .hello-intro__primary {
+    @apply flex items-center justify-center flex-wrap;
+    row-gap: 8px;
+    column-gap: clamp(10px, 2.2vw, 22px);
+    max-width: 94vw;
+  }
+
+  .hello-intro__hello,
+  .hello-intro__translation {
+    height: clamp(44px, 9vw, 120px);
+    width: auto;
+    flex-shrink: 0;
+
+    path {
+      fill: none;
+      stroke: #1c1b19;
+      stroke-width: 7;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+  }
+
+  .hello-intro__separator {
+    height: clamp(34px, 6.5vw, 92px);
+    width: auto;
+    flex-shrink: 0;
+
+    path {
+      fill: none;
+      stroke: rgba(28, 27, 25, 0.5);
+      stroke-width: 6;
+      stroke-linecap: round;
+    }
+  }
+
+  .hello-intro__skip {
+    @apply absolute bottom-8 right-8 z-10 text-xs font-medium tracking-wide uppercase cursor-pointer transition-colors rounded-md px-2 py-1;
+    color: rgba(28, 27, 25, 0.4);
+
+    &:hover {
+      color: rgba(28, 27, 25, 0.7);
+    }
+
+    &:focus-visible {
+      @apply outline-none;
+      box-shadow: 0 0 0 2px rgba(28, 27, 25, 0.35);
+    }
+  }
+
+  /* ---------- Publications ---------- */
+
+  #publications {
+    @apply w-3xl max-w-[94vw] h-[600px] max-h-[85vh] top-16 left-1/5;
+
+    h2 {
+      @apply font-bold text-sm;
+    }
+  }
+
+  .publications-body {
+    @apply flex-1 min-h-0 overflow-y-auto p-6;
+  }
+
+  .publications-intro {
+    @apply text-sm text-gray-600 leading-relaxed mb-5 max-w-prose;
+  }
+
+  .publications-list {
+    @apply space-y-5 mb-6;
+    counter-reset: none;
+  }
+
+  .publication-entry {
+    @apply flex items-start gap-2.5 scroll-mt-6 rounded-lg transition-colors;
+
+    &.publication-highlight {
+      @apply bg-blue-500/8 ring-2 ring-blue-500/40 p-2 -m-2;
+    }
+  }
+
+  .publication-number {
+    @apply flex-none text-sm font-mono text-gray-400 pt-0.5;
+  }
+
+  .publication-body {
+    @apply flex-1 min-w-0;
+  }
+
+  .publication-line {
+    @apply text-sm text-gray-800 leading-relaxed;
+  }
+
+  .publication-author-owner {
+    @apply font-semibold text-gray-900;
+  }
+
+  .publication-title-link {
+    @apply text-gray-900 hover:text-blue-600 hover:underline;
+  }
+
+  .publication-venue {
+    @apply text-gray-700;
+    font-style: italic;
+  }
+
+  .publication-actions {
+    @apply flex flex-wrap items-center gap-3 mt-2;
+  }
+
+  .publication-action {
+    @apply inline-flex items-center gap-1.5 text-xs font-medium text-gray-500 cursor-pointer transition-colors hover:text-blue-600;
+
+    &:focus-visible {
+      @apply outline-none ring-2 ring-blue-500/50 rounded-sm;
+    }
+  }
+
+  /* ---------- Talks ---------- */
+
+  #talks {
+    @apply w-3xl max-w-[94vw] h-[600px] max-h-[85vh] top-16 left-1/5;
+    /* The talk-detail article responds to the #talks *window's* own width
+       (it can be resized independently of the browser), not the viewport —
+       established here, on the window root, so descendants like
+       .talk-detail and .talk-detail__gallery can be queried by it. */
+    container-type: inline-size;
+    container-name: talks;
+
+    h2 {
+      @apply font-bold text-sm;
+    }
+  }
+
+  .talks-body {
+    @apply flex-1 min-h-0 overflow-y-auto p-6;
+    overflow-x: hidden;
+    overscroll-behavior: contain;
+  }
+
+  .talks-intro {
+    @apply text-sm text-gray-600 leading-relaxed mb-5 max-w-prose;
+  }
+
+  .talks-list {
+    @apply space-y-5;
+  }
+
+  .talk-row {
+    @apply flex items-start gap-4 pb-5 border-b border-black/5 last:border-b-0 last:pb-0;
+  }
+
+  .talk-row-date {
+    @apply flex-none w-20 text-xs font-medium text-gray-400 pt-0.5;
+  }
+
+  .talk-row-body {
+    @apply flex-1 min-w-0 space-y-1.5;
+  }
+
+  .talk-row-title {
+    @apply text-sm font-semibold text-gray-900;
+  }
+
+  .talk-row-meta {
+    @apply text-xs text-gray-500;
+  }
+
+  .talk-row-format {
+    @apply inline-block mr-1.5 text-[10px] font-medium uppercase tracking-wide text-blue-600 bg-blue-500/10 rounded px-1.5 py-0.5;
+  }
+
+  .talk-row-description {
+    @apply text-sm text-gray-600 leading-relaxed;
+  }
+
+  .talk-row-topics {
+    @apply flex flex-wrap gap-1.5;
+  }
+
+  .talk-row-topic {
+    @apply text-[10px] font-medium text-gray-500 bg-black/5 rounded px-1.5 py-0.5;
+  }
+
+  .talk-row-actions {
+    @apply flex flex-wrap items-center gap-3 mt-1;
+  }
+
+  .talk-row-action {
+    @apply inline-flex items-center gap-1.5 text-xs font-medium text-gray-500 cursor-pointer transition-colors hover:text-blue-600;
+
+    &:focus-visible {
+      @apply outline-none ring-2 ring-blue-500/50 rounded-sm;
+    }
+  }
+
+  .talks-empty {
+    @apply flex flex-col items-center justify-center gap-3 text-center text-sm text-gray-400 py-20;
+  }
+
+  .talks-empty-icon {
+    @apply text-gray-300;
+  }
+
+  /* ---- Featured talk preview (list view) ---- */
+
+  .talks-featured-item {
+    @apply flex flex-col gap-4 pb-6 mb-1 border-b border-black/5;
+  }
+
+  .talks-featured-media {
+    @apply block w-full rounded-xl overflow-hidden cursor-pointer border border-black/5;
+    aspect-ratio: 16 / 9;
+    padding: 0;
+
+    img {
+      @apply size-full object-cover transition-transform duration-300;
+    }
+
+    &:hover img {
+      transform: scale(1.02);
+    }
+
+    &:focus-visible {
+      @apply outline-none ring-2 ring-blue-500/60 ring-offset-2;
+    }
+  }
+
+  .talks-featured-copy {
+    @apply min-w-0;
+  }
+
+  .talks-featured-copy h3 {
+    @apply text-lg font-bold text-gray-900 leading-snug mt-1 mb-1.5;
+  }
+
+  .talks-featured-meta {
+    @apply text-xs text-gray-500 mb-2;
+  }
+
+  .talks-featured-excerpt {
+    @apply text-sm text-gray-600 italic leading-relaxed mb-3 max-w-prose;
+  }
+
+  .talks-featured-actions {
+    @apply flex flex-wrap items-center gap-4;
+  }
+
+  /* ---- Talk detail (full editorial view, same #talks window) ---- */
+
+  .talk-detail {
+    display: block;
+  }
+
+  .talk-detail__inner {
+    width: min(100%, 720px);
+    margin-inline: auto;
+  }
+
+  .talk-detail__back {
+    @apply inline-flex items-center gap-1.5 text-xs font-medium text-gray-500 cursor-pointer transition-colors mb-5;
+
+    &:hover {
+      @apply text-blue-600;
+    }
+
+    &:focus-visible {
+      @apply outline-none ring-2 ring-blue-500/50 rounded-sm;
+    }
+  }
+
+  .talk-detail__eyebrow {
+    @apply text-xs font-semibold uppercase text-gray-400;
+    letter-spacing: 0.07em;
+    margin: 0 0 10px;
+  }
+
+  .talk-detail__title {
+    @apply font-bold text-gray-900;
+    font-size: clamp(1.5rem, 2.6cqi + 1rem, 2.1rem);
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    margin: 0 0 6px;
+  }
+
+  .talk-detail__subtitle {
+    @apply text-gray-600 font-medium;
+    font-size: clamp(1.05rem, 1cqi + 0.9rem, 1.25rem);
+    margin: 0 0 12px;
+  }
+
+  .talk-detail__meta {
+    @apply text-xs text-gray-500;
+    margin: 0 0 22px;
+  }
+
+  .talk-detail__lead {
+    @apply font-semibold text-gray-800;
+    font-style: italic;
+    font-size: clamp(1.05rem, 1.2cqi + 0.9rem, 1.3rem);
+    line-height: 1.5;
+    max-width: 62ch;
+    margin: 0 0 24px;
+  }
+
+  .talk-detail__hero {
+    margin: 0 0 28px;
+
+    button {
+      @apply block w-full cursor-pointer rounded-xl overflow-hidden border border-black/5 bg-black/[0.02];
+      box-shadow: 0 18px 40px -22px rgba(15, 23, 42, 0.35);
+      padding: 0;
+
+      &:focus-visible {
+        @apply outline-none ring-2 ring-blue-500/60 ring-offset-2;
+      }
+    }
+
+    img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+  }
+
+  .talk-detail__section {
+    padding-top: 26px;
+    margin-top: 26px;
+    border-top: 1px solid rgba(15, 23, 42, 0.07);
+  }
+
+  .talk-detail__section-title {
+    @apply text-lg font-bold text-gray-900;
+    letter-spacing: -0.005em;
+    margin: 0 0 12px;
+  }
+
+  .talk-detail__copy p {
+    @apply text-sm text-gray-700 leading-relaxed;
+    max-width: 68ch;
+    margin: 0 0 1em;
+
+    strong {
+      @apply font-semibold text-gray-900;
+    }
+  }
+
+  .talk-detail__copy p:last-child {
+    margin-bottom: 0;
+  }
+
+  .talk-detail__gallery {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+    margin: 28px 0;
+  }
+
+  .talk-detail__gallery-item {
+    @apply block w-full cursor-pointer rounded-lg overflow-hidden border border-black/5 bg-black/[0.02];
+    aspect-ratio: 4 / 3;
+    padding: 0;
+
+    img {
+      @apply size-full object-cover transition-transform duration-300;
+    }
+
+    &:hover img {
+      transform: scale(1.03);
+    }
+
+    &:focus-visible {
+      @apply outline-none ring-2 ring-blue-500/60 ring-offset-2;
+    }
+  }
+
+  .talk-detail__presentation {
+    @apply text-center;
+    padding: 28px 0 4px;
+    margin-top: 26px;
+    border-top: 1px solid rgba(15, 23, 42, 0.07);
+
+    .talk-detail__section-title {
+      margin-bottom: 8px;
+    }
+
+    .talk-detail__copy {
+      @apply text-sm text-gray-500;
+      max-width: 46ch;
+      margin: 0 auto 16px;
+    }
+  }
+
+  @container talks (min-width: 560px) {
+    .talks-featured-item {
+      flex-direction: row;
+      align-items: stretch;
+    }
+
+    .talks-featured-media {
+      flex: 0 0 42%;
+      max-width: 42%;
+      aspect-ratio: 4 / 3;
+    }
+
+    .talks-featured-copy {
+      @apply flex-1;
+    }
+
+    .talk-detail__gallery {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .talks-featured-media img,
+    .talk-detail__gallery-item img {
+      transition: none;
+    }
+
+    .talks-featured-media:hover img,
+    .talk-detail__gallery-item:hover img {
+      transform: none;
+    }
+  }
+
+  /* ---------- Letterboxd ---------- */
+
+  #letterboxd {
+    @apply w-[980px] max-w-[92vw] h-[680px] max-h-[85vh] top-14 left-1/6;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    /* Established here (the window root), not on .letterboxd-app itself —
+       a container can't be queried by its own descendants' rules targeting
+       itself; the query below needs to restyle .letterboxd-app, so the
+       container context has to live one level up, on #letterboxd. */
+    container-type: inline-size;
+    container-name: letterboxd-app;
+    --lb-bg: #14161a;
+    --lb-bg-raised: rgba(255, 255, 255, 0.04);
+    --lb-border: rgba(255, 255, 255, 0.09);
+    --lb-fg: #f1f0ec;
+    --lb-fg-muted: #b7b8bd;
+    --lb-fg-faint: #82848c;
+    --lb-accent: #ff8c42;
+
+    #window-header {
+      background: #1b1d22;
+      border-color: var(--lb-border);
+      color: var(--lb-fg-muted);
+    }
+
+    .letterboxd-app {
+      flex: 1;
+      min-height: 0;
+      display: flex;
+      overflow: hidden;
+      background: var(--lb-bg);
+      color: var(--lb-fg);
+    }
+
+    .letterboxd-nav {
+      @apply flex-none flex flex-col gap-0.5 p-3;
+      width: 168px;
+      border-right: 1px solid var(--lb-border);
+    }
+
+    .letterboxd-nav-item {
+      @apply text-left text-sm font-medium rounded-lg px-3 py-2 cursor-pointer transition-colors;
+      color: var(--lb-fg-muted);
+
+      &:hover {
+        background: var(--lb-bg-raised);
+        color: var(--lb-fg);
+      }
+
+      &[aria-current="page"] {
+        background: rgba(255, 140, 66, 0.14);
+        color: var(--lb-accent);
+      }
+
+      &:focus-visible {
+        outline: 2px solid var(--lb-accent);
+        outline-offset: -2px;
+      }
+    }
+
+    .letterboxd-content {
+      flex: 1;
+      min-width: 0;
+      min-height: 0;
+      overflow-y: auto;
+      overflow-x: hidden;
+      overscroll-behavior: contain;
+      padding: clamp(18px, 3.5cqi, 32px);
+    }
+
+    .letterboxd-section {
+      max-width: 860px;
+    }
+
+    .letterboxd-section-header {
+      @apply text-xl font-bold;
+      color: var(--lb-fg);
+      margin: 0 0 4px;
+    }
+
+    .letterboxd-section-header-row {
+      @apply flex items-center justify-between gap-3 flex-wrap;
+      margin-bottom: 18px;
+
+      .letterboxd-section-header {
+        margin-bottom: 0;
+      }
+    }
+
+    .letterboxd-chapter-label {
+      @apply text-xs font-semibold uppercase;
+      letter-spacing: 0.06em;
+      color: var(--lb-fg-faint);
+      margin: 0 0 10px;
+    }
+
+    .letterboxd-profile {
+      @apply flex items-start gap-4 flex-wrap;
+      margin-bottom: 22px;
+    }
+
+    .letterboxd-profile-icon {
+      @apply size-14 rounded-2xl object-cover flex-none;
+      border: 1px solid var(--lb-border);
+    }
+
+    .letterboxd-profile-copy {
+      min-width: 0;
+    }
+
+    .letterboxd-profile-username {
+      @apply text-sm;
+      color: var(--lb-fg-faint);
+      margin: 2px 0 8px;
+    }
+
+    .letterboxd-profile-tagline {
+      @apply text-sm leading-relaxed;
+      color: var(--lb-fg-muted);
+      max-width: 52ch;
+      margin: 0 0 12px;
+    }
+
+    .letterboxd-stats {
+      @apply flex items-center gap-6 flex-wrap;
+      padding: 14px 0;
+      border-top: 1px solid var(--lb-border);
+      border-bottom: 1px solid var(--lb-border);
+      margin: 0 0 26px;
+    }
+
+    .letterboxd-stat {
+      dt {
+        @apply text-[11px] font-medium uppercase;
+        letter-spacing: 0.05em;
+        color: var(--lb-fg-faint);
+        margin: 0 0 2px;
+      }
+
+      dd {
+        @apply text-lg font-bold;
+        color: var(--lb-fg);
+        margin: 0;
+      }
+    }
+
+    .letterboxd-overview-block {
+      margin-bottom: 30px;
+    }
+
+    .letterboxd-textlink {
+      @apply text-xs font-medium cursor-pointer;
+      color: var(--lb-accent);
+      margin-top: 10px;
+
+      &:hover {
+        text-decoration: underline;
+      }
+
+      &:focus-visible {
+        outline: 2px solid var(--lb-accent);
+        outline-offset: 2px;
+        border-radius: 2px;
+      }
+    }
+
+    .letterboxd-external-link {
+      @apply inline-flex items-center gap-1.5 text-xs font-medium cursor-pointer;
+      color: var(--lb-fg);
+      background: var(--lb-bg-raised);
+      border: 1px solid var(--lb-border);
+      border-radius: 999px;
+      padding: 7px 13px;
+      transition: border-color 0.15s ease, color 0.15s ease;
+
+      &:hover {
+        border-color: var(--lb-accent);
+        color: var(--lb-accent);
+      }
+
+      &:focus-visible {
+        outline: 2px solid var(--lb-accent);
+        outline-offset: 2px;
+      }
+    }
+
+    /* ---- Ratings ---- */
+
+    .letterboxd-rating {
+      @apply inline-flex items-center gap-1.5 flex-none;
+    }
+
+    .letterboxd-rating-stars {
+      @apply inline-flex items-center gap-0.5;
+    }
+
+    .letterboxd-star--full {
+      color: var(--lb-accent);
+    }
+
+    .letterboxd-star--empty {
+      color: var(--lb-border);
+    }
+
+    .letterboxd-rating-text {
+      @apply text-xs;
+      color: var(--lb-fg-faint);
+    }
+
+    /* ---- Posters (scoped specifically to Letterboxd — never a global img rule) ---- */
+
+    .letterboxd-review-poster,
+    .letterboxd-film-poster,
+    .letterboxd-poster-fallback {
+      aspect-ratio: 2 / 3;
+      border-radius: 8px;
+      display: block;
+    }
+
+    .letterboxd-review-poster {
+      width: 96px;
+      flex: none;
+      object-fit: cover;
+      border: 1px solid var(--lb-border);
+    }
+
+    .letterboxd-film-poster {
+      width: 100%;
+      object-fit: cover;
+      border: 1px solid var(--lb-border);
+      margin-bottom: 8px;
+      transition: transform 0.2s ease;
+    }
+
+    .letterboxd-poster-fallback {
+      @apply flex flex-col items-center justify-center text-center gap-1 px-2;
+      background: linear-gradient(160deg, #23262c, #16181c);
+      border: 1px solid var(--lb-border);
+      color: var(--lb-fg-faint);
+
+      .letterboxd-poster-fallback-title {
+        @apply text-[11px] font-medium leading-tight;
+        color: var(--lb-fg-muted);
+      }
+
+      .letterboxd-poster-fallback-year {
+        @apply text-[10px];
+        color: var(--lb-fg-faint);
+      }
+    }
+
+    /* ---- Reviews ---- */
+
+    .letterboxd-review-list {
+      display: flex;
+      flex-direction: column;
+      gap: 22px;
+    }
+
+    .letterboxd-review {
+      display: flex;
+      gap: 16px;
+      padding-bottom: 22px;
+      border-bottom: 1px solid var(--lb-border);
+      transition: background-color 0.15s ease;
+
+      &:last-child {
+        border-bottom: none;
+        padding-bottom: 0;
+      }
+    }
+
+    .letterboxd-review-copy {
+      min-width: 0;
+      flex: 1;
+    }
+
+    .letterboxd-review-heading {
+      @apply flex items-start justify-between gap-3 flex-wrap;
+      margin-bottom: 4px;
+
+      h3 {
+        @apply text-base font-semibold;
+        color: var(--lb-fg);
+        margin: 0;
+      }
+    }
+
+    .letterboxd-review-year {
+      font-weight: 400;
+      color: var(--lb-fg-faint);
+    }
+
+    .letterboxd-review-meta {
+      @apply inline-flex items-center gap-1.5 text-xs;
+      color: var(--lb-fg-faint);
+      margin: 0 0 10px;
+    }
+
+    .letterboxd-review-text {
+      @apply text-sm leading-relaxed;
+      color: var(--lb-fg-muted);
+      max-width: 68ch;
+
+      p {
+        margin: 0 0 0.9em;
+
+        &:last-child {
+          margin-bottom: 0;
+        }
+      }
+    }
+
+    .letterboxd-spoiler-tag {
+      @apply inline-block text-[10px] font-semibold uppercase;
+      letter-spacing: 0.05em;
+      color: var(--lb-accent);
+      border: 1px solid rgba(255, 140, 66, 0.4);
+      border-radius: 999px;
+      padding: 2px 8px;
+      margin-bottom: 10px;
+    }
+
+    .letterboxd-spoiler-guard {
+      @apply text-sm;
+      color: var(--lb-fg-muted);
+      background: var(--lb-bg-raised);
+      border: 1px dashed var(--lb-border);
+      border-radius: 10px;
+      padding: 14px;
+
+      p {
+        margin: 0 0 8px;
+      }
+    }
+
+    .letterboxd-spoiler-reveal {
+      @apply inline-flex items-center gap-1.5 text-xs font-medium cursor-pointer;
+      color: var(--lb-accent);
+
+      &:focus-visible {
+        outline: 2px solid var(--lb-accent);
+        outline-offset: 2px;
+      }
+    }
+
+    .letterboxd-review-actions {
+      @apply flex items-center gap-2 flex-wrap;
+      margin-top: 12px;
+    }
+
+    /* ---- Films ---- */
+
+    .letterboxd-film-controls {
+      @apply flex items-center gap-3 flex-wrap;
+      margin-bottom: 18px;
+
+      input, select {
+        @apply text-sm rounded-lg px-3 py-2;
+        background: var(--lb-bg-raised);
+        border: 1px solid var(--lb-border);
+        color: var(--lb-fg);
+
+        &:focus-visible {
+          outline: 2px solid var(--lb-accent);
+          outline-offset: 1px;
+        }
+      }
+    }
+
+    .letterboxd-film-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(min(140px, 100%), 1fr));
+      gap: 18px 14px;
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .letterboxd-film-grid--strip {
+      grid-template-columns: repeat(auto-fill, minmax(min(110px, 100%), 1fr));
+    }
+
+    .letterboxd-film {
+      a {
+        display: block;
+        border-radius: 4px;
+
+        &:focus-visible {
+          outline: 2px solid var(--lb-accent);
+          outline-offset: 3px;
+        }
+
+        &:hover .letterboxd-film-poster {
+          transform: translateY(-3px);
+        }
+      }
+    }
+
+    .letterboxd-film-title {
+      @apply text-xs font-semibold leading-snug;
+      color: var(--lb-fg);
+      margin: 0 0 2px;
+    }
+
+    .letterboxd-film-meta {
+      @apply flex items-center justify-between gap-2 text-[11px];
+      color: var(--lb-fg-faint);
+    }
+
+    .letterboxd-film-badges {
+      @apply flex items-center gap-1.5 flex-wrap;
+      margin-top: 4px;
+    }
+
+    .letterboxd-film-badge {
+      @apply text-[9px] font-semibold uppercase;
+      letter-spacing: 0.04em;
+      color: var(--lb-fg-faint);
+      border: 1px solid var(--lb-border);
+      border-radius: 999px;
+      padding: 1px 6px;
+    }
+
+    /* ---- Lists ---- */
+
+    .letterboxd-list-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(min(240px, 100%), 1fr));
+      gap: 16px;
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .letterboxd-list {
+      border: 1px solid var(--lb-border);
+      border-radius: 12px;
+      padding: 14px;
+      background: var(--lb-bg-raised);
+    }
+
+    .letterboxd-list-covers {
+      @apply flex items-center gap-1.5;
+      margin-bottom: 10px;
+
+      img {
+        width: 32px;
+        aspect-ratio: 2 / 3;
+        object-fit: cover;
+        border-radius: 4px;
+        border: 1px solid var(--lb-border);
+      }
+    }
+
+    .letterboxd-list-title {
+      @apply text-sm font-semibold;
+      color: var(--lb-fg);
+      margin: 0 0 4px;
+    }
+
+    .letterboxd-list-description {
+      @apply text-xs leading-relaxed;
+      color: var(--lb-fg-muted);
+      margin: 0 0 8px;
+    }
+
+    .letterboxd-list-meta {
+      @apply text-[11px];
+      color: var(--lb-fg-faint);
+      margin: 0 0 10px;
+    }
+
+    /* ---- Empty states ---- */
+
+    .letterboxd-empty {
+      @apply flex flex-col items-center justify-center text-center gap-2;
+      color: var(--lb-fg-faint);
+      padding: 56px 20px;
+
+      p {
+        margin: 0;
+      }
+    }
+
+    .letterboxd-empty-secondary {
+      @apply text-sm;
+      max-width: 42ch;
+    }
+
+    .letterboxd-empty-actions {
+      @apply flex items-center gap-2 flex-wrap justify-center;
+      margin-top: 14px;
+    }
+
+    /* ---- Footer disclaimer ---- */
+
+    .letterboxd-disclaimer {
+      @apply flex-none text-[11px] text-center;
+      color: var(--lb-fg-faint);
+      background: #1b1d22;
+      border-top: 1px solid var(--lb-border);
+      padding: 8px 12px;
+      margin: 0;
+    }
+  }
+
+  /* Narrow Letterboxd window: sidebar becomes a compact horizontal tab row
+     pinned under the title bar, matching the app's own container width —
+     not the browser viewport — since this window resizes independently. */
+  @container letterboxd-app (max-width: 640px) {
+    #letterboxd .letterboxd-app {
+      flex-direction: column;
+    }
+
+    #letterboxd .letterboxd-nav {
+      flex-direction: row;
+      width: 100%;
+      overflow-x: auto;
+      border-right: none;
+      border-bottom: 1px solid var(--lb-border);
+      padding: 8px 10px;
+    }
+
+    #letterboxd .letterboxd-nav-item {
+      flex: none;
+    }
+
+    #letterboxd .letterboxd-review {
+      flex-direction: column;
+    }
+
+    #letterboxd .letterboxd-review-poster {
+      width: 84px;
+    }
+  }
+
+  /* ---------- GitHub ---------- */
+
+  #github {
+    @apply w-[1000px] max-w-[92vw] h-[680px] max-h-[85vh] top-14 left-1/6;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    --gh-bg: #f6f8fa;
+    --gh-surface: #ffffff;
+    --gh-border: rgba(27, 31, 36, 0.1);
+    --gh-fg: #1f2328;
+    --gh-fg-muted: #59636e;
+    --gh-fg-faint: #818b94;
+    --gh-accent: #1f6feb;
+    --gh-green-1: #aceebb;
+    --gh-green-2: #4ac26b;
+    --gh-green-3: #2da44e;
+    --gh-green-4: #116329;
+
+    #window-header {
+      background: var(--gh-surface);
+    }
+  }
+
+  :root[data-theme="dark"] #github {
+    --gh-bg: #0d1117;
+    --gh-surface: #151b23;
+    --gh-border: rgba(255, 255, 255, 0.1);
+    --gh-fg: #e6edf3;
+    --gh-fg-muted: #9198a1;
+    --gh-fg-faint: #6c7681;
+    --gh-green-1: #0e4429;
+    --gh-green-2: #26a641;
+    --gh-green-3: #39d353;
+    --gh-green-4: #56e075;
+  }
+
+  #github .github-app {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    background: var(--gh-bg);
+    color: var(--gh-fg);
+    container-type: inline-size;
+    container-name: github-app;
+  }
+
+  #github .github-content {
+    flex: 1;
+    min-width: 0;
+    min-height: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    overscroll-behavior: contain;
+    padding: clamp(16px, 3cqi, 28px);
+  }
+
+  #github .sr-only {
+    @apply sr-only;
+  }
+
+  /* ---- Skeleton / error ---- */
+
+  .github-skeleton {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .github-skeleton__row,
+  .github-skeleton__block {
+    border-radius: 8px;
+    background: linear-gradient(90deg, var(--gh-border) 25%, rgba(127, 127, 127, 0.18) 37%, var(--gh-border) 63%);
+    background-size: 400% 100%;
+    animation: github-skeleton-shimmer 1.4s ease infinite;
+  }
+
+  .github-skeleton__row { height: 20px; width: 40%; }
+  .github-skeleton__row--wide { width: 70%; height: 28px; }
+  .github-skeleton__block { height: 140px; }
+
+  @keyframes github-skeleton-shimmer {
+    0% { background-position: 100% 0; }
+    100% { background-position: -100% 0; }
+  }
+
+  .github-error {
+    @apply flex flex-col items-center justify-center gap-3 text-center;
+    color: var(--gh-fg-muted);
+    padding: 56px 20px;
+  }
+
+  /* ---- Profile header ---- */
+
+  .github-profile {
+    @apply flex items-start gap-4 flex-wrap;
+    padding-bottom: 18px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid var(--gh-border);
+  }
+
+  .github-profile__avatar {
+    @apply size-14 rounded-full object-cover flex-none;
+    border: 1px solid var(--gh-border);
+  }
+
+  .github-profile__identity {
+    @apply flex-1;
+    min-width: 160px;
+  }
+
+  .github-profile__identity h1 {
+    @apply text-lg font-bold;
+    color: var(--gh-fg);
+    margin: 0;
+  }
+
+  .github-profile__username {
+    @apply text-sm;
+    color: var(--gh-fg-muted);
+    margin: 0 0 4px;
+  }
+
+  .github-profile__bio,
+  .github-profile__location {
+    @apply text-xs;
+    color: var(--gh-fg-muted);
+    margin: 0;
+  }
+
+  .github-profile__actions {
+    @apply flex items-center gap-2 flex-none flex-wrap;
+  }
+
+  /* Structural styling (padding/radius/transition) now comes from the
+     shared .ui-button — these two only override its default blue accent
+     with GitHub's own brand-green tokens. */
+  .github-profile__view-btn {
+    background: var(--gh-green-3) !important;
+
+    &:hover { background: var(--gh-green-4) !important; }
+    &:focus-visible { ring-color: var(--gh-green-3); }
+  }
+
+  .github-profile__refresh-btn {
+    color: var(--gh-fg-muted);
+    background: var(--gh-surface) !important;
+    border: 1px solid var(--gh-border);
+
+    &:hover:not(:disabled) { color: var(--gh-fg); border-color: var(--gh-fg-faint); }
+    &:focus-visible { ring-color: var(--gh-accent); }
+  }
+
+  .github-status {
+    @apply text-xs w-full;
+    color: var(--gh-fg-faint);
+    margin: 8px 0 0;
+  }
+
+  /* ---- Sections ---- */
+
+  .github-section {
+    padding-top: 22px;
+    margin-top: 22px;
+    border-top: 1px solid var(--gh-border);
+  }
+
+  .github-section__header h2 {
+    @apply text-base font-bold;
+    color: var(--gh-fg);
+    margin: 0 0 12px;
+  }
+
+  .github-empty {
+    @apply flex flex-col items-center justify-center gap-2 text-center text-sm;
+    color: var(--gh-fg-faint);
+    padding: 32px 16px;
+  }
+
+  /* ---- Contribution summary ---- */
+
+  .github-summary {
+    margin-bottom: 14px;
+  }
+
+  .github-summary--pending {
+    @apply text-sm;
+    color: var(--gh-fg-muted);
+    max-width: 60ch;
+  }
+
+  .github-summary__sentence {
+    @apply text-sm;
+    color: var(--gh-fg-muted);
+    margin: 0 0 10px;
+  }
+
+  .github-summary__items {
+    @apply flex flex-wrap gap-x-8 gap-y-2;
+  }
+
+  .github-summary__item {
+    dt {
+      @apply text-[11px] font-medium uppercase;
+      letter-spacing: 0.04em;
+      color: var(--gh-fg-faint);
+      margin: 0;
+    }
+
+    dd {
+      @apply text-sm font-semibold;
+      color: var(--gh-fg);
+      margin: 0;
+    }
+  }
+
+  /* ---- Contribution calendar ---- */
+
+  .github-calendar-shell {
+    position: relative;
+  }
+
+  .github-calendar__scroll-hint {
+    @apply text-[11px];
+    color: var(--gh-fg-faint);
+    margin: 0 0 6px;
+  }
+
+  .github-calendar-scroll {
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding-bottom: 4px;
+  }
+
+  .github-calendar {
+    display: inline-block;
+    min-width: 100%;
+  }
+
+  .github-calendar__months {
+    position: relative;
+    height: 16px;
+    margin-left: 30px;
+
+    span {
+      @apply text-[11px];
+      position: absolute;
+      left: calc(var(--col) * 13px);
+      color: var(--gh-fg-faint);
+    }
+  }
+
+  .github-calendar__body {
+    @apply flex items-start gap-1;
+  }
+
+  .github-calendar__weekdays {
+    position: relative;
+    width: 26px;
+    flex: none;
+    height: calc(7 * 13px);
+
+    span {
+      @apply text-[10px];
+      position: absolute;
+      top: calc(var(--row) * 13px);
+      color: var(--gh-fg-faint);
+      line-height: 11px;
+    }
+  }
+
+  .github-calendar__weeks {
+    @apply flex items-start gap-[3px];
+  }
+
+  .github-calendar__week {
+    @apply flex flex-col gap-[3px];
+  }
+
+  .github-calendar__day {
+    @apply size-[11px] rounded-[2px] cursor-pointer;
+    background: var(--gh-border);
+
+    &--empty {
+      background: transparent;
+      cursor: default;
+    }
+
+    &[data-level="1"] { background: var(--gh-green-1); }
+    &[data-level="2"] { background: var(--gh-green-2); }
+    &[data-level="3"] { background: var(--gh-green-3); }
+    &[data-level="4"] { background: var(--gh-green-4); }
+
+    &:hover:not(&--empty) {
+      outline: 1px solid var(--gh-fg-faint);
+      outline-offset: 1px;
+    }
+
+    &:focus-visible {
+      @apply outline-none ring-2 ring-offset-1;
+      ring-color: var(--gh-accent);
+    }
+  }
+
+  .github-calendar__legend {
+    @apply flex items-center gap-1 justify-end;
+    margin-top: 8px;
+
+    span:not(.github-calendar__legend-swatch) {
+      @apply text-[11px];
+      color: var(--gh-fg-faint);
+    }
+  }
+
+  .github-calendar__legend-swatch {
+    @apply size-[11px] rounded-[2px];
+    background: var(--gh-border);
+
+    &[data-level="1"] { background: var(--gh-green-1); }
+    &[data-level="2"] { background: var(--gh-green-2); }
+    &[data-level="3"] { background: var(--gh-green-3); }
+    &[data-level="4"] { background: var(--gh-green-4); }
+  }
+
+  .github-calendar__tooltip {
+    position: fixed;
+    transform: translate(-50%, calc(-100% - 10px));
+    z-index: 20;
+    pointer-events: none;
+    background: var(--gh-fg);
+    color: var(--gh-bg);
+    border-radius: 8px;
+    padding: 8px 10px;
+    box-shadow: 0 8px 20px -6px rgba(0, 0, 0, 0.4);
+    max-width: 200px;
+    animation: github-tooltip-in 0.12s ease-out;
+
+    p {
+      margin: 0;
+      line-height: 1.35;
+    }
+
+    .github-calendar__tooltip-count {
+      @apply text-xs font-semibold;
+    }
+
+    .github-calendar__tooltip-date,
+    .github-calendar__tooltip-level {
+      @apply text-[11px];
+      opacity: 0.8;
+    }
+  }
+
+  @keyframes github-tooltip-in {
+    from { opacity: 0; transform: translate(-50%, calc(-100% - 4px)); }
+    to { opacity: 1; transform: translate(-50%, calc(-100% - 10px)); }
+  }
+
+  /* ---- Contribution heading (dynamic "N contributions in the last
+     year") + a real focus outline for the section headings the Spotlight
+     scroll-and-focus effect above lands keyboard/AT focus on. ---- */
+
+  .github-contribution-heading {
+    @apply text-base font-bold;
+    color: var(--gh-fg);
+    margin: 0 0 6px;
+  }
+
+  .github-section__header h2:focus-visible,
+  .github-activity-overview__body ~ h2:focus-visible {
+    @apply outline-none ring-2 ring-offset-2;
+    ring-color: var(--gh-accent);
+    border-radius: 4px;
+  }
+
+  /* ---- Activity scope menu ---- */
+
+  .github-scope-menu {
+    @apply flex flex-wrap items-center gap-1.5;
+    margin-bottom: 8px;
+  }
+
+  .github-scope-menu__item {
+    @apply text-xs font-medium rounded-full cursor-pointer transition-colors;
+    padding: 6px 12px;
+    color: var(--gh-fg-muted);
+    border: 1px solid var(--gh-border);
+    background: var(--gh-surface);
+
+    &[aria-pressed="true"] {
+      background: var(--gh-accent);
+      border-color: var(--gh-accent);
+      color: #fff;
+    }
+
+    &:focus-visible { @apply outline-none ring-2 ring-offset-1; ring-color: var(--gh-accent); }
+  }
+
+  .github-scope-menu__note {
+    @apply text-[11px];
+    color: var(--gh-fg-faint);
+    margin: 0 0 16px;
+    max-width: 60ch;
+  }
+
+  /* ---- Activity overview (repository summary + breakdown chart) ---- */
+
+  .github-activity-overview__body {
+    @apply flex items-start gap-6;
+  }
+
+  .github-activity-overview__repositories {
+    @apply flex-1;
+    min-width: 0;
+    padding-right: 24px;
+    border-right: 1px solid var(--gh-border);
+  }
+
+  .github-activity-overview__visual {
+    @apply flex-1;
+    min-width: 0;
+  }
+
+  @container github-app (max-width: 640px) {
+    .github-activity-overview__body {
+      flex-direction: column;
+    }
+
+    .github-activity-overview__repositories {
+      padding-right: 0;
+      border-right: none;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--gh-border);
+    }
+  }
+
+  .github-owner-badge {
+    @apply inline-flex items-center gap-2 rounded-full;
+    padding: 4px 12px 4px 4px;
+    margin-bottom: 10px;
+    background: var(--gh-surface);
+    border: 1px solid var(--gh-border);
+    color: var(--gh-fg);
+    font-size: 0.8rem;
+    font-weight: 600;
+
+    img {
+      @apply size-6 rounded-full object-cover;
+    }
+
+    &:is(a):hover { border-color: var(--gh-fg-faint); }
+    &:is(a):focus-visible { @apply outline-none ring-2 ring-offset-1; ring-color: var(--gh-accent); }
+  }
+
+  .github-contributed-repositories__sentence {
+    @apply text-sm;
+    color: var(--gh-fg-muted);
+    margin: 0 0 10px;
+    max-width: 52ch;
+  }
+
+  .github-contributed-repositories__toggle {
+    @apply inline-flex items-center gap-1.5 text-xs font-semibold cursor-pointer rounded-full;
+    padding: 6px 12px;
+    color: var(--gh-fg);
+    background: var(--gh-surface);
+    border: 1px solid var(--gh-border);
+
+    &:hover { border-color: var(--gh-fg-faint); }
+    &:focus-visible { @apply outline-none ring-2 ring-offset-1; ring-color: var(--gh-accent); }
+  }
+
+  .github-contributed-repositories__table-wrap {
+    overflow-x: auto;
+    margin-top: 12px;
+    border: 1px solid var(--gh-border);
+    border-radius: 10px;
+  }
+
+  .github-contributed-repositories__table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.78rem;
+    white-space: nowrap;
+
+    th, td {
+      padding: 8px 12px;
+      text-align: left;
+      border-bottom: 1px solid var(--gh-border);
+    }
+
+    th {
+      color: var(--gh-fg-faint);
+      font-weight: 600;
+      text-transform: uppercase;
+      font-size: 0.68rem;
+      letter-spacing: 0.03em;
+    }
+
+    td {
+      color: var(--gh-fg-muted);
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    a {
+      color: var(--gh-accent);
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+
+      &:hover { text-decoration: underline; }
+      &:focus-visible { @apply outline-none ring-2 rounded-sm; ring-color: var(--gh-accent); }
+    }
+  }
+
+  /* ---- Four-axis activity breakdown chart ---- */
+
+  .github-activity-chart {
+    @apply flex flex-col items-center gap-4;
+  }
+
+  .github-activity-chart__svg {
+    width: 100%;
+    max-width: 260px;
+    height: auto;
+    overflow: visible;
+  }
+
+  .github-activity-chart__ring {
+    fill: none;
+    stroke: var(--gh-border);
+    stroke-width: 1;
+  }
+
+  .github-activity-chart__axis {
+    stroke: var(--gh-border);
+    stroke-width: 1;
+  }
+
+  .github-activity-chart__axis-label {
+    fill: var(--gh-fg-muted);
+    font-size: 9px;
+    font-weight: 600;
+  }
+
+  .github-activity-chart__polygon {
+    fill: color-mix(in srgb, var(--gh-green-3) 28%, transparent);
+    stroke: var(--gh-green-3);
+    stroke-width: 1.5;
+    stroke-linejoin: round;
+    transform-origin: 110px 110px;
+    animation: github-chart-in 0.4s ease-out;
+  }
+
+  .github-activity-chart__point {
+    fill: var(--gh-green-3);
+  }
+
+  @keyframes github-chart-in {
+    from { opacity: 0; transform: scale(0.85); }
+    to { opacity: 1; transform: scale(1); }
+  }
+
+  .github-activity-chart__empty {
+    @apply text-sm text-center;
+    color: var(--gh-fg-faint);
+    max-width: 34ch;
+    margin: 0;
+  }
+
+  .github-activity-chart__summary {
+    @apply w-full;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px 16px;
+
+    li {
+      @apply flex items-center justify-between text-xs;
+      padding-bottom: 6px;
+      border-bottom: 1px solid var(--gh-border);
+    }
+  }
+
+  .github-activity-chart__summary-label {
+    color: var(--gh-fg-muted);
+  }
+
+  .github-activity-chart__summary-value {
+    @apply font-semibold;
+    color: var(--gh-fg);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .github-activity-chart__polygon {
+      animation: none;
+    }
+  }
+
+  /* ---- Repositories ---- */
+
+  .github-repository-controls {
+    @apply flex flex-wrap items-center gap-2;
+    margin-bottom: 14px;
+  }
+
+  .github-repository-search {
+    @apply flex items-center gap-2 flex-1;
+    min-width: 160px;
+    background: var(--gh-surface);
+    border: 1px solid var(--gh-border);
+    border-radius: 8px;
+    padding: 6px 10px;
+    color: var(--gh-fg-faint);
+
+    input {
+      @apply flex-1 text-sm bg-transparent;
+      color: var(--gh-fg);
+
+      &:focus-visible { @apply outline-none; }
+    }
+  }
+
+  .github-repository-select select {
+    @apply text-sm rounded-lg;
+    background: var(--gh-surface);
+    border: 1px solid var(--gh-border);
+    color: var(--gh-fg);
+    padding: 7px 10px;
+
+    &:focus-visible { @apply outline-none ring-2; ring-color: var(--gh-accent); }
+  }
+
+  .github-repository-filters {
+    @apply flex items-center gap-1;
+  }
+
+  .github-repository-filter {
+    @apply text-xs font-medium rounded-full cursor-pointer transition-colors;
+    padding: 6px 11px;
+    color: var(--gh-fg-muted);
+    border: 1px solid var(--gh-border);
+    background: var(--gh-surface);
+
+    &[aria-pressed="true"] {
+      background: var(--gh-accent);
+      border-color: var(--gh-accent);
+      color: #fff;
+    }
+
+    &:focus-visible { @apply outline-none ring-2 ring-offset-1; ring-color: var(--gh-accent); }
+  }
+
+  .github-repository-list {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .github-repository {
+    border: 1px solid var(--gh-border);
+    border-radius: 10px;
+    background: var(--gh-surface);
+    padding: 12px 14px;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px -10px rgba(0, 0, 0, 0.3);
+    }
+  }
+
+  .github-repository__header {
+    @apply flex items-center gap-2 flex-wrap;
+  }
+
+  .github-repository__name {
+    @apply text-sm font-semibold cursor-pointer;
+    color: var(--gh-accent);
+
+    &:hover { text-decoration: underline; }
+    &:focus-visible { @apply outline-none ring-2 rounded-sm; ring-color: var(--gh-accent); }
+  }
+
+  .github-repository__badge {
+    @apply inline-flex items-center gap-1 text-[10px] font-medium uppercase rounded-full;
+    letter-spacing: 0.03em;
+    padding: 2px 8px;
+    color: var(--gh-fg-muted);
+    border: 1px solid var(--gh-border);
+  }
+
+  .github-repository__description {
+    @apply text-sm;
+    color: var(--gh-fg-muted);
+    margin: 6px 0 0;
+    max-width: 68ch;
+  }
+
+  .github-repository__topics {
+    @apply flex flex-wrap gap-1.5;
+    margin-top: 8px;
+  }
+
+  .github-topic {
+    @apply text-[11px] font-medium rounded-full;
+    padding: 2px 9px;
+    background: rgba(31, 111, 235, 0.1);
+    color: var(--gh-accent);
+  }
+
+  .github-repository__metadata {
+    @apply flex flex-wrap items-center gap-x-4 gap-y-1.5;
+    margin-top: 10px;
+  }
+
+  .github-repository__metadata > * {
+    @apply text-xs;
+    color: var(--gh-fg-muted);
+  }
+
+  .github-repository__stat {
+    @apply inline-flex items-center gap-1;
+  }
+
+  .github-language {
+    @apply inline-flex items-center gap-1.5;
+
+    &::before {
+      content: '';
+      @apply inline-block size-2 rounded-full;
+      background: var(--gh-accent);
+    }
+  }
+
+  .github-repository-footer {
+    @apply flex items-center justify-between flex-wrap gap-3;
+    margin-top: 16px;
+  }
+
+  .github-show-more {
+    @apply text-xs font-semibold rounded-full cursor-pointer;
+    padding: 8px 16px;
+    color: var(--gh-fg);
+    background: var(--gh-surface);
+    border: 1px solid var(--gh-border);
+
+    &:hover { border-color: var(--gh-fg-faint); }
+    &:focus-visible { @apply outline-none ring-2 ring-offset-1; ring-color: var(--gh-accent); }
+  }
+
+  .github-view-all {
+    @apply inline-flex items-center gap-1.5 text-xs font-medium cursor-pointer;
+    color: var(--gh-fg-muted);
+
+    &:hover { color: var(--gh-accent); }
+    &:focus-visible { @apply outline-none ring-2 rounded-sm; ring-color: var(--gh-accent); }
+  }
+
+  @container github-app (max-width: 640px) {
+    .github-repository-controls {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .github-repository-filters {
+      justify-content: space-between;
+    }
+
+    .github-profile {
+      flex-direction: column;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .github-repository {
+      transition: none;
+
+      &:hover { transform: none; }
+    }
+
+    .github-skeleton__row,
+    .github-skeleton__block {
+      animation: none;
+    }
+
+    .github-spin {
+      animation: none;
+    }
+
+    .github-calendar__tooltip {
+      animation: none;
+    }
+  }
+
+  /* ---------- NexAI ---------- */
+
+  #nexai {
+    /* A distinct default position — top-16/left-1/5 is already shared by
+       Activity Monitor, Publications, and Talks; NexAI gets its own so
+       opening it alongside any of those doesn't fully stack one header
+       bar's translucent glass directly on top of another's. */
+    @apply w-[880px] max-w-[92vw] h-[640px] max-h-[85vh] top-10 left-2/5;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    --nexai-bg: #f8f7f5;
+    --nexai-surface: #ffffff;
+    --nexai-border: rgba(31, 27, 20, 0.1);
+    --nexai-fg: #1f1b14;
+    --nexai-fg-muted: #6b6255;
+    --nexai-fg-faint: #948b7c;
+    --nexai-accent: #8a5a2b;
+    --nexai-accent-soft: rgba(138, 90, 43, 0.12);
+  }
+
+  :root[data-theme="dark"] #nexai {
+    --nexai-bg: #17140f;
+    --nexai-surface: #201b14;
+    --nexai-border: rgba(255, 255, 255, 0.1);
+    --nexai-fg: #f2ece2;
+    --nexai-fg-muted: #b8ad9b;
+    --nexai-fg-faint: #857a68;
+    --nexai-accent: #d9a15f;
+    --nexai-accent-soft: rgba(217, 161, 95, 0.16);
+  }
+
+  #nexai .nexai-app {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    background: var(--nexai-bg);
+    color: var(--nexai-fg);
+    container-type: inline-size;
+    container-name: nexai-app;
+  }
+
+  #nexai .nexai-content {
+    flex: 1;
+    min-width: 0;
+    min-height: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    overscroll-behavior: contain;
+    padding: clamp(18px, 3cqi, 32px);
+  }
+
+  .nexai-hero {
+    padding-bottom: 18px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid var(--nexai-border);
+  }
+
+  .nexai-eyebrow {
+    @apply text-xs font-semibold uppercase;
+    letter-spacing: 0.06em;
+    color: var(--nexai-accent);
+    margin: 0 0 6px;
+  }
+
+  .nexai-hero h1 {
+    @apply text-2xl font-bold;
+    color: var(--nexai-fg);
+    margin: 0 0 8px;
+  }
+
+  .nexai-hero__short {
+    @apply text-sm;
+    color: var(--nexai-fg-muted);
+    max-width: 62ch;
+    margin: 0;
+  }
+
+  .nexai-section {
+    padding-top: 22px;
+    margin-top: 22px;
+    border-top: 1px solid var(--nexai-border);
+
+    &:first-of-type {
+      padding-top: 0;
+      margin-top: 0;
+      border-top: none;
+    }
+  }
+
+  .nexai-section h2 {
+    @apply text-base font-bold;
+    color: var(--nexai-fg);
+    margin: 0 0 12px;
+  }
+
+  .nexai-research-question {
+    @apply text-lg font-medium;
+    color: var(--nexai-fg);
+    border-left: 3px solid var(--nexai-accent);
+    padding: 4px 0 4px 16px;
+    margin: 0 0 14px;
+  }
+
+  .nexai-paragraph {
+    @apply text-sm;
+    color: var(--nexai-fg);
+    max-width: 70ch;
+    margin: 0 0 12px;
+    line-height: 1.6;
+
+    &:last-child { margin-bottom: 0; }
+  }
+
+  .nexai-paragraph--muted {
+    color: var(--nexai-fg-muted);
+    font-size: 0.8rem;
+  }
+
+  .nexai-tag-list {
+    @apply flex flex-wrap gap-2;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .nexai-tag {
+    @apply text-xs font-medium rounded-full;
+    padding: 5px 12px;
+    background: var(--nexai-accent-soft);
+    color: var(--nexai-accent);
+  }
+
+  .nexai-talk-card {
+    @apply flex items-center gap-3 text-left cursor-pointer w-full;
+    background: var(--nexai-surface);
+    border: 1px solid var(--nexai-border);
+    border-radius: 10px;
+    padding: 12px 14px;
+    color: var(--nexai-fg);
+    transition: border-color 0.15s ease;
+
+    &:hover { border-color: var(--nexai-accent); }
+    &:focus-visible { @apply outline-none ring-2 ring-offset-1; ring-color: var(--nexai-accent); }
+  }
+
+  .nexai-talk-card__text {
+    @apply flex-1 flex flex-col;
+  }
+
+  .nexai-talk-card__title {
+    @apply text-sm font-semibold;
+  }
+
+  .nexai-talk-card__event {
+    @apply text-xs;
+    color: var(--nexai-fg-muted);
+  }
+
+  /* ---- Evidence map ---- */
+
+  .nexai-evidence-map__caption {
+    @apply text-xs italic;
+    color: var(--nexai-fg-faint);
+    margin: 0 0 16px;
+    max-width: 60ch;
+  }
+
+  .nexai-evidence-map__question {
+    background: var(--nexai-accent-soft);
+    border-radius: 12px;
+    padding: 14px 18px;
+    margin: 0 0 18px;
+    text-align: center;
+
+    p {
+      @apply text-base font-semibold;
+      color: var(--nexai-fg);
+      margin: 4px 0 0;
+    }
+  }
+
+  .nexai-evidence-map__question-label {
+    @apply text-[11px] font-semibold uppercase;
+    letter-spacing: 0.05em;
+    color: var(--nexai-accent);
+  }
+
+  .nexai-evidence-map__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    list-style: none;
+    padding: 0;
+    margin: 0 0 18px;
+  }
+
+  .nexai-evidence-card {
+    background: var(--nexai-surface);
+    border: 1px solid var(--nexai-border);
+    border-radius: 10px;
+    padding: 12px;
+  }
+
+  .nexai-evidence-card__label {
+    @apply text-sm font-semibold;
+    color: var(--nexai-fg);
+    margin: 0 0 4px;
+  }
+
+  .nexai-evidence-card__description {
+    @apply text-xs;
+    color: var(--nexai-fg-muted);
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  .nexai-evidence-map__arrow {
+    width: 2px;
+    height: 20px;
+    background: var(--nexai-border);
+    margin: 0 auto 18px;
+  }
+
+  .nexai-evidence-map__decisions ul {
+    @apply flex flex-wrap gap-2 justify-center;
+    list-style: none;
+    padding: 0;
+    margin: 8px 0 0;
+  }
+
+  .nexai-decision-badge {
+    @apply text-xs font-medium rounded-full;
+    padding: 6px 14px;
+    border: 1px solid var(--nexai-border);
+    color: var(--nexai-fg-muted);
+
+    /* Color is a supporting accent only — the label text itself always
+       carries the meaning, never color alone. */
+    &[data-decision="human-captured"] { border-color: #3f9142; color: #3f9142; }
+    &[data-decision="ai-generated"] { border-color: #a85a2e; color: #a85a2e; }
+    &[data-decision="manipulated"] { border-color: #b8433f; color: #b8433f; }
+    &[data-decision="unknown"] { border-color: var(--nexai-fg-faint); color: var(--nexai-fg-faint); }
+  }
+
+  @container nexai-app (max-width: 560px) {
+    .nexai-evidence-map__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #nexai .nexai-evidence-card {
+      opacity: 1 !important;
+      transform: none !important;
+    }
+
+    .nexai-talk-card {
+      transition: none;
+    }
+  }
+
+  /* ---------- HarshBot ---------- */
+
+  #harshbot {
+    @apply w-[720px] max-w-[92vw] h-[640px] max-h-[85vh] top-12 left-1/3;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    --hb-bg: #f7f7f9;
+    --hb-surface: #ffffff;
+    --hb-border: rgba(15, 23, 42, 0.1);
+    --hb-fg: #1a1a2e;
+    --hb-fg-muted: #64607a;
+    --hb-fg-faint: #948fa8;
+    --hb-accent: #6366f1;
+    --hb-accent-fg: #ffffff;
+    --hb-user-bubble: #6366f1;
+    --hb-user-bubble-fg: #ffffff;
+    --hb-assistant-bubble: #ffffff;
+  }
+
+  :root[data-theme="dark"] #harshbot {
+    --hb-bg: #17171f;
+    --hb-surface: #212130;
+    --hb-border: rgba(255, 255, 255, 0.1);
+    --hb-fg: #efeef7;
+    --hb-fg-muted: #b0acc4;
+    --hb-fg-faint: #7d788f;
+    --hb-accent: #818cf8;
+    --hb-accent-fg: #17171f;
+    --hb-user-bubble: #818cf8;
+    --hb-user-bubble-fg: #17171f;
+    --hb-assistant-bubble: #212130;
+  }
+
+  #harshbot .harshbot-app {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    background: var(--hb-bg);
+    color: var(--hb-fg);
+  }
+
+  #harshbot .sr-only {
+    @apply sr-only;
+  }
+
+  .harshbot-clear-btn {
+    @apply flex-none flex items-center justify-center size-7 rounded-full cursor-pointer transition-colors;
+    color: var(--hb-fg-muted);
+
+    &:hover:not(:disabled) { @apply bg-black/5; color: var(--hb-fg); }
+    &:disabled { opacity: 0.35; cursor: not-allowed; }
+    &:focus-visible { @apply outline-none ring-2 ring-offset-1; ring-color: var(--hb-accent); }
+  }
+
+  .harshbot-identity {
+    @apply flex items-center gap-3;
+    padding: 16px 20px 12px;
+    flex: none;
+  }
+
+  .harshbot-identity__icon {
+    @apply size-9 rounded-xl object-cover flex-none;
+  }
+
+  .harshbot-identity__name {
+    @apply text-sm font-bold;
+    color: var(--hb-fg);
+    margin: 0;
+  }
+
+  .harshbot-identity__tagline {
+    @apply text-xs;
+    color: var(--hb-fg-muted);
+    margin: 0;
+  }
+
+  .harshbot-disclosure {
+    @apply text-xs;
+    color: var(--hb-fg-muted);
+    padding: 0 20px 12px;
+    margin: 0;
+    max-width: 68ch;
+    line-height: 1.5;
+    flex: none;
+  }
+
+  .harshbot-dev-status {
+    @apply text-xs;
+    color: #92400e;
+    background: color-mix(in srgb, orange 18%, transparent);
+    border: 1px solid color-mix(in srgb, orange 40%, transparent);
+    border-radius: 8px;
+    padding: 8px 12px;
+    margin: 0 20px 12px;
+    line-height: 1.4;
+    flex: none;
+  }
+
+  .harshbot-mode-note {
+    @apply text-[11px];
+    color: var(--hb-fg-faint);
+    margin: 4px 0 0;
+    font-style: italic;
+  }
+
+  .harshbot-conversation {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    overscroll-behavior: contain;
+    padding: 0 20px;
+  }
+
+  .harshbot-welcome {
+    @apply flex flex-col items-center text-center gap-3;
+    padding: 28px 12px;
+    color: var(--hb-fg-muted);
+  }
+
+  .harshbot-welcome__icon {
+    color: var(--hb-accent);
+  }
+
+  .harshbot-welcome__prompt {
+    @apply text-sm;
+    max-width: 44ch;
+    margin: 0;
+    line-height: 1.55;
+  }
+
+  .harshbot-suggestions {
+    @apply flex flex-wrap justify-center gap-2;
+    margin-top: 6px;
+    max-width: 480px;
+  }
+
+  .harshbot-suggestion {
+    @apply text-xs font-medium rounded-full cursor-pointer transition-colors;
+    padding: 8px 14px;
+    color: var(--hb-fg);
+    background: var(--hb-surface);
+    border: 1px solid var(--hb-border);
+
+    &:hover { border-color: var(--hb-accent); color: var(--hb-accent); }
+    &:focus-visible { @apply outline-none ring-2 ring-offset-1; ring-color: var(--hb-accent); }
+  }
+
+  .harshbot-message-list {
+    list-style: none;
+    padding: 8px 0 16px;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .harshbot-message {
+    display: flex;
+    flex-direction: column;
+    max-width: 82%;
+  }
+
+  .harshbot-message--user {
+    align-self: flex-end;
+    align-items: flex-end;
+  }
+
+  .harshbot-message--assistant {
+    align-self: flex-start;
+    align-items: flex-start;
+  }
+
+  .harshbot-bubble {
+    border-radius: 16px;
+    padding: 10px 14px;
+
+    p {
+      @apply text-sm;
+      margin: 0;
+      line-height: 1.55;
+      white-space: pre-wrap;
+      overflow-wrap: break-word;
+    }
+  }
+
+  .harshbot-message--user .harshbot-bubble {
+    background: var(--hb-user-bubble);
+    color: var(--hb-user-bubble-fg);
+    border-bottom-right-radius: 4px;
+  }
+
+  .harshbot-message--assistant .harshbot-bubble {
+    background: var(--hb-assistant-bubble);
+    color: var(--hb-fg);
+    border: 1px solid var(--hb-border);
+    border-bottom-left-radius: 4px;
+  }
+
+  .harshbot-cursor {
+    display: inline-block;
+    width: 2px;
+    height: 1em;
+    margin-left: 2px;
+    vertical-align: text-bottom;
+    background: currentColor;
+    animation: harshbot-blink 1s step-end infinite;
+  }
+
+  .harshbot-sources {
+    @apply flex flex-wrap gap-1.5;
+    margin-top: 6px;
+  }
+
+  .harshbot-source-chip {
+    @apply text-[11px] font-medium rounded-full cursor-pointer transition-colors;
+    padding: 4px 10px;
+    color: var(--hb-accent);
+    background: color-mix(in srgb, var(--hb-accent) 12%, transparent);
+    border: 1px solid transparent;
+
+    &:hover { border-color: var(--hb-accent); }
+    &:focus-visible { @apply outline-none ring-2 ring-offset-1; ring-color: var(--hb-accent); }
+  }
+
+  .harshbot-message-actions {
+    @apply flex items-center gap-2;
+    margin-top: 4px;
+  }
+
+  .harshbot-message-action {
+    @apply inline-flex items-center gap-1 text-[11px] font-medium cursor-pointer rounded;
+    padding: 2px 4px;
+    color: var(--hb-fg-faint);
+
+    &:hover { color: var(--hb-fg-muted); }
+    &:focus-visible { @apply outline-none ring-2; ring-color: var(--hb-accent); }
+  }
+
+  .harshbot-composer {
+    flex: none;
+    padding: 12px 20px 16px;
+    border-top: 1px solid var(--hb-border);
+    background: var(--hb-surface);
+  }
+
+  .harshbot-textarea {
+    @apply text-sm w-full rounded-xl resize-none;
+    padding: 10px 12px;
+    color: var(--hb-fg);
+    background: var(--hb-bg);
+    border: 1px solid var(--hb-border);
+    max-height: 120px;
+
+    &::placeholder { color: var(--hb-fg-faint); }
+    &:focus-visible { @apply outline-none ring-2; ring-color: var(--hb-accent); }
+  }
+
+  .harshbot-composer__row {
+    @apply flex items-center justify-between;
+    margin-top: 8px;
+  }
+
+  .harshbot-char-counter {
+    @apply text-[11px];
+    color: var(--hb-fg-faint);
+
+    &--over { color: #d64545; }
+  }
+
+  .harshbot-send-btn {
+    @apply inline-flex items-center gap-1.5 text-xs font-semibold rounded-full cursor-pointer transition-colors;
+    padding: 8px 16px;
+    color: var(--hb-accent-fg);
+    background: var(--hb-accent);
+    border: none;
+
+    &:hover:not(:disabled) { opacity: 0.9; }
+    &:disabled { opacity: 0.4; cursor: not-allowed; }
+    &:focus-visible { @apply outline-none ring-2 ring-offset-1; ring-color: var(--hb-accent); }
+  }
+
+  .harshbot-send-btn--stop {
+    background: #d64545;
+    color: #ffffff;
+  }
+
+  .harshbot-privacy-note {
+    @apply text-[10.5px];
+    color: var(--hb-fg-faint);
+    margin: 8px 0 0;
+    line-height: 1.4;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .harshbot-cursor {
+      animation: none;
+      opacity: 0.6;
+    }
+  }
+}
+
+@keyframes harshbot-blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+@keyframes quick-look-backdrop-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes quick-look-panel-in {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes app-switcher-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes mission-control-backdrop-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes dropdown-in {
+  from {
+    opacity: 0;
+    transform: translateY(-6px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes live-activity-in {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes screen-saver-drift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes screen-saver-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-14px); }
+}
+
+/* Freeform, mouse-driven resizing/dragging isn't practical on phone-sized
+   touch screens, so windows fall back to a near-full-screen presentation.
+   !important is required here because manual resize/drag/maximize write
+   inline top/left/width/height/transform directly onto the element. */
+@media (max-width: 640px) {
+  .window-surface {
+    position: fixed !important;
+    inset: 64px 8px 12px 8px !important;
+    width: auto !important;
+    height: auto !important;
+    max-width: none !important;
+    max-height: none !important;
+    transform: none !important;
+    border-radius: 1rem;
+  }
+
+  .resize-handles {
+    display: none !important;
+  }
+
+  #spotlight {
+    left: 12px !important;
+    right: 12px;
+    top: 64px !important;
+    width: auto !important;
+    max-width: none;
+  }
+
+  .spotlight-preview {
+    display: none !important;
+  }
+
+  .live-activity-capsule,
+  .live-activity-coach {
+    left: 12px !important;
+    right: 12px !important;
+    width: auto !important;
   }
 }

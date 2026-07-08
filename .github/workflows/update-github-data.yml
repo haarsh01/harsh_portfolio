@@ -1,0 +1,113 @@
+name: Update GitHub profile data
+
+# Deliberately never triggers on `push` — this workflow commits to the
+# repository itself, so a push trigger would make it fire on its own
+# commits and loop forever. workflow_dispatch (manual) and schedule are
+# the only triggers, and neither is a downstream consequence of the
+# commit this workflow makes.
+on:
+  workflow_dispatch:
+  schedule:
+    # Hourly, offset from the top of the hour (GitHub's own docs note that
+    # jobs scheduled exactly on the hour are the most congested and most
+    # likely to be delayed). A personal portfolio doesn't need anything
+    # more frequent than this — this is "updated hourly" sync, never
+    # real-time streaming.
+    - cron: "17 * * * *"
+
+# Minimum permissions for the whole workflow; the one job that needs to
+# write commits back to the repo re-declares `contents: write` itself.
+# Never issues/pull-requests/actions/packages write — nothing here needs
+# any of those.
+permissions:
+  contents: read
+
+concurrency:
+  group: update-github-data
+  cancel-in-progress: false
+
+jobs:
+  update-data:
+    runs-on: ubuntu-latest
+    # Only the default branch — a schedule already only runs on the
+    # default branch by GitHub's own design, but workflow_dispatch could
+    # in principle target another ref, so this is a defensive check.
+    if: github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      # Fails the run clearly, before ever making a GraphQL request, when
+      # the secret hasn't been configured — an unset Actions secret
+      # interpolates as an empty string here, not as "undefined", so the
+      # length check below is what actually catches it. Never prints the
+      # value or its length, only whether one exists.
+      - name: Check required secret is configured
+        env:
+          TOKEN_PRESENT: ${{ secrets.GH_PUBLIC_PROFILE_TOKEN != '' }}
+        run: |
+          if [ "$TOKEN_PRESENT" != "true" ]; then
+            echo "::error::Required GitHub activity credential is missing. Add a GH_PUBLIC_PROFILE_TOKEN repository secret (Settings → Secrets and variables → Actions) — see the setup instructions in scripts/update-github-data.mjs's own header comment."
+            exit 1
+          fi
+          echo "GitHub activity credential is configured."
+
+      - name: Generate GitHub profile data
+        env:
+          # A dedicated PAT is REQUIRED here, not merely preferred: GitHub's
+          # GraphQL `contributionsCollection` field only returns real data
+          # for a token carrying the `read:user` OAuth scope (classic PAT)
+          # or the "Read access to profile" account permission
+          # (fine-grained PAT). The default `GITHUB_TOKEN` below is a
+          # repo-scoped installation token with no user-level scope at all
+          # — GitHub does not error on it, it silently returns an empty
+          # `weeks` array instead, which is exactly the bug this pipeline
+          # had. There is deliberately no fallback to GITHUB_TOKEN here
+          # any more: better to fail loudly than repeat that silently.
+          GITHUB_ACTIVITY_TOKEN: ${{ secrets.GH_PUBLIC_PROFILE_TOKEN }}
+        run: npm run github:sync
+
+      - name: Validate generated data
+        run: npm run github:validate
+
+      - name: Build the portfolio
+        run: npm run build
+
+      - name: Commit updated data if it changed
+        # GITHUB_TOKEN (the default, repo-scoped installation token) is
+        # used here for the git operation only, via actions/checkout's own
+        # credential setup — it never needs to read contribution data, only
+        # to push a commit, which its default permissions already cover.
+        run: |
+          if git diff --quiet -- public/data/github-profile.json; then
+            echo "No changes to public/data/github-profile.json — nothing to commit."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/data/github-profile.json
+          git commit -m "chore: refresh GitHub profile data [skip ci]"
+          git push
+
+      # No separate deploy step: this repository currently has no
+      # configured deployment (GitHub Pages is disabled, no Vercel/Netlify
+      # integration exists). Once one is added, most setups (Pages'
+      # branch-based build, Vercel/Netlify's git integration) redeploy
+      # automatically on any push to this branch, bot commits included —
+      # no extra step here should be needed. If a future deploy method
+      # specifically excludes bot-authored commits, add a deploy job (or a
+      # `workflow_call`/`repository_dispatch` to the deploy workflow) after
+      # this one rather than a second, competing deployment system.

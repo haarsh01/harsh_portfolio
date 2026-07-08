@@ -2,11 +2,29 @@
 import { techStack } from "#constants";
 import WindowWarpper from "#hoc/WindowWarpper.jsx";
 import { Check } from "lucide-react";
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
 import WindowControls from "#components/WindowControls.jsx";
+import useWindowStore from "#store/window";
+import clsx from "clsx";
 
 
 const Terminal = () => {
+  const { windows } = useWindowStore();
+  const targetSkill = windows.terminal?.data?.skill;
+  const highlightRef = useRef(null);
+
+  // Help Search can open Terminal with a specific technology in `data.skill`
+  // (e.g. `openWindow("terminal", { skill: "React.js" })`). Terminal has no
+  // real selection model, so the minimal, safe addition is: scroll that
+  // category into view and give it a brief highlight.
+  useEffect(() => {
+    if (targetSkill && highlightRef.current) {
+      highlightRef.current.scrollIntoView({ block: "center", behavior: "smooth" });
+    }
+  }, [targetSkill]);
+
+  const normalizedTarget = targetSkill?.toLowerCase();
+
   return (
     <>
     <div id="window-header">
@@ -23,11 +41,19 @@ const Terminal = () => {
         <div className="label">
           <p className="w-32">Category</p>
           <p>Technologies</p>
-          
+
         </div>
         <ul className="content">
-          {techStack.map(({category, items}) => (
-            <li key={category} className="flex items-center">
+          {techStack.map(({category, items}) => {
+            const isMatch = Boolean(
+              normalizedTarget && items.some((item) => item.toLowerCase().includes(normalizedTarget)),
+            );
+            return (
+            <li
+              key={category}
+              ref={isMatch ? highlightRef : null}
+              className={clsx("flex items-center", isMatch && "skill-highlight")}
+            >
               <Check className="check" size={20}/>
               <h3>{category}</h3>
               <ul>
@@ -35,14 +61,15 @@ const Terminal = () => {
                   <li key={i}>{item}{i < items.length -1 ? "," : ""}</li>
                 ))}
               </ul>
-               
+
             </li>
-          ))}
-    
+            );
+          })}
+
         </ul>
         <div className="footnote">
                 <p>
-                  <Check size={20} /> 5 of 5 stacks loaded successfully (100%)
+                  <Check size={20} /> {techStack.length} of {techStack.length} stacks loaded successfully (100%)
                 </p>
 
               </div>
