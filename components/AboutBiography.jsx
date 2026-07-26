@@ -1,9 +1,34 @@
 import React, { useRef } from 'react';
-import { ArrowRight } from 'lucide-react';
-import { ABOUT_CONTENT, ABOUT_EMPHASIS_PHRASES } from '#constants/about.js';
-import { NEXAI } from '#constants/nexai.js';
+import { ABOUT_CONTENT, ABOUT_EMPHASIS_PHRASES, ABOUT_ORGANIZATIONS } from '#constants/about.js';
 import { useAboutScrollAnimations } from '#hooks/useAboutScrollAnimations.js';
-import useWindowStore from '#store/window.js';
+
+function organizationLogoUrl(file) {
+  return `${import.meta.env.BASE_URL}images/organizations/${encodeURIComponent(file)}`;
+}
+
+// One real logo card — rendered twice per page load (the real, announced
+// group and an aria-hidden duplicate right after it that makes the
+// marquee loop read as seamless). All 8 are small (a few KB to ~50KB
+// each) and every one of them is meant to be seen as the strip scrolls,
+// so `loading="lazy"` is deliberately not used here — with the marquee
+// clipped by `overflow: hidden`, a lazily-loaded card positioned outside
+// the initial visible slice wouldn't fetch until the animation had
+// already carried it partway across, popping in mid-motion instead of
+// being ready from the start. Never a link: none of these organizations
+// have one single obvious official URL to send a visitor to from here,
+// and a static logo is explicitly fine per this section's own spec.
+function OrganizationLogo({ org }) {
+  return (
+    <div className="about-org-card">
+      <img
+        src={organizationLogoUrl(org.file)}
+        alt={org.alt}
+        className="about-org-logo"
+        draggable={false}
+      />
+    </div>
+  );
+}
 
 function escapeRegExp(value) {
   return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -40,7 +65,6 @@ const AboutBiography = ({ image, imageAlt }) => {
   const scrollContainerRef = useRef(null);
   const rootRef = useRef(null);
   const heroImageRef = useRef(null);
-  const openWindow = useWindowStore((state) => state.openWindow);
 
   useAboutScrollAnimations({ rootRef, scrollContainerRef, heroImageRef });
 
@@ -60,8 +84,7 @@ const AboutBiography = ({ image, imageAlt }) => {
             </figure>
 
             <div className="about-copy">
-              <p className="about-eyebrow">{ABOUT_CONTENT.eyebrow}</p>
-              <h1 className="about-name">{ABOUT_CONTENT.name}</h1>
+              <h1 className="about-name">{ABOUT_CONTENT.pageTitle}</h1>
               <p className="about-lead">{withEmphasis(ABOUT_CONTENT.intro[0], 'lead')}</p>
             </div>
           </header>
@@ -69,13 +92,37 @@ const AboutBiography = ({ image, imageAlt }) => {
           <section className="about-section about-research" data-about-chapter="research">
             <span className="about-divider" aria-hidden="true" />
             <h2 className="about-section-title">Research</h2>
-            <div className="about-copy-group">
-              {ABOUT_CONTENT.intro.slice(1).map((paragraph, i) => (
-                <p key={i}>{withEmphasis(paragraph, `research-${i}`)}</p>
+            <p className="about-research-intro">{withEmphasis(ABOUT_CONTENT.research.intro, 'research-intro')}</p>
+            <ul className="about-research-cards">
+              {ABOUT_CONTENT.research.cards.map((card, i) => (
+                <li key={card.label} className="about-research-card">
+                  <span className="about-research-card-label">{card.label}</span>
+                  <p>{withEmphasis(card.text, `research-card-${i}`)}</p>
+                </li>
               ))}
-              <button type="button" className="about-nexai-link" onClick={() => openWindow('nexai')}>
-                Explore {NEXAI.name} <ArrowRight size={14} aria-hidden="true" />
-              </button>
+            </ul>
+          </section>
+
+          <section
+            className="about-section about-organizations"
+            aria-labelledby="about-organizations-title"
+            data-about-chapter="organizations"
+          >
+            <span className="about-divider" aria-hidden="true" />
+            <h2 className="about-section-title" id="about-organizations-title">{ABOUT_ORGANIZATIONS.title}</h2>
+            <p className="about-organizations-subtitle">{ABOUT_ORGANIZATIONS.subtitle}</p>
+
+            <div className="about-org-marquee">
+              <div className="about-org-track">
+                {ABOUT_ORGANIZATIONS.logos.map((org) => (
+                  <OrganizationLogo key={org.name} org={org} />
+                ))}
+                <div className="about-org-track-duplicate" aria-hidden="true">
+                  {ABOUT_ORGANIZATIONS.logos.map((org) => (
+                    <OrganizationLogo key={`${org.name}-duplicate`} org={org} />
+                  ))}
+                </div>
+              </div>
             </div>
           </section>
 

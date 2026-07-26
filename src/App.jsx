@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
 import gsap from "gsap";
 import {
-  Dock, Navbar, Welcome, Home, QuickLook, AppSwitcher, MissionControl, GetInfo, ContextMenu, Spotlight, LiveActivity,
+  Dock, Navbar, Home, QuickLook, AppSwitcher, MissionControl, GetInfo, ContextMenu, Spotlight, LiveActivity,
   ControlCenter, ScreenSaver, DesktopBackground, PreferencesBridge, HandoffPanel, HandoffBootstrap, HelloIntro,
 } from "#components";
 import { Draggable } from "gsap/Draggable";
-import { Finder, Resume, Safari, Terminal, Text, Image, Contact, Photos, Spotify, AboutPortfolio, TimeMachine, ActivityMonitor, Publications, Talks, Letterboxd, GitHub, NexAI, HarshBot } from '#windows';
+import { Finder, Resume, Safari, Terminal, Text, Image, Contact, Photos, Spotify, AboutPortfolio, TimeMachine, ActivityMonitor, Publications, Talks, Letterboxd, GitHub, NexAI, AuditLM, HarshBot } from '#windows';
 import { hasSeenHelloThisSession, markHelloSeenThisSession } from '#utils/helloSession.js';
 
 
@@ -32,7 +32,6 @@ const App = () => {
     <DesktopBackground/>
     {!introComplete ? <HelloIntro onComplete={completeIntro} /> : null}
     <Navbar/>
-    <Welcome introComplete={introComplete}/>
     <Dock/>
 <Safari/>
     <Terminal/>
@@ -51,6 +50,7 @@ const App = () => {
     <Letterboxd/>
     <GitHub/>
     <NexAI/>
+    <AuditLM/>
     <HarshBot/>
     <Home/>
     <QuickLook/>

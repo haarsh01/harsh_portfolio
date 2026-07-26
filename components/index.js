@@ -1,5 +1,4 @@
 import Navbar from "#components/Navbar.jsx";
-import Welcome from "#components/Welcome.jsx";
 import Dock from "#components/Dock.jsx"
 import WindowControls from "#components/WindowControls";
 import Home from"#components/Home.jsx"
@@ -25,7 +24,7 @@ import EmptyState from "#components/EmptyState.jsx";
 import Badge from "#components/Badge.jsx";
 
 export {
-  Navbar, Welcome, Dock, WindowControls, Home, QuickLook, AppSwitcher, MissionControl, GetInfo,
+  Navbar, Dock, WindowControls, Home, QuickLook, AppSwitcher, MissionControl, GetInfo,
   ContextMenu, Spotlight, LiveActivity, ControlCenter, DesktopWidgets, ScreenSaver, DesktopBackground, PreferencesBridge,
   HandoffPanel, HandoffBootstrap, HelloIntro,
   Button, IconButton, ExternalLink, EmptyState, Badge,

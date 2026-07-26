@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import clsx from 'clsx';
 import { ExternalLink, GraduationCap, Copy, Check } from 'lucide-react';
-import { WindowControls } from '#components';
+import { WindowControls, Badge } from '#components';
 import WindowWrapper from '#hoc/WindowWarpper.jsx';
 import ShareButton from '#components/ShareButton.jsx';
 import Button from '#components/Button.jsx';
@@ -37,6 +37,9 @@ const PublicationEntry = ({ pub, number, isHighlighted, entryRef }) => {
     <li id={`publication-${pub.id}`} ref={entryRef} className={clsx('publication-entry', isHighlighted && 'publication-highlight')}>
       <span className="publication-number">[{citation.number}]</span>
       <div className="publication-body">
+        {pub.status === 'submitted' ? (
+          <Badge tone="accent" className="publication-status-badge">Manuscript submitted</Badge>
+        ) : null}
         <p className="publication-line">
           {citation.authorsList.map((author, i, arr) => {
             let prefix = '';

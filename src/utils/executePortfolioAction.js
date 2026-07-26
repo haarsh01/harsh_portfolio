@@ -74,7 +74,7 @@ export default function executePortfolioAction(action) {
       return;
 
     case "open-photos-section":
-      runItemAction({ type: "open-window", windowId: "photos", data: { section: action.section } }, ctx);
+      runItemAction({ type: "open-window", windowId: "photos", data: { section: action.section, album: action.album } }, ctx);
       return;
 
     case "open-terminal-item":
@@ -178,7 +178,7 @@ export default function executePortfolioAction(action) {
       }
 
       if (destination.app === "photos") {
-        ctx.openWindow("photos", destination.section ? { section: destination.section } : null);
+        ctx.openWindow("photos", destination.section ? { section: destination.section, album: destination.album } : null);
         return;
       }
 

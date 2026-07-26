@@ -109,11 +109,10 @@ export function useAboutScrollAnimations({ rootRef, scrollContainerRef, heroImag
     // exist, with no ScrollTrigger measurement involved, so it's safe to
     // run synchronously in this same layout-effect pass.
     const heroImage = heroImageRef.current;
-    const eyebrow = root.querySelector('.about-eyebrow');
     const name = root.querySelector('.about-name');
     const lead = root.querySelector('.about-lead');
 
-    const heroTargets = [heroImage, eyebrow, name, lead].filter(Boolean);
+    const heroTargets = [heroImage, name, lead].filter(Boolean);
     if (heroTargets.length) {
       gsap.set(heroTargets, { opacity: 0, y: 20 });
       gsap.to(heroTargets, {
@@ -148,7 +147,13 @@ export function useAboutScrollAnimations({ rootRef, scrollContainerRef, heroImag
         if (!sectionEl) return;
         const divider = sectionEl.querySelector('.about-divider');
         const heading = sectionEl.querySelector('.about-section-title');
-        const copy = Array.from(sectionEl.querySelectorAll('.about-copy-group > *'));
+        // `.about-research-intro`/`.about-research-cards > li` cover the
+        // Research section's own intro sentence + cards (it has no
+        // `.about-copy-group`, unlike Outside/Organizations) — matched
+        // here too so Research's reveal isn't just a bare divider+heading.
+        const copy = Array.from(sectionEl.querySelectorAll(
+          '.about-copy-group > *, .about-research-intro, .about-research-cards > li',
+        ));
 
         const fadeTargets = [heading, ...copy].filter(Boolean);
         if (!divider && !fadeTargets.length) return;
@@ -175,6 +180,33 @@ export function useAboutScrollAnimations({ rootRef, scrollContainerRef, heroImag
 
       revealChapter(root.querySelector('[data-about-chapter="research"]'));
       revealChapter(root.querySelector('[data-about-chapter="outside"]'));
+
+      // Divider + heading + subtitle fade in the same generic way as any
+      // other chapter (the subtitle lives in `.about-copy-group` here, so
+      // it's already covered by revealChapter's own selector above).
+      const orgSection = root.querySelector('[data-about-chapter="organizations"]');
+      revealChapter(orgSection);
+
+      // The marquee's own one-time entrance — separate from the fade above
+      // because this needs to *slide in from outside the visible area*,
+      // not just fade, per this section's spec ("logos should feel like
+      // they come from outside the screen"). This only animates the OUTER
+      // `.about-org-marquee` container's own reveal; the perpetual seamless
+      // loop (index.css's `about-org-marquee` keyframes, translateX 0 to
+      // -50% over the real+duplicate logo set) is untouched and keeps
+      // running underneath it, both before and after this plays.
+      const orgMarquee = orgSection?.querySelector('.about-org-marquee') ?? null;
+      if (orgMarquee) {
+        gsap.set(orgMarquee, { opacity: 0, x: 56 });
+        ScrollTrigger.create({
+          trigger: orgMarquee,
+          scroller,
+          start: 'top 85%',
+          end: 'top 60%',
+          once: true,
+          onEnter: () => gsap.to(orgMarquee, { opacity: 1, x: 0, duration: 0.9, ease: 'power2.out' }),
+        });
+      }
 
       // Principle rows — sequential, slightly slower stagger than prose.
       const principleRows = root.querySelectorAll('.about-principle');

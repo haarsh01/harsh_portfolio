@@ -37,7 +37,7 @@ export const PreviewBody = ({ item }) => {
     case 'pdf':
       return (
         <div className="quick-look-pdf">
-          <Document file="files/resume.pdf">
+          <Document file={`${import.meta.env.BASE_URL}files/cv_harsh_kaushik.pdf`}>
             <Page pageNumber={1} width={320} renderTextLayer={false} renderAnnotationLayer={false} />
           </Document>
         </div>

@@ -90,8 +90,12 @@ export function useGitHubData() {
 
   // Adapts whichever generated-snapshot schema version is actually on disk
   // into one stable internal shape — this is the one place that boundary
-  // lives, so GitHubContributionCalendar/Summary/ActivityOverview never
-  // needed to know a schema version exists at all.
+  // lives. contributionDays/contributionMeta/activity/repositoryActivity
+  // are still computed here even though the GitHub window no longer
+  // renders a contribution/activity UI for them (removed in a
+  // content/privacy cleanup) — left in place since they're cheap to
+  // derive and this hook's job is adapting the snapshot shape, not
+  // deciding what the window displays.
   //   v1: contributions{from,to,totalContributions,totalCommitContributions,weeks}
   //   v2: v1 + activity{commits,pullRequests,issues,codeReviews,classifiedTotal} + repositoryActivity[]
   //   v3: period{from,to} (date-only) + contributions gains

@@ -20,7 +20,7 @@ import ShareButton from '#components/ShareButton.jsx';
 const toQuickLookEntry = (item, openItem) => {
   const base = { id: item.id, name: item.name, icon: item.icon, open: () => openItem(item) };
 
-  // A "app" item (e.g. NexAI, Portfolio OS) is a direct launch point for a
+  // A "app" item (e.g. NexAI, AuditLM) is a direct launch point for a
   // real window, not a browsable folder — it may still carry a `children`
   // array purely so Get Info/Spotlight can surface a real description, but
   // Quick Look should preview it as a project, not offer to navigate in.
@@ -81,7 +81,7 @@ const Finder = () => {
 
     const openItem =(item) => {
 
-        // A direct-launch "app" item (NexAI, Portfolio OS) opens its real
+        // A direct-launch "app" item (NexAI, AuditLM) opens its real
         // window immediately — it is not a folder to browse into, even
         // though it may still carry `children` purely for Get Info/Quick
         // Look metadata (see toQuickLookEntry above).
@@ -182,7 +182,7 @@ const Finder = () => {
             // but have no browsable children (their content is a
             // dedicated window, not a folder) — open that window directly
             // instead of navigating into an empty pane. Work-folder "app"
-            // entries (NexAI, Portfolio OS) behave the same way when
+            // entries (NexAI, AuditLM) behave the same way when
             // clicked straight from the sidebar shortcut list.
             item.type === "publications" ? openWindow("publications")
             : item.type === "talks" ? openWindow("talks")

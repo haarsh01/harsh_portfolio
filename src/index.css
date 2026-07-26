@@ -398,134 +398,6 @@ body {
   .ui-brand-icon--medium { @apply size-9; padding: 5px; }
   .ui-brand-icon--large { @apply size-12; padding: 7px; }
 
-  #welcome {
-    @apply text-gray-200 flex flex-col justify-center items-center absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 select-none text-center px-6 z-10 max-sm:hidden;
-    /* #home (the desktop-icons layer) sits at z-0 but its <ul> is a
-       full-bleed `inset-0` hit-target (so empty desktop space still reaches
-       its own right-click context menu) — without z-10 here, that empty UL
-       was confirmed (via elementFromPoint) to intercept clicks aimed at the
-       hero's own buttons, even where no icon is visually anywhere near
-       them. But raising the whole container's stacking order alone would
-       *also* make its empty flex gaps swallow right-clicks meant for the
-       desktop context menu underneath — so the container itself stays
-       `pointer-events: none` (fully click-through) and only the three real
-       buttons opt back in below. z-10 is comfortably below the Dock/Navbar
-       (z-50) and windows (z-index 1000+), which must still stack above the
-       hero regardless.
-       Bounded to the visible desktop area (minus Navbar/Dock safe zones) at
-       every width, so the hero column never has to fight the Dock/Navbar
-       for space and never needs its own separate mobile layout branch.
-       Hidden below the mobile breakpoint: it visually overlapped the
-       MobileHome app grid (#home is a positioned sibling, not a parent),
-       and the desktop already carries the full hero experience — Take a
-       Tour gets its own tile in the mobile grid instead of being lost. */
-    width: min(640px, calc(100vw - 48px));
-    max-height: calc(100dvh - 180px);
-    color: var(--desktop-text-color);
-    pointer-events: none;
-
-    .welcome-eyebrow {
-      @apply text-xs font-semibold uppercase;
-      letter-spacing: 0.08em;
-      color: var(--desktop-text-color);
-      opacity: 0.75;
-      margin: 0 0 14px;
-    }
-
-    .welcome-statement {
-      @apply font-georama italic font-medium;
-      font-size: clamp(1.5rem, 1rem + 2.6vw, 2.75rem);
-      line-height: 1.25;
-      margin: 0 0 14px;
-    }
-
-    .welcome-support {
-      font-size: clamp(0.85rem, 0.7rem + 0.6vw, 1rem);
-      color: var(--desktop-text-color);
-      opacity: 0.8;
-      max-width: 46ch;
-      margin: 0 auto 26px;
-    }
-
-    .welcome-actions {
-      @apply flex flex-wrap items-center justify-center gap-3;
-      margin-bottom: 34px;
-      pointer-events: none;
-    }
-
-    /* These three render via the shared Button primitive (.ui-button and
-       friends supply the structural/variant styling) — the container chain
-       above is click-through (see #welcome's own pointer-events:none), so
-       only these three real controls opt back in, and only the wallpaper-
-       specific color/contrast treatment is overridden here (the shared
-       component's default tokens assume a window surface, not sitting
-       directly on the colorful desktop background). */
-    .welcome-action-primary,
-    .welcome-action-secondary,
-    .welcome-action-text {
-      pointer-events: auto;
-    }
-
-    .welcome-action-secondary {
-      color: var(--desktop-text-color);
-      background: rgba(255, 255, 255, 0.16) !important;
-      border: 1px solid rgba(255, 255, 255, 0.3);
-
-      &:hover:not(:disabled) { background: rgba(255, 255, 255, 0.26) !important; }
-    }
-
-    .welcome-action-primary:focus-visible,
-    .welcome-action-secondary:focus-visible {
-      @apply ring-white/70 ring-offset-2 ring-offset-transparent;
-    }
-
-    .welcome-action-text {
-      color: var(--desktop-text-color);
-      opacity: 0.85;
-
-      &:hover { text-decoration: underline; }
-      &:focus-visible { @apply ring-white/70; }
-    }
-
-    /* A restrained secondary wordmark, not the primary hero message — sized
-       with clamp() (never a fixed text-9xl) and forced to a single line so
-       it can never wrap mid-word or overflow, from a 320px phone through a
-       large desktop. `white-space: nowrap` also defends against a real
-       browser quirk: adjacent `display: inline-block` letters (below) get
-       their own soft line-break opportunities even with no whitespace
-       between them, unlike plain inline text — confirmed live at ~834px
-       width before this fix, where "portfolio" broke into "portfoli" + an
-       orphaned "o" on its own line. */
-    .welcome-wordmark {
-      @apply font-georama italic;
-      font-size: clamp(1.75rem, 1rem + 4vw, 4.5rem);
-      white-space: nowrap;
-      max-width: 100%;
-      overflow: hidden;
-      opacity: 0.9;
-      margin: 0;
-    }
-
-    /* Pre-animation state for the "portfolio" entrance (Welcome.jsx) — set
-       here, not only via GSAP, so the letters are already hidden on the
-       very first paint (behind the Hello overlay) instead of flashing
-       their final state before the entrance timeline runs. */
-    .portfolio-letter {
-      display: inline-block;
-      opacity: 0;
-      transform: translateY(0.35em);
-      filter: blur(10px);
-    }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    #welcome .portfolio-letter {
-      opacity: 1;
-      transform: none;
-      filter: none;
-    }
-  }
-
   #dock {
     @apply absolute bottom-5 left-1/2 -translate-x-1/2 z-50 select-none;
     /* Was `max-sm:hidden` — the Dock was the *only* always-visible launch
@@ -536,20 +408,124 @@ body {
     max-width: calc(100vw - 16px);
     padding-bottom: env(safe-area-inset-bottom, 0px);
 
-    .dock-container {
-      @apply justify-between rounded-[1.4rem] p-2 flex items-end gap-1.5;
+    /* Outer wrapper: intentionally has NO background/blur/overflow of its
+       own. It exists purely so a magnified icon (and its tooltip) has
+       somewhere to visually render above the compact glass capsule below
+       — isolation:isolate gives the layers below their own local
+       stacking context (Step 6) without needing large/arbitrary z-index
+       values anywhere else in the app. */
+    overflow: visible;
+    isolation: isolate;
+
+    /* The ONLY element that is actually clipped to the rounded shape.
+       Anchored to the bottom of #dock at the compact "resting" height
+       (not the taller interactive layer below), so it can never clip a
+       magnified icon — those live in a sibling layer entirely. Sits
+       behind everything else (z-index 0) and never receives pointer
+       events, so it's purely decorative. */
+    .dock-surface {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: var(--dock-surface-height);
+      border-radius: 1.4rem;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: 0;
       background: rgba(255, 255, 255, 0.22);
       border: 1px solid rgba(255, 255, 255, 0.35);
       box-shadow: 0 18px 40px -14px rgba(15, 23, 42, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.4);
       backdrop-filter: var(--glass-blur) var(--glass-saturate);
       -webkit-backdrop-filter: var(--glass-blur) var(--glass-saturate);
+    }
+
+    /* The interactive/animation layer. Taller than the visual capsule by
+       `--dock-headroom` (see the calculation below) so a fully magnified
+       icon and its tooltip are painted *inside* this box's own bounds —
+       overflow-x:auto (kept for narrow viewports where the full Dock
+       doesn't fit — see Step 7/responsive notes) forces overflow-y to
+       also compute as "auto" per the CSS spec (an element can't mix a
+       non-visible overflow-x with a truly visible overflow-y), but
+       because nothing ever actually exceeds this taller box, that
+       computed overflow-y:auto never clips anything in practice. Icons
+       sit flush at the bottom via align-items:flex-end, matching the
+       glass surface below.
+
+       --dock-headroom derivation (Step 3 formula, using real values):
+         base icon height           = 56px  (size-14)
+         max magnificationScale     = 0.5   (clamped in store/preferences.js,
+                                              Control Center slider max=50%)
+         max scale                  = 1 + 0.5 = 1.5
+         scale-driven rise          = 56 * (1.5 - 1)        = 28px
+         existing manual lift       = 60 * 0.5 (scaleBoost) = 30px
+         tooltip height (~1 line)   = ~24px
+         tooltip gap                = ~10px
+         -----------------------------------------------------------
+         required                   = 28 + 30 + 24 + 10      = 92px
+       Rounded up with a safety margin (also comfortably covers the
+       3xl:size-20 80px icon case, which needs even less proportionally
+       since the manual lift/tooltip terms don't scale with icon size). */
+    --dock-surface-height: 72px; /* 56px icon + 8px top/bottom, matches the old p-2 capsule */
+    --dock-headroom: 110px;
+
+    .dock-items {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      /* Modest resting gap (up from 6px) so square icon frames don't read
+         as visually attached at rest — collision protection at hover
+         comes from Dock.jsx's horizontal-displacement math, not from
+         this being large. */
+      gap: 0.625rem;
+      /* Extra horizontal padding beyond the visual capsule's own edges:
+         at max scale (1.5) an icon grows (width * (scale-1)) / 2 = 14px
+         past its resting edge on each side (transform-origin is bottom
+         center — Step 4 — so growth is horizontally symmetric); this
+         keeps the first/last icon's magnified edge inside the rounded
+         capsule instead of poking out past its corner (Step 7). */
+      padding: var(--dock-headroom) 20px 8px;
+      /* No explicit height: the box's natural height (padding-top +
+         tallest icon + padding-bottom) already equals headroom + 56 + 8,
+         which is exactly what's needed — an explicit height here would
+         have to be kept in sync by hand instead of falling out of the
+         padding values above. */
       max-width: 100%;
       overflow-x: auto;
+      overflow-y: visible; /* computes to "auto" per spec; see comment above */
       overscroll-behavior-x: contain;
     }
 
-    .tooltip {
-      @apply !py-1 !px-3 !w-fit !text-center !text-xs !rounded-md !bg-blue-200 !text-blue-900 !shadow-2xl;
+    /* The Dock's single controlled tooltip (Dock.jsx) — positioned via
+       GSAP x/y (see the component for why: native per-icon hover/focus
+       detection breaks once icons displace horizontally to make room for
+       a magnified neighbor). Base position is pinned to the row's own
+       origin (left:0, bottom:0) with xPercent:-50 for centering; GSAP
+       then only ever adds a translate on top of that. */
+    .dock-tooltip {
+      @apply text-xs font-medium rounded-md shadow-lg;
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      padding: 4px 10px;
+      white-space: nowrap;
+      pointer-events: none;
+      z-index: 20;
+      background: rgba(30, 32, 38, 0.92);
+      color: #fff;
+      opacity: 0;
+      transition: opacity 100ms ease-out;
+
+      &[data-visible="true"] {
+        opacity: 1;
+        transition-duration: 140ms;
+      }
+    }
+
+    .dock-item {
+      @apply relative flex justify-center;
     }
 
     .dock-icon {
@@ -560,15 +536,22 @@ body {
          second, unintended lag on top of GSAP's already-eased motion —
          confirmed live as the real cause of the magnification feeling
          delayed, not the tween durations themselves. */
-      @apply size-14 3xl:size-20 cursor-pointer rounded-xl active:scale-90;
+      @apply size-14 3xl:size-20 cursor-pointer rounded-xl active:scale-90 relative;
+      transform-origin: center bottom;
+      z-index: 1;
+
+      &:hover, &:focus-visible {
+        z-index: 3;
+      }
 
       img {
-        @apply object-cover object-center rounded-xl;
+        @apply object-cover object-center rounded-xl pointer-events-none;
       }
     }
 
     .dock-indicator {
       @apply absolute -bottom-1.5 left-1/2 -translate-x-1/2 size-1 rounded-full bg-white/90;
+      z-index: 2;
     }
   }
 
@@ -731,68 +714,287 @@ body {
   .resize-handle.resize-se { @apply bottom-0 right-0 size-4 cursor-nwse-resize; }
   .resize-handle.resize-sw { @apply bottom-0 left-0 size-4 cursor-nesw-resize; }
 
+  /* ---------- Field Notes (src/windows/Safari.jsx, windowId "safari") ----------
+     A calm, mostly solid reading surface — same philosophy as the About
+     editorial page (.about-page) — so the article stays readable
+     regardless of wallpaper, plus a small set of custom properties so the
+     list card, tags, and placeholder blocks all key off one palette. */
   #safari {
-    @apply w-4xl top-40 left-2/12;
+    @apply w-4xl max-w-[92vw] h-[640px] max-h-[85vh] top-16 left-2/12;
+  }
 
-    .search {
-      @apply flex items-center gap-3 w-2/3 bg-white/70 border border-white/60 rounded-lg px-3 py-2;
+  .field-notes {
+    @apply flex-1 min-h-0 flex flex-col overflow-hidden;
+    background: #fdfcfa;
+    --fn-surface: #fdfcfa;
+    --fn-fg: #1a1a1d;
+    --fn-fg-muted: #52525b;
+    --fn-fg-faint: #8b8b93;
+    --fn-border: rgba(15, 23, 42, 0.09);
+    --fn-accent: #db2777;
+    --fn-accent-soft: rgba(219, 39, 119, 0.08);
+    --fn-card-bg: rgba(15, 23, 42, 0.015);
+    --fn-card-bg-hover: rgba(15, 23, 42, 0.04);
+    --fn-placeholder-bg: rgba(15, 23, 42, 0.025);
+  }
 
-      input {
-        @apply placeholder:text-gray-400 bg-transparent;
+  :root[data-theme="dark"] .field-notes {
+    background: #17171a;
+    --fn-surface: #17171a;
+    --fn-fg: #f1f1f0;
+    --fn-fg-muted: #b4b4b9;
+    --fn-fg-faint: #78787f;
+    --fn-border: rgba(255, 255, 255, 0.1);
+    --fn-accent: #f472b6;
+    --fn-accent-soft: rgba(244, 114, 182, 0.12);
+    --fn-card-bg: rgba(255, 255, 255, 0.03);
+    --fn-card-bg-hover: rgba(255, 255, 255, 0.06);
+    --fn-placeholder-bg: rgba(255, 255, 255, 0.04);
+  }
+
+  .field-notes-scroll {
+    @apply flex-1 min-h-0 overflow-y-auto overflow-x-hidden;
+    overscroll-behavior: contain;
+    container-type: inline-size;
+    container-name: field-notes;
+
+    &:focus-visible { @apply outline-none; box-shadow: inset 0 0 0 2px rgba(219, 39, 119, 0.4); }
+  }
+
+  .field-notes-list {
+    width: min(100%, 640px);
+    margin-inline: auto;
+    padding: clamp(20px, 5cqi, 40px) clamp(16px, 4cqi, 28px);
+  }
+
+  .field-notes-article {
+    width: min(100%, 68ch);
+    margin-inline: auto;
+    padding: clamp(20px, 5cqi, 40px) clamp(16px, 4cqi, 28px);
+    color: var(--fn-fg);
+  }
+
+  .field-notes-intro {
+    @apply mb-6;
+
+    h2 {
+      @apply text-lg font-bold mb-1.5;
+      color: var(--fn-fg);
+    }
+
+    p {
+      @apply text-sm;
+      color: var(--fn-fg-muted);
+    }
+  }
+
+  .field-notes-card {
+    @apply flex flex-col w-full text-left rounded-2xl overflow-hidden cursor-pointer transition-colors mb-4;
+    border: 1px solid var(--fn-border);
+    background: var(--fn-card-bg);
+
+    &:hover { background: var(--fn-card-bg-hover); }
+    &:focus-visible { @apply outline-none ring-2 ring-offset-2 rounded-2xl; ring-color: var(--fn-accent); }
+
+    &:last-of-type { @apply mb-0; }
+
+    .field-notes-card__body {
+      @apply flex-1 min-w-0 flex flex-col gap-2 p-4;
+
+      h3 {
+        @apply text-base font-bold leading-snug;
+        color: var(--fn-fg);
       }
     }
 
-    .blog {
-      @apply flex-1 min-h-0 overflow-y-auto p-10 max-w-3xl mx-auto w-full;
+    .field-notes-card__excerpt {
+      @apply text-sm leading-relaxed m-0;
+      color: var(--fn-fg-muted);
+    }
+  }
 
-      h2 {
-        @apply text-xl font-bold text-pink-600 mb-10;
-      }
+  @container field-notes (min-width: 440px) {
+    .field-notes-card {
+      @apply flex-row items-stretch;
 
-      .blog-post {
-        @apply grid grid-cols-12 space-x-5 rounded-lg transition-colors duration-300;
+      /* Was a fixed 160px thumbnail with the frame's own 16/9 aspect-ratio
+         still driving its height (~90px) — next to a text column that's
+         easily 180-240px tall with tags + title + excerpt + meta, that
+         read as a small thumbnail glued to a much taller body instead of
+         a real feature image. `flex: 0 0 <range>` gives it a real,
+         substantial column width (clamped so it never gets thumbnail-
+         small or overly dominant), and dropping the frame's aspect-ratio
+         in favor of `height: 100%` lets it stretch to match whatever
+         height the text column actually needs — `items-stretch` above is
+         what makes that 100% meaningful (both columns share the row's
+         real height, not just their own natural content height). */
+      .field-notes-image--card {
+        flex: 0 0 clamp(220px, 36%, 320px);
+        width: auto;
 
-        img {
-          @apply size-full rounded-md object-cover;
-        }
-
-        .content {
-          @apply col-span-10 space-y-3;
-
-          p {
-            @apply text-xs text-gray-500;
-          }
-
-          h3 {
-            @apply font-semibold text-base text-gray-800;
-          }
-
-          a {
-            @apply text-blue-600 text-xs hover:underline flex items-center gap-3;
-          }
-
-          .blog-post-share {
-            @apply flex-none flex items-center justify-center size-6 rounded-full text-gray-400 cursor-pointer transition-colors hover:bg-black/5 hover:text-blue-600;
-          }
-        }
-
-        &.post-highlight {
-          @apply bg-pink-50 ring-2 ring-pink-300 ring-offset-2;
+        .field-notes-image-frame {
+          height: 100%;
+          min-height: 220px;
+          aspect-ratio: auto;
         }
       }
+    }
+  }
 
-      .field-notes-empty {
-        @apply flex flex-col items-center text-center gap-4 py-16 text-gray-400;
+  .field-notes-tags {
+    @apply flex flex-wrap gap-1.5;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
 
-        p {
-          @apply text-sm max-w-sm;
-        }
-      }
+  .field-notes-tag {
+    @apply text-[11px] font-semibold rounded-full;
+    padding: 3px 10px;
+    background: var(--fn-accent-soft);
+    color: var(--fn-accent);
+  }
 
-      .field-notes-talk-link {
-        @apply inline-flex items-center gap-2 text-xs font-medium text-pink-600 cursor-pointer rounded-full px-4 py-2 transition-colors hover:bg-pink-50;
-        border: 1px solid rgba(219, 39, 119, 0.25);
-      }
+  .field-notes-meta {
+    @apply flex items-center gap-2 text-xs m-0;
+    color: var(--fn-fg-faint);
+
+    .field-notes-meta__reading-time {
+      @apply flex items-center gap-1;
+    }
+  }
+
+  .field-notes-more {
+    @apply flex flex-col items-center text-center gap-3;
+    padding: 32px 0 8px;
+    margin-top: 8px;
+    border-top: 1px solid var(--fn-border);
+    color: var(--fn-fg-faint);
+
+    p { @apply text-sm m-0; }
+  }
+
+  .field-notes-talk-link {
+    @apply inline-flex items-center gap-2 text-xs font-medium cursor-pointer rounded-full px-4 py-2 transition-colors;
+    color: var(--fn-accent);
+    border: 1px solid var(--fn-accent-soft);
+
+    &:hover { background: var(--fn-accent-soft); }
+    &:focus-visible { @apply outline-none ring-2 ring-offset-1; ring-color: var(--fn-accent); }
+  }
+
+  .field-notes-back {
+    @apply inline-flex items-center gap-1.5 text-xs font-semibold cursor-pointer rounded-full transition-colors mb-5;
+    padding: 6px 12px;
+    color: var(--fn-fg-muted);
+    background: var(--fn-surface);
+    box-shadow: 0 4px 10px -4px rgba(0, 0, 0, 0.12);
+    position: sticky;
+    top: 0;
+    z-index: 1;
+
+    &:hover { color: var(--fn-accent); background: var(--fn-accent-soft); }
+    &:focus-visible { @apply outline-none ring-2 ring-offset-1; ring-color: var(--fn-accent); }
+  }
+
+  .field-notes-article-header {
+    @apply mb-6;
+
+    h1 {
+      @apply font-bold mb-2;
+      font-size: clamp(1.375rem, 1.1rem + 1.2cqi, 1.75rem);
+      line-height: 1.25;
+      color: var(--fn-fg);
+    }
+  }
+
+  .field-notes-article-subtitle {
+    @apply text-sm mb-3 max-w-[60ch];
+    color: var(--fn-fg-muted);
+  }
+
+  .field-notes-article-header .field-notes-meta {
+    @apply mb-3;
+  }
+
+  .field-notes-article-body {
+    @apply mt-8;
+
+    h2 {
+      @apply font-bold mt-9 mb-3;
+      font-size: 1.05rem;
+      color: var(--fn-fg);
+
+      &:first-child { margin-top: 0; }
+    }
+
+    p {
+      @apply text-[0.95rem] mb-4;
+      line-height: 1.75;
+      color: var(--fn-fg);
+
+      &:last-child { margin-bottom: 0; }
+    }
+
+    /* A simple closing signature, not a fourth heading-led section — kept
+       at the same body text size (never oversized), just given extra
+       breathing room above it and a softer, slightly muted/italic tone so
+       it reads as a warm sign-off rather than another paragraph of prose. */
+    .field-note-signoff {
+      margin-top: 36px;
+      font-style: italic;
+      color: var(--fn-fg-muted);
+    }
+  }
+
+  .field-notes-image {
+    display: block;
+    margin: 0;
+  }
+
+  .field-notes-image-frame {
+    @apply rounded-2xl;
+    overflow: hidden;
+    border: 1px solid var(--fn-border);
+    background: var(--fn-placeholder-bg);
+
+    img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  .field-notes-image-caption {
+    @apply text-xs italic text-center m-0;
+    margin-top: 8px;
+    color: var(--fn-fg-faint);
+  }
+
+  .field-notes-image--hero {
+    width: 100%;
+    margin-bottom: 8px;
+
+    .field-notes-image-frame {
+      aspect-ratio: 16 / 7;
+    }
+  }
+
+  .field-notes-image--inline {
+    width: 100%;
+    margin: 28px 0;
+
+    .field-notes-image-frame {
+      aspect-ratio: 16 / 8;
+    }
+  }
+
+  .field-notes-image--card {
+    width: 100%;
+
+    .field-notes-image-frame {
+      aspect-ratio: 16 / 9;
     }
   }
 
@@ -806,26 +1008,49 @@ body {
     .techstack {
       @apply flex-1 min-h-0 overflow-y-auto text-sm font-roboto p-5;
 
+      /* Both the header and each content row share the same 3-column grid
+         (checkmark / category / technologies) so they always line up —
+         switched from a flex row specifically because the real CV's
+         "Machine Learning & Computer Vision" category (much longer than
+         the old single-word placeholder categories this was built for)
+         wrapped to several lines and visually ran into the technologies
+         column next to it under the old fixed-width flex layout. Grid
+         columns don't have that problem: each column wraps independently
+         within its own track, so a long category label never crowds the
+         technologies list beside it. */
       .label {
-        @apply flex items-center ms-10 mt-7;
+        @apply grid mt-7;
+        grid-template-columns: 28px 11rem 1fr;
+        column-gap: 0.75rem;
       }
 
       .content {
         @apply py-5 my-5 border-y border-dashed space-y-1;
 
-        li {
-          @apply rounded-md transition-colors duration-300;
+        /* Direct-child combinator, not a bare descendant selector — a
+           bare `li` here also matched the per-skill <li> items nested
+           inside the technologies <ul> below, silently forcing each of
+           them into this same 3-column grid too (visible as one skill
+           per line instead of wrapping normally). */
+        > li {
+          @apply grid rounded-md transition-colors duration-300;
+          grid-template-columns: 28px 11rem 1fr;
+          column-gap: 0.75rem;
+          align-items: start;
+          padding-block: 4px;
 
           .check {
-            @apply text-[#00A154] w-5;
+            @apply text-[#00A154];
+            margin-top: 2px;
           }
 
           h3 {
-            @apply font-semibold text-[#00A154] w-32 ms-5;
+            @apply font-semibold text-[#00A154];
+            line-height: 1.35;
           }
 
           ul {
-            @apply flex items-center gap-3;
+            @apply flex flex-wrap items-center gap-x-3 gap-y-1;
           }
 
           &.skill-highlight {
@@ -860,24 +1085,12 @@ body {
     @apply flex-1 min-h-0 overflow-y-auto p-6 space-y-6;
   }
 
-  .contact-identity {
-    @apply flex items-start gap-4;
-  }
-
-  .contact-photo {
-    @apply size-16 rounded-full object-cover flex-none;
-  }
-
   .contact-name {
     @apply text-lg font-semibold text-gray-900;
   }
 
-  .contact-role {
-    @apply text-sm text-gray-500 mt-0.5 leading-relaxed;
-  }
-
   .contact-invite {
-    @apply text-sm text-gray-700 mt-2 leading-relaxed;
+    @apply text-sm text-gray-700 mt-1.5 leading-relaxed;
   }
 
   .contact-actions {
@@ -977,7 +1190,7 @@ body {
        unaccounted-for extra offset and sent the window off-screen. This
        fixed value reproduces the original default position without being
        height-dependent. */
-    @apply w-3xl max-w-[90vw] top-[88px] left-1/2;
+    @apply w-3xl max-w-[90vw] h-[560px] max-h-[82vh] top-[88px] left-1/2;
 
     .sidebar {
       @apply w-3/12 min-w-[9rem] max-w-[14rem] flex-none border-r flex flex-col p-5 overflow-y-auto;
@@ -989,8 +1202,8 @@ body {
       }
 
       ul {
-        li {
-          @apply flex space-y-1 items-center gap-2 px-3 py-2 rounded-md cursor-pointer transition-colors;
+        .sidebar-link {
+          @apply flex w-full items-center gap-2 px-3 py-2 rounded-md cursor-pointer transition-colors border-0 bg-transparent text-left;
 
           &.active {
             @apply bg-blue-500/15 text-blue-700;
@@ -1000,8 +1213,13 @@ body {
             @apply bg-black/5;
           }
 
-          img {
-            @apply w-4;
+          &:focus-visible {
+            @apply outline-none ring-2 ring-offset-1;
+            ring-color: var(--accent-color, #2563eb);
+          }
+
+          .sidebar-icon {
+            @apply w-4 h-4 flex-none;
           }
 
           p {
@@ -1011,45 +1229,112 @@ body {
       }
     }
 
-    .gallery-empty {
-      @apply flex-1 min-h-[16rem] flex flex-col items-center justify-center gap-2 text-center text-gray-400;
+    /* Internal scroll region — the window frame (.window-surface) already
+       establishes the outer flex column + overflow:hidden; .photos-app
+       (the sidebar+content row) and this are the two nested flex/min-h-0
+       layers that let content scroll *inside* the window without ever
+       touching the page body. Container-queried (not viewport-media-
+       queried): the Photos window resizes independently of the browser,
+       so the grid column count must react to *this element's* width. */
+    .photos-content {
+      @apply p-5 overflow-y-auto overflow-x-hidden;
+      container-type: inline-size;
+      container-name: photos;
+    }
 
-      p {
-        @apply text-sm;
-      }
+    .photo-section + .photo-section {
+      @apply mt-6;
+    }
 
-      span {
-        @apply text-xs text-gray-300;
+    .photo-section-heading {
+      @apply text-sm font-semibold mb-2.5;
+      color: var(--text-primary, #1f2328);
+
+      .photo-count {
+        @apply text-xs font-normal ml-1.5;
+        color: var(--text-tertiary, #9ca3af);
       }
     }
 
-    .gallery {
-      @apply flex-1 min-h-0 flex flex-col gap-2.5 p-5 overflow-y-auto;
+    .photo-grid, .album-grid {
+      @apply grid grid-cols-3 gap-2.5;
+    }
 
-      .gallery-intro {
-        @apply text-xs text-gray-500;
-        margin: 0 0 4px;
-      }
+    @container photos (min-width: 30rem) {
+      .photo-grid, .album-grid { grid-template-columns: repeat(4, 1fr); }
+    }
 
-      /* A plain, even grid — deliberately not a hand-tuned asymmetric
-         layout, since that was tuned for exactly 4 tiles (one of which,
-         a leftover template logo, has been removed). An equal grid stays
-         balanced regardless of how many verified photos exist. */
-      ul {
-        @apply flex-1 min-h-[16rem] grid grid-cols-3 gap-2.5;
+    @container photos (min-width: 42rem) {
+      .photo-grid, .album-grid { grid-template-columns: repeat(5, 1fr); }
+    }
 
-        li img {
-          @apply size-full object-cover rounded-lg aspect-square;
+    @container photos (min-width: 56rem) {
+      .photo-grid, .album-grid { grid-template-columns: repeat(6, 1fr); }
+    }
+
+    .photo-grid {
+      li button {
+        @apply block w-full cursor-pointer p-0 border-0 bg-transparent;
+
+        &:focus-visible {
+          @apply outline-none ring-2 ring-offset-1;
+          ring-color: var(--accent-color, #2563eb);
         }
       }
 
-      .upload-placeholder {
-        @apply flex-none flex items-center gap-2 px-3 py-2.5 rounded-lg border border-dashed border-gray-300 text-gray-400;
+      img {
+        @apply size-full object-cover rounded-lg aspect-square transition-transform duration-150 ease-out;
+      }
 
-        p {
+      li button:hover img {
+        transform: scale(1.03);
+      }
+    }
+
+    .album-grid {
+      .album-card {
+        @apply flex flex-col items-start gap-1.5 w-full cursor-pointer p-0 border-0 bg-transparent text-left transition-transform duration-150 ease-out;
+
+        &:hover {
+          transform: translateY(-2px);
+        }
+
+        &:focus-visible {
+          @apply outline-none ring-2 ring-offset-1;
+          ring-color: var(--accent-color, #2563eb);
+        }
+
+        img {
+          @apply w-full aspect-square object-cover rounded-lg;
+        }
+
+        .album-title {
+          @apply text-sm font-semibold mt-1;
+          color: var(--text-primary, #1f2328);
+        }
+
+        .album-count {
           @apply text-xs;
+          color: var(--text-tertiary, #9ca3af);
         }
       }
+    }
+
+    .photo-detail-section {
+      .photo-back-button {
+        @apply text-sm font-medium cursor-pointer mb-3 inline-block;
+        color: var(--accent-color, #2563eb);
+
+        &:hover { text-decoration: underline; }
+        &:focus-visible { @apply outline-none ring-2 rounded-sm; ring-color: var(--accent-color, #2563eb); }
+      }
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #photos .photo-grid li button:hover img,
+    #photos .album-grid .album-card:hover {
+      transform: none;
     }
   }
 
@@ -1062,8 +1347,68 @@ body {
       }
     }
 
+    .resume-download-button {
+      @apply flex-none;
+    }
+
+    /* A slim, always-visible strip between the traffic-light header and the
+       scrollable pages — carries the real filename/page count/"open in new
+       tab" affordance without crowding the header row every other window
+       shares, and without scrolling away with the PDF (flex-none, same as
+       #window-header). */
+    .resume-meta {
+      @apply flex items-center justify-between gap-3 px-4 py-2 text-xs flex-none border-b min-w-0;
+      color: var(--text-secondary);
+      border-color: rgba(15, 23, 42, 0.08);
+
+      .resume-filename {
+        @apply truncate min-w-0;
+      }
+
+      .resume-meta-right {
+        @apply flex items-center gap-3 flex-none;
+      }
+
+      .resume-page-count {
+        @apply flex-none;
+      }
+
+      .resume-open-tab {
+        @apply flex items-center gap-1 flex-none rounded-sm;
+
+        &:hover { color: var(--text-primary); }
+        &:focus-visible { @apply outline-none ring-2 ring-offset-1; ring-color: var(--accent-color); }
+      }
+    }
+
     .pdf-viewer {
       @apply flex-1 min-h-0 overflow-auto flex items-start justify-center bg-gray-200 p-4;
+    }
+
+    .resume-pages {
+      @apply flex flex-col items-center;
+      gap: 24px;
+      padding-bottom: 8px;
+      max-width: 100%;
+    }
+
+    /* Real paper look on purpose — a PDF page stays white in both themes,
+       same as every native PDF viewer (Preview, Drive, Acrobat). */
+    .resume-page {
+      @apply rounded-sm overflow-hidden max-w-full;
+      background: #fff;
+      border: 1px solid rgba(15, 23, 42, 0.1);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 4px 14px rgba(0, 0, 0, 0.08);
+    }
+
+    .resume-loading,
+    .resume-error {
+      @apply flex flex-col items-center justify-center gap-3 text-sm text-center m-auto py-10 px-6 max-w-xs;
+      color: var(--text-secondary);
+    }
+
+    .resume-error svg {
+      color: var(--text-tertiary);
     }
   }
 
@@ -1213,9 +1558,11 @@ body {
     margin: 0;
   }
 
-  /* The image's own intrinsic ratio (currently a 1:1 portrait) is always
-     preserved — width drives layout, height is derived, never the other
-     way around, and nothing here can stretch or crop it. */
+  /* The image's own intrinsic ratio is always preserved — width drives
+     layout, height is derived, never the other way around, and nothing
+     here can stretch or crop it. Deliberately no fixed aspect-ratio or
+     object-fit, so this stays correct whether the photo is portrait or
+     landscape (currently a landscape conference shot). */
   .about-photo {
     display: block;
     width: 100%;
@@ -1230,13 +1577,6 @@ body {
   .about-copy {
     width: 100%;
     max-width: 68ch;
-  }
-
-  .about-eyebrow {
-    @apply text-xs font-semibold uppercase;
-    letter-spacing: 0.08em;
-    color: var(--about-fg-faint);
-    margin: 0 0 10px;
   }
 
   .about-name {
@@ -1267,18 +1607,6 @@ body {
 
   .about-copy-group p:last-child {
     margin-bottom: 0;
-  }
-
-  .about-nexai-link {
-    @apply inline-flex items-center gap-1.5 text-sm font-semibold cursor-pointer;
-    color: var(--about-fg);
-    margin-top: 4px;
-    padding-bottom: 2px;
-    border-bottom: 1px solid var(--about-border);
-    transition: opacity 0.15s ease;
-
-    &:hover { opacity: 0.7; }
-    &:focus-visible { @apply outline-none ring-2 ring-offset-2 rounded-sm; ring-color: var(--about-fg); }
   }
 
   .about-emphasis {
@@ -1333,6 +1661,51 @@ body {
     margin: 0;
   }
 
+  /* The Research section's intro sentence, styled like `.about-lead`'s
+     calmer sibling rather than reusing `.about-copy-group p` — it's one
+     short sentence introducing the cards below, not a paragraph in a
+     longer flow. */
+  .about-research-intro {
+    font-size: 1rem;
+    line-height: 1.7;
+    color: var(--about-fg-muted);
+    max-width: 68ch;
+    margin: 0 0 20px;
+  }
+
+  .about-research-cards {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 12px;
+  }
+
+  .about-research-card {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 16px 18px;
+    border-radius: 14px;
+    background: var(--about-media-bg);
+    border: 1px solid var(--about-border-soft);
+  }
+
+  .about-research-card-label {
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    color: var(--about-fg-faint);
+  }
+
+  .about-research-card p {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: var(--about-fg-muted);
+    margin: 0;
+  }
+
   .about-principles-section {
     margin-top: -10px; /* reads as a continuation of "Outside the screen", not a new topic */
   }
@@ -1365,6 +1738,124 @@ body {
 
   .about-principle:last-child {
     border-bottom: none;
+  }
+
+  .about-organizations {
+    padding-top: clamp(24px, 5cqi, 36px);
+    /* Safety net for the marquee's own GSAP entrance (useAboutScrollAnimations.js
+       slides `.about-org-marquee` in via a horizontal `x` transform before its
+       ScrollTrigger fires) — without this, that pre-reveal offset briefly
+       widens `.about-scroll-body`'s own scrollWidth on narrow viewports,
+       before the section has even scrolled into view. The marquee already
+       clips its own infinite loop via its own `overflow: hidden`; this just
+       makes sure nothing above it can bleed out horizontally either. */
+    overflow-x: hidden;
+  }
+
+  .about-organizations-subtitle {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: var(--about-fg-soft);
+    max-width: 60ch;
+    margin: 0 0 clamp(18px, 4cqi, 26px);
+  }
+
+  /* Fades the strip at its own edges rather than hard-clipping a logo
+     mid-shape as it enters/exits — a calm touch, not a decorative one.
+     `overflow: hidden` here is deliberately scoped to just this element,
+     never the About window/scroll body around it. */
+  .about-org-marquee {
+    overflow: hidden;
+    mask-image: linear-gradient(to right, transparent, black 6%, black 94%, transparent);
+    -webkit-mask-image: linear-gradient(to right, transparent, black 6%, black 94%, transparent);
+  }
+
+  .about-org-track {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    width: max-content;
+    animation: about-org-marquee 8s linear infinite;
+  }
+
+  /* A real, visible group followed by an identical one immediately after
+     it — `display: contents` keeps the wrapper itself out of the flex
+     layout (so `gap` reads as uniform across all 8 cards, real ones and
+     duplicates alike, which is what makes the -50% loop line up exactly)
+     while still giving `aria-hidden` a real element to attach to. */
+  .about-org-track-duplicate {
+    display: contents;
+  }
+
+  .about-org-marquee:hover .about-org-track,
+  .about-org-marquee:focus-within .about-org-track {
+    animation-play-state: paused;
+  }
+
+  @keyframes about-org-marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  /* A real, solid-white card on purpose, in both themes — two of these
+     four logos ship with an opaque white background already baked into
+     the PNG (Dalhousie, Nextria) rather than transparency, so a themed
+     (dark-mode-capable) card surface would show a mismatched white box
+     behind only some of them. Same reasoning as the Resume PDF viewer
+     keeping its pages white regardless of site theme. */
+  .about-org-card {
+    flex: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 208px;
+    height: 88px;
+    padding: 16px;
+    border-radius: 18px;
+    background: #ffffff;
+    border: 1px solid rgba(15, 23, 42, 0.08);
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.05);
+    transition: box-shadow 0.25s ease, transform 0.25s ease;
+  }
+
+  .about-org-marquee:hover .about-org-card,
+  .about-org-marquee:focus-within .about-org-card {
+    box-shadow: 0 6px 16px -6px rgba(15, 23, 42, 0.18);
+  }
+
+  .about-org-logo {
+    display: block;
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .about-org-track {
+      animation: none !important;
+      transform: none !important;
+      flex-wrap: wrap;
+      justify-content: center;
+      width: 100%;
+    }
+
+    .about-org-track-duplicate {
+      display: none;
+    }
+  }
+
+  [data-reduce-motion="true"] .about-org-track {
+    animation: none !important;
+    transform: none !important;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 100%;
+  }
+
+  [data-reduce-motion="true"] .about-org-track-duplicate {
+    display: none;
   }
 
   .about-vision {
@@ -1451,11 +1942,26 @@ body {
   }
 
   #imgfile {
-    @apply w-xl max-w-[90vw] top-16 left-2/12;
+    /* Previously had no height/max-height at all — the window (and the
+       .preview stage inside it, via flex-1) had nothing bounding its
+       height, so a tall phone photo's own intrinsic size determined the
+       window's height instead of the other way around, letting it grow
+       past the visible desktop. Bounded here the same way #resume/#spotify
+       already are; manual resize (WindowWarpper) and the maximize/restore
+       flow both already clamp to the viewport independently of this. */
+    @apply w-xl max-w-[90vw] h-[640px] max-h-[85vh] top-16 left-2/12;
 
     #window-header {
       p {
         @apply font-bold text-[#5f6266];
+      }
+
+      .favorite-toggle {
+        @apply p-1 rounded hover:bg-gray-200 hover:cursor-default text-gray-400;
+
+        &[aria-pressed="true"] {
+          color: #e0245e;
+        }
       }
 
       .zoom-controls {
@@ -1471,12 +1977,67 @@ body {
       }
     }
 
-    .preview {
-      @apply flex-1 min-h-0 p-4 bg-gray-200 overflow-auto flex items-center justify-center;
+    /* Real metadata only — every span below is conditionally rendered by
+       Image.jsx and only appears when the corresponding field exists on
+       the photo, so this bar simply doesn't render at all for non-Photos
+       callers (Finder, Talks, About) or for photos with no known date/
+       location. */
+    .photo-meta-bar {
+      @apply flex-none flex flex-wrap items-center gap-x-3 gap-y-1 px-4 py-2 text-xs border-b;
+      color: var(--text-secondary, #6b7280);
+      border-color: rgba(15, 23, 42, 0.08);
 
-      img {
-        @apply max-w-full max-h-full object-contain object-center transition-[width,height] duration-150 ease-out;
+      .photo-meta-context {
+        @apply font-medium;
+        color: var(--text-primary, #1f2328);
       }
+
+      .photo-meta-location {
+        @apply inline-flex items-center gap-1;
+
+        .icon {
+          @apply p-0 size-3 hover:bg-transparent;
+        }
+      }
+    }
+
+    .preview {
+      @apply flex-1 min-h-0 p-4 bg-gray-200 overflow-auto flex items-center justify-center relative;
+
+      /* Deliberately no max-width/max-height here: Image.jsx already sets
+         an explicit pixel width/height for every mode (Fit, and every
+         manual zoom step), computed from the stage's real measured size —
+         a CSS cap here would also clamp intentional zoom-beyond-fit, which
+         is meant to overflow this scrollable stage so the user can pan a
+         zoomed-in photo. */
+      img {
+        @apply object-contain object-center transition-[width,height] duration-150 ease-out;
+      }
+    }
+
+    .photo-nav {
+      @apply absolute top-1/2 -translate-y-1/2 flex items-center justify-center size-9 rounded-full cursor-pointer transition-opacity;
+      background: rgba(0, 0, 0, 0.45);
+      color: #fff;
+      opacity: 0.7;
+
+      &:hover:not(:disabled) { opacity: 1; }
+      &:disabled { @apply opacity-0 pointer-events-none; }
+      &:focus-visible { @apply outline-none ring-2 ring-offset-1 ring-white; opacity: 1; }
+
+      .icon {
+        @apply p-0 hover:bg-transparent;
+      }
+    }
+
+    .photo-nav--prev { @apply left-3; }
+    .photo-nav--next { @apply right-3; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #imgfile .photo-nav,
+    #imgfile .preview img {
+      transition: none;
     }
   }
 
@@ -3397,6 +3958,10 @@ body {
     @apply flex-1 min-w-0;
   }
 
+  .publication-status-badge {
+    @apply mb-1.5;
+  }
+
   .publication-line {
     @apply text-sm text-gray-800 leading-relaxed;
   }
@@ -4287,10 +4852,11 @@ body {
     --gh-fg-muted: #59636e;
     --gh-fg-faint: #818b94;
     --gh-accent: #1f6feb;
-    --gh-green-1: #aceebb;
-    --gh-green-2: #4ac26b;
-    --gh-green-3: #2da44e;
-    --gh-green-4: #116329;
+    --github-level-0: var(--gh-border);
+    --github-level-1: #aceebb;
+    --github-level-2: #4ac26b;
+    --github-level-3: #2da44e;
+    --github-level-4: #116329;
 
     #window-header {
       background: var(--gh-surface);
@@ -4304,10 +4870,11 @@ body {
     --gh-fg: #e6edf3;
     --gh-fg-muted: #9198a1;
     --gh-fg-faint: #6c7681;
-    --gh-green-1: #0e4429;
-    --gh-green-2: #26a641;
-    --gh-green-3: #39d353;
-    --gh-green-4: #56e075;
+    --github-level-0: var(--gh-border);
+    --github-level-1: #0e4429;
+    --github-level-2: #26a641;
+    --github-level-3: #39d353;
+    --github-level-4: #56e075;
   }
 
   #github .github-app {
@@ -4413,10 +4980,10 @@ body {
      shared .ui-button — these two only override its default blue accent
      with GitHub's own brand-green tokens. */
   .github-profile__view-btn {
-    background: var(--gh-green-3) !important;
+    background: var(--github-level-3) !important;
 
-    &:hover { background: var(--gh-green-4) !important; }
-    &:focus-visible { ring-color: var(--gh-green-3); }
+    &:hover { background: var(--github-level-4) !important; }
+    &:focus-visible { ring-color: var(--github-level-3); }
   }
 
   .github-profile__refresh-btn {
@@ -4556,17 +5123,17 @@ body {
 
   .github-calendar__day {
     @apply size-[11px] rounded-[2px] cursor-pointer;
-    background: var(--gh-border);
+    background: var(--github-level-0);
 
     &--empty {
       background: transparent;
       cursor: default;
     }
 
-    &[data-level="1"] { background: var(--gh-green-1); }
-    &[data-level="2"] { background: var(--gh-green-2); }
-    &[data-level="3"] { background: var(--gh-green-3); }
-    &[data-level="4"] { background: var(--gh-green-4); }
+    &[data-level="1"] { background: var(--github-level-1); }
+    &[data-level="2"] { background: var(--github-level-2); }
+    &[data-level="3"] { background: var(--github-level-3); }
+    &[data-level="4"] { background: var(--github-level-4); }
 
     &:hover:not(&--empty) {
       outline: 1px solid var(--gh-fg-faint);
@@ -4591,12 +5158,12 @@ body {
 
   .github-calendar__legend-swatch {
     @apply size-[11px] rounded-[2px];
-    background: var(--gh-border);
+    background: var(--github-level-0);
 
-    &[data-level="1"] { background: var(--gh-green-1); }
-    &[data-level="2"] { background: var(--gh-green-2); }
-    &[data-level="3"] { background: var(--gh-green-3); }
-    &[data-level="4"] { background: var(--gh-green-4); }
+    &[data-level="1"] { background: var(--github-level-1); }
+    &[data-level="2"] { background: var(--github-level-2); }
+    &[data-level="3"] { background: var(--github-level-3); }
+    &[data-level="4"] { background: var(--github-level-4); }
   }
 
   .github-calendar__tooltip {
@@ -4824,8 +5391,8 @@ body {
   }
 
   .github-activity-chart__polygon {
-    fill: color-mix(in srgb, var(--gh-green-3) 28%, transparent);
-    stroke: var(--gh-green-3);
+    fill: color-mix(in srgb, var(--github-level-3) 28%, transparent);
+    stroke: var(--github-level-3);
     stroke-width: 1.5;
     stroke-linejoin: round;
     transform-origin: 110px 110px;
@@ -4833,7 +5400,7 @@ body {
   }
 
   .github-activity-chart__point {
-    fill: var(--gh-green-3);
+    fill: var(--github-level-3);
   }
 
   @keyframes github-chart-in {
@@ -5078,268 +5645,37 @@ body {
     }
   }
 
-  /* ---------- NexAI ---------- */
+  /* ---------- Project placeholders (NexAI, AuditLM) ----------
+     Both are real, ongoing projects intentionally left undetailed
+     everywhere in the portfolio while still under development (see
+     src/constants/nexai.js / auditlm.js) — one small, honest window
+     layout shared by both rather than a bespoke one per project. */
 
   #nexai {
-    /* A distinct default position — top-16/left-1/5 is already shared by
-       Activity Monitor, Publications, and Talks; NexAI gets its own so
-       opening it alongside any of those doesn't fully stack one header
-       bar's translucent glass directly on top of another's. */
-    @apply w-[880px] max-w-[92vw] h-[640px] max-h-[85vh] top-10 left-2/5;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    --nexai-bg: #f8f7f5;
-    --nexai-surface: #ffffff;
-    --nexai-border: rgba(31, 27, 20, 0.1);
-    --nexai-fg: #1f1b14;
-    --nexai-fg-muted: #6b6255;
-    --nexai-fg-faint: #948b7c;
-    --nexai-accent: #8a5a2b;
-    --nexai-accent-soft: rgba(138, 90, 43, 0.12);
+    @apply w-md max-w-[90vw] h-80 max-h-[70vh] top-16 left-2/5;
   }
 
-  :root[data-theme="dark"] #nexai {
-    --nexai-bg: #17140f;
-    --nexai-surface: #201b14;
-    --nexai-border: rgba(255, 255, 255, 0.1);
-    --nexai-fg: #f2ece2;
-    --nexai-fg-muted: #b8ad9b;
-    --nexai-fg-faint: #857a68;
-    --nexai-accent: #d9a15f;
-    --nexai-accent-soft: rgba(217, 161, 95, 0.16);
+  #auditlm {
+    @apply w-md max-w-[90vw] h-80 max-h-[70vh] top-24 left-[46%];
   }
 
-  #nexai .nexai-app {
-    flex: 1;
-    min-height: 0;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    background: var(--nexai-bg);
-    color: var(--nexai-fg);
-    container-type: inline-size;
-    container-name: nexai-app;
+  .placeholder-app {
+    @apply flex-1 min-h-0 flex flex-col items-center justify-center gap-3 text-center px-8;
   }
 
-  #nexai .nexai-content {
-    flex: 1;
-    min-width: 0;
-    min-height: 0;
-    overflow-y: auto;
-    overflow-x: hidden;
-    overscroll-behavior: contain;
-    padding: clamp(18px, 3cqi, 32px);
+  .placeholder-app__title {
+    @apply text-xl font-bold;
+    color: var(--text-primary, #1f2328);
   }
 
-  .nexai-hero {
-    padding-bottom: 18px;
-    margin-bottom: 20px;
-    border-bottom: 1px solid var(--nexai-border);
+  .placeholder-app__body {
+    @apply text-base font-medium;
+    color: var(--text-secondary, #59636e);
   }
 
-  .nexai-eyebrow {
-    @apply text-xs font-semibold uppercase;
-    letter-spacing: 0.06em;
-    color: var(--nexai-accent);
-    margin: 0 0 6px;
-  }
-
-  .nexai-hero h1 {
-    @apply text-2xl font-bold;
-    color: var(--nexai-fg);
-    margin: 0 0 8px;
-  }
-
-  .nexai-hero__short {
-    @apply text-sm;
-    color: var(--nexai-fg-muted);
-    max-width: 62ch;
-    margin: 0;
-  }
-
-  .nexai-section {
-    padding-top: 22px;
-    margin-top: 22px;
-    border-top: 1px solid var(--nexai-border);
-
-    &:first-of-type {
-      padding-top: 0;
-      margin-top: 0;
-      border-top: none;
-    }
-  }
-
-  .nexai-section h2 {
-    @apply text-base font-bold;
-    color: var(--nexai-fg);
-    margin: 0 0 12px;
-  }
-
-  .nexai-research-question {
-    @apply text-lg font-medium;
-    color: var(--nexai-fg);
-    border-left: 3px solid var(--nexai-accent);
-    padding: 4px 0 4px 16px;
-    margin: 0 0 14px;
-  }
-
-  .nexai-paragraph {
-    @apply text-sm;
-    color: var(--nexai-fg);
-    max-width: 70ch;
-    margin: 0 0 12px;
-    line-height: 1.6;
-
-    &:last-child { margin-bottom: 0; }
-  }
-
-  .nexai-paragraph--muted {
-    color: var(--nexai-fg-muted);
-    font-size: 0.8rem;
-  }
-
-  .nexai-tag-list {
-    @apply flex flex-wrap gap-2;
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-
-  .nexai-tag {
-    @apply text-xs font-medium rounded-full;
-    padding: 5px 12px;
-    background: var(--nexai-accent-soft);
-    color: var(--nexai-accent);
-  }
-
-  .nexai-talk-card {
-    @apply flex items-center gap-3 text-left cursor-pointer w-full;
-    background: var(--nexai-surface);
-    border: 1px solid var(--nexai-border);
-    border-radius: 10px;
-    padding: 12px 14px;
-    color: var(--nexai-fg);
-    transition: border-color 0.15s ease;
-
-    &:hover { border-color: var(--nexai-accent); }
-    &:focus-visible { @apply outline-none ring-2 ring-offset-1; ring-color: var(--nexai-accent); }
-  }
-
-  .nexai-talk-card__text {
-    @apply flex-1 flex flex-col;
-  }
-
-  .nexai-talk-card__title {
-    @apply text-sm font-semibold;
-  }
-
-  .nexai-talk-card__event {
-    @apply text-xs;
-    color: var(--nexai-fg-muted);
-  }
-
-  /* ---- Evidence map ---- */
-
-  .nexai-evidence-map__caption {
-    @apply text-xs italic;
-    color: var(--nexai-fg-faint);
-    margin: 0 0 16px;
-    max-width: 60ch;
-  }
-
-  .nexai-evidence-map__question {
-    background: var(--nexai-accent-soft);
-    border-radius: 12px;
-    padding: 14px 18px;
-    margin: 0 0 18px;
-    text-align: center;
-
-    p {
-      @apply text-base font-semibold;
-      color: var(--nexai-fg);
-      margin: 4px 0 0;
-    }
-  }
-
-  .nexai-evidence-map__question-label {
-    @apply text-[11px] font-semibold uppercase;
-    letter-spacing: 0.05em;
-    color: var(--nexai-accent);
-  }
-
-  .nexai-evidence-map__grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
-    list-style: none;
-    padding: 0;
-    margin: 0 0 18px;
-  }
-
-  .nexai-evidence-card {
-    background: var(--nexai-surface);
-    border: 1px solid var(--nexai-border);
-    border-radius: 10px;
-    padding: 12px;
-  }
-
-  .nexai-evidence-card__label {
-    @apply text-sm font-semibold;
-    color: var(--nexai-fg);
-    margin: 0 0 4px;
-  }
-
-  .nexai-evidence-card__description {
-    @apply text-xs;
-    color: var(--nexai-fg-muted);
-    margin: 0;
-    line-height: 1.5;
-  }
-
-  .nexai-evidence-map__arrow {
-    width: 2px;
-    height: 20px;
-    background: var(--nexai-border);
-    margin: 0 auto 18px;
-  }
-
-  .nexai-evidence-map__decisions ul {
-    @apply flex flex-wrap gap-2 justify-center;
-    list-style: none;
-    padding: 0;
-    margin: 8px 0 0;
-  }
-
-  .nexai-decision-badge {
-    @apply text-xs font-medium rounded-full;
-    padding: 6px 14px;
-    border: 1px solid var(--nexai-border);
-    color: var(--nexai-fg-muted);
-
-    /* Color is a supporting accent only — the label text itself always
-       carries the meaning, never color alone. */
-    &[data-decision="human-captured"] { border-color: #3f9142; color: #3f9142; }
-    &[data-decision="ai-generated"] { border-color: #a85a2e; color: #a85a2e; }
-    &[data-decision="manipulated"] { border-color: #b8433f; color: #b8433f; }
-    &[data-decision="unknown"] { border-color: var(--nexai-fg-faint); color: var(--nexai-fg-faint); }
-  }
-
-  @container nexai-app (max-width: 560px) {
-    .nexai-evidence-map__grid {
-      grid-template-columns: 1fr;
-    }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    #nexai .nexai-evidence-card {
-      opacity: 1 !important;
-      transform: none !important;
-    }
-
-    .nexai-talk-card {
-      transition: none;
-    }
+  .placeholder-app__support {
+    @apply text-sm max-w-xs;
+    color: var(--text-tertiary, #818b94);
   }
 
   /* ---------- HarshBot ---------- */

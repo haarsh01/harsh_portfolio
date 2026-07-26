@@ -15,5 +15,6 @@ import Talks from "./Talks";
 import Letterboxd from "./Letterboxd";
 import GitHub from "./GitHub";
 import NexAI from "./NexAI";
+import AuditLM from "./AuditLM";
 import HarshBot from "./HarshBot";
-export {Terminal, Safari, Resume, Finder, Text, Image, Contact, Photos, Spotify, AboutPortfolio, TimeMachine, ActivityMonitor, Publications, Talks, Letterboxd, GitHub, NexAI, HarshBot};
+export {Terminal, Safari, Resume, Finder, Text, Image, Contact, Photos, Spotify, AboutPortfolio, TimeMachine, ActivityMonitor, Publications, Talks, Letterboxd, GitHub, NexAI, AuditLM, HarshBot};

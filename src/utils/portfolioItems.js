@@ -3,8 +3,18 @@
 // invent their own competing definition of what a "project" or "photo" is.
 // Every item here is derived from `#constants` — nothing is authored here.
 import {
-  locations, dockApps, socials, gallery, techStack, SPOTIFY_PLAYLIST, WINDOW_CONFIG,
+  locations, dockApps, socials, techStack, SPOTIFY_PLAYLIST, WINDOW_CONFIG,
 } from "#constants";
+import { getFieldNotes } from "#constants/fieldNotes.js";
+
+// Base-aware so Get Info/Quick Look's Download row and the desktop's
+// Resume.pdf item resolve correctly even if the site is ever deployed
+// under a subpath — matches the path #windows/Resume.jsx itself renders.
+const RESUME_DOWNLOAD_URL = `${import.meta.env.BASE_URL}files/cv_harsh_kaushik.pdf`;
+// Same base-aware convention as the hero image path Safari.jsx itself
+// builds (fieldNoteImageUrl) — kept in sync manually since that helper
+// isn't exported; both must agree on the same public/images subfolder.
+const fieldNoteImageUrl = (file) => `${import.meta.env.BASE_URL}images/field-notes/thesis/${encodeURIComponent(file)}`;
 
 export const KIND_LABEL = {
   image: "Image",
@@ -46,7 +56,7 @@ function buildProjectItems() {
     const urlChild = project.children?.find((child) => child.fileType === "url");
     const figChild = project.children?.find((child) => child.fileType === "fig");
 
-    // A direct-launch "app" project (NexAI, Portfolio OS) has a real
+    // A direct-launch "app" project (NexAI, AuditLM) has a real
     // dedicated window rather than a folder of files to browse — opening
     // it should focus that window directly, not navigate Finder into an
     // (often single-file) folder.
@@ -90,25 +100,13 @@ function buildPhotographyItems() {
       },
     }));
 
-  const galleryImages = gallery.map((photo, idx) => {
-    const name = `Photo ${idx + 1}`;
-    return {
-      id: `gallery-image-${photo.id}`,
-      name,
-      kind: "image",
-      category: "Photography",
-      icon: "/images/image.png",
-      action: { type: "open-window", windowId: "imgfile", data: { name, imageUrl: photo.img } },
-      metadata: {
-        location: "Gallery › Library",
-        album: "Library",
-        imageUrl: photo.img,
-        fileExtension: fileExtension(photo.img),
-      },
-    };
-  });
-
-  return [...aboutImages, ...galleryImages];
+  // The Photos app's real library (src/constants/photos.js) has its own
+  // rich in-app browsing (Library/Albums/Memories/Places/Favorites/Recents)
+  // and isn't flattened into individual Desktop Stacks/Spotlight entries —
+  // unlike the old 3-photo placeholder gallery this replaced, duplicating
+  // every one of dozens of real photos here would flood both surfaces with
+  // near-identical "Photo N" entries for no real navigational benefit.
+  return aboutImages;
 }
 
 function buildDocumentItems() {
@@ -124,7 +122,7 @@ function buildDocumentItems() {
       metadata: {
         location: "Finder › Resume",
         fileExtension: "PDF",
-        downloadUrl: "files/resume.pdf",
+        downloadUrl: RESUME_DOWNLOAD_URL,
       },
     },
   ];
@@ -143,6 +141,31 @@ function buildDocumentItems() {
         image: aboutTxt.image ?? null,
         description: aboutTxt.description ?? null,
         fileExtension: fileExtension(aboutTxt.name),
+      },
+    });
+  }
+
+  // A desktop shortcut into the one real Field Notes post — not a second
+  // copy of it. Opening this runs the exact same `open-window` / "safari"
+  // / `{ noteId }` action Spotlight's own per-note entry already uses
+  // (see buildFieldNotesEntries in searchRegistry.js), so it deep-links
+  // straight into the real article; nothing about the post is duplicated
+  // here beyond its excerpt for the Quick Look preview.
+  const thesisNote = getFieldNotes()[0] ?? null;
+  if (thesisNote) {
+    items.push({
+      id: "document-thesis",
+      name: "thesis.txt",
+      kind: "text",
+      category: "Documents",
+      icon: "/images/txt.png",
+      action: { type: "open-window", windowId: "safari", data: { noteId: thesisNote.id } },
+      metadata: {
+        location: "Field Notes",
+        subtitle: thesisNote.subtitle ?? null,
+        image: thesisNote.hero ? fieldNoteImageUrl(thesisNote.hero.file) : null,
+        description: thesisNote.excerpt ? [thesisNote.excerpt] : null,
+        fileExtension: "TXT",
       },
     });
   }
@@ -220,41 +243,31 @@ export function getDesktopItems() {
   return cachedItems;
 }
 
-// The desktop's own icon set — every real project folder plus the two
-// individual document files (about-me.txt, Resume.pdf) that belong
-// directly on the desktop, not just nested inside Finder. Photos, blog
-// posts, music, and contact/socials are real portfolio items too, but were
-// never desktop icons in this design, so they're deliberately excluded
-// here.
-// Publications and Talks are real, credible research-credibility windows
-// but aren't part of the Work folder's project tree (they're each their
-// own dedicated Finder "Favorites" location) — these two synthetic
-// shortcuts give them equal desktop-level prominence to NexAI without
-// duplicating their content a second time or forcing them into Work.
-const PUBLICATIONS_DESKTOP_SHORTCUT = {
-  id: "shortcut-publications",
-  name: "Publications",
-  kind: "project",
-  category: "Projects",
-  icon: "/icons/edit.svg", // matches the Finder sidebar's own Publications icon
-  action: { type: "open-window", windowId: "publications" },
-};
-
-const TALKS_DESKTOP_SHORTCUT = {
-  id: "shortcut-talks",
-  name: "Talks",
-  kind: "project",
-  category: "Projects",
-  icon: "/icons/share.svg", // a closer semantic fit than the Finder sidebar's own (reused) wifi.svg
-  action: { type: "open-window", windowId: "talks" },
-};
-
+// The desktop's own icon set — every real project folder plus the
+// individual document files (about-me.txt, thesis.txt, Resume.pdf) that
+// belong directly on the desktop, not just nested inside Finder (or, for
+// thesis.txt, inside Field Notes). Photos, blog posts, music, and
+// contact/socials are real portfolio items too, but were never desktop
+// icons in this design, so they're deliberately excluded here.
+// Publications and Talks are NOT desktop icons — they remain fully
+// available as their own dedicated Finder "Favorites" locations
+// (Finder.jsx), Spotlight actions (searchRegistry.js's dedicated
+// action-publications/action-talks entries), and their existing windows.
+// They previously also had synthetic desktop shortcuts
+// (PUBLICATIONS_DESKTOP_SHORTCUT/TALKS_DESKTOP_SHORTCUT, ids
+// "shortcut-publications"/"shortcut-talks") purely for desktop-level
+// prominence; removed to declutter the desktop. Any stale persisted
+// position for those two ids is silently ignored by
+// store/desktopItems.js's loadStoredPositions() (it only keeps entries
+// whose id still appears in this function's return value), so no
+// migration step is needed here.
 export function getDesktopIconItems() {
   const items = getDesktopItems();
   const projects = items.filter((item) => item.kind === "project");
   const about = items.find((item) => item.id === "document-about-me");
+  const thesis = items.find((item) => item.id === "document-thesis");
   const resume = items.find((item) => item.id === "document-resume");
-  return [...projects, PUBLICATIONS_DESKTOP_SHORTCUT, TALKS_DESKTOP_SHORTCUT, about, resume].filter(Boolean);
+  return [...projects, about, thesis, resume].filter(Boolean);
 }
 
 function formatGroupLabel(key, mode) {
@@ -341,6 +354,7 @@ const RELATED_APP_NAMES = {
   imgfile: "Image Viewer",
   aboutPortfolio: "About This Portfolio",
   nexai: "NexAI",
+  auditlm: "AuditLM",
   publications: "Publications",
   talks: "Talks",
   github: "GitHub",
@@ -481,7 +495,7 @@ export function normalizeFinderItem(item, locationLabel) {
         kind: "pdf",
         category: "Documents",
         action: { type: "open-window", windowId: "resume" },
-        metadata: { location: `Finder › ${locationLabel}`, fileExtension: "PDF", downloadUrl: "files/resume.pdf" },
+        metadata: { location: `Finder › ${locationLabel}`, fileExtension: "PDF", downloadUrl: RESUME_DOWNLOAD_URL },
       };
     case "fig":
     case "url":
@@ -507,7 +521,7 @@ export function normalizeFinderItem(item, locationLabel) {
 // (already filtered to real, openable apps) plus the handful of windows
 // that have a genuine launch point but no Dock icon (Resume, About This
 // Portfolio). Deliberately excludes generic file-viewer windows
-// (txtfile/imgfile) and Trash, which has no WINDOW_CONFIG entry at all.
+// (txtfile/imgfile), which have no standalone launch point of their own.
 export function getRegisteredApplications() {
   const fromDock = dockApps
     .filter((app) => app.canOpen && WINDOW_CONFIG[app.id])

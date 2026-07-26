@@ -39,7 +39,8 @@ const Terminal = () => {
         </p>
 
         <div className="label">
-          <p className="w-32">Category</p>
+          <span aria-hidden="true" />
+          <p>Category</p>
           <p>Technologies</p>
 
         </div>
@@ -52,7 +53,7 @@ const Terminal = () => {
             <li
               key={category}
               ref={isMatch ? highlightRef : null}
-              className={clsx("flex items-center", isMatch && "skill-highlight")}
+              className={clsx(isMatch && "skill-highlight")}
             >
               <Check className="check" size={20}/>
               <h3>{category}</h3>

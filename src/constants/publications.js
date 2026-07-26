@@ -26,6 +26,38 @@
 const SCHOLAR_PROFILE_URL = "https://scholar.google.ca/citations?user=0_EGeiEAAAAJ&hl=en";
 
 export const PUBLICATIONS = [
+  // PLACEHOLDER ENTRY — a real WIFS (IEEE Workshop on Information Forensics
+  // and Security) manuscript is in the submission pipeline, but its exact
+  // title, full author list, and submission year were not available at the
+  // time this entry was added. Per this project's own no-fabrication rule,
+  // nothing below is invented: `title` and `year` are honest placeholders
+  // (never a real DOI/pages/venue detail), and `authors` includes only
+  // Harsh — add any co-authors once confirmed. Replace the bracketed
+  // fields and set `year` before this is presented as final. `status:
+  // "submitted"` is what drives both the "Manuscript submitted" badge and
+  // the submitted-style IEEE citation tail (see formatIeeeCitation.js) —
+  // remove it (and fill in doi/pages/etc.) once the paper is actually
+  // published.
+  {
+    id: "wifs-manuscript-submitted",
+    title: "[Manuscript title to be finalized]",
+    authors: ["Harsh Kaushik"],
+    type: "conference",
+    status: "submitted",
+    venue: "IEEE Workshop on Information Forensics and Security",
+    venueAbbreviation: "WIFS",
+    publisher: null,
+    location: null,
+    year: null,
+    volume: null,
+    issue: null,
+    pages: null,
+    articleNumber: null,
+    doi: null,
+    publisherUrl: null,
+    scholarUrl: null,
+    profileUrl: SCHOLAR_PROFILE_URL,
+  },
   {
     id: "solar-based-wireless-ev-charging-2024",
     title: "Design and Development of a Solar-Based Wireless Electric Vehicle Charging System",
@@ -86,10 +118,12 @@ export const PUBLICATIONS = [
 
 export { SCHOLAR_PROFILE_URL };
 
-// Preserves the profile's own display order — the 2024 chapter is listed
-// first because it's how Google Scholar's own profile page orders these
-// three entries (both by most-recent-year and by citation count, which
-// agree here), not an arbitrary placement.
+// The submitted-but-unpublished WIFS manuscript is listed first (it isn't
+// on Scholar yet, so it has no ranking there to preserve) — everything
+// after it preserves the profile's own display order, where the 2024
+// chapter is listed first because it's how Google Scholar's own profile
+// page orders those three entries (both by most-recent-year and by
+// citation count, which agree here), not an arbitrary placement.
 export function getPublications() {
   return PUBLICATIONS;
 }

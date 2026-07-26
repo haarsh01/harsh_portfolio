@@ -12,11 +12,11 @@
 // should be a conscious decision, not automatic the moment any window is
 // added anywhere else in the app.
 const ALLOWED_WINDOW_IDS = new Set([
-  'nexai', 'resume', 'publications', 'talks', 'github', 'contact',
+  'nexai', 'auditlm', 'resume', 'publications', 'talks', 'github', 'contact',
   'aboutPortfolio', 'letterboxd', 'spotify', 'photos', 'terminal', 'txtfile',
 ]);
 
-const ALLOWED_FINDER_LOCATIONS = new Set(['work', 'about', 'resume', 'publications', 'talks', 'utilities']);
+const ALLOWED_FINDER_LOCATIONS = new Set(['work', 'about', 'resume', 'publications', 'talks']);
 
 const ALLOWED_WINDOW_DATA_KEYS = new Set(['section', 'talkId', 'publicationId']);
 

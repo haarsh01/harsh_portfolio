@@ -4,9 +4,6 @@ import { WindowControls } from '#components';
 import WindowWrapper from '#hoc/WindowWarpper.jsx';
 import ShareButton from '#components/ShareButton.jsx';
 import GitHubProfileHeader from '#components/GitHubProfileHeader.jsx';
-import GitHubContributionSummary from '#components/GitHubContributionSummary.jsx';
-import GitHubContributionCalendar from '#components/GitHubContributionCalendar.jsx';
-import GitHubActivityOverview from '#components/GitHubActivityOverview.jsx';
 import GitHubRepositoryList from '#components/GitHubRepositoryList.jsx';
 import { useGitHubData } from '#hooks/useGitHubData.js';
 import { GITHUB_PROFILE } from '#constants/github.js';
@@ -15,17 +12,18 @@ import useWindowStore from '#store/window.js';
 // Anchors a Spotlight section deep-link (`openWindow("github", { section })`)
 // to the heading it should scroll into view — this page is one continuous
 // scroll (not tabs like Letterboxd), so "section-targeted" here means
-// scrolling within `.github-content`, not swapping panels.
+// scrolling within `.github-content`, not swapping panels. Contribution
+// activity/Activity overview were removed (content/privacy cleanup) —
+// their anchors are gone too, since nothing on the page has those
+// headings anymore.
 const SECTION_ANCHOR_IDS = {
   profile: 'github-profile-heading',
-  contributions: 'github-contributions-heading',
-  activity: 'github-activity-overview-heading',
   repositories: 'github-repos-heading',
 };
 
 const GitHubApp = () => {
   const {
-    status, profile, contributionDays, contributionMeta, activity, repositoryActivity, repositories,
+    status, profile, repositories,
     generatedAt, isRefreshing, refresh,
   } = useGitHubData();
   const { windows } = useWindowStore();
@@ -59,7 +57,7 @@ const GitHubApp = () => {
         <div className="github-content" ref={contentRef}>
           {status === 'loading' ? (
             <div className="github-skeleton">
-              <p className="sr-only" role="status">Fetching GitHub contribution activity…</p>
+              <p className="sr-only" role="status">Fetching GitHub profile and repositories…</p>
               <div className="github-skeleton__row github-skeleton__row--wide" aria-hidden="true" />
               <div className="github-skeleton__row" aria-hidden="true" />
               <div className="github-skeleton__block" aria-hidden="true" />
@@ -67,7 +65,7 @@ const GitHubApp = () => {
           ) : status === 'error' ? (
             <div className="github-error">
               <AlertCircle size={22} aria-hidden="true" />
-              <p role="status">Contribution activity is temporarily unavailable.</p>
+              <p role="status">GitHub data is temporarily unavailable.</p>
               <a href={GITHUB_PROFILE.profileUrl} target="_blank" rel="noopener noreferrer" className="github-profile__view-btn">
                 View GitHub Profile
               </a>
@@ -79,27 +77,6 @@ const GitHubApp = () => {
                 generatedAt={generatedAt}
                 isRefreshing={isRefreshing}
                 onRefresh={refresh}
-              />
-
-              <section className="github-section" aria-labelledby="github-contributions-heading">
-                <header className="github-section__header">
-                  <h2 id="github-contributions-heading" tabIndex={-1}>Contribution activity</h2>
-                </header>
-                <GitHubContributionSummary
-                  days={contributionDays}
-                  totalContributions={contributionMeta?.totalContributions}
-                  totalCommitContributions={contributionMeta?.totalCommitContributions}
-                  synced={contributionMeta?.synced}
-                  from={contributionMeta?.from}
-                  to={contributionMeta?.to}
-                />
-                <GitHubContributionCalendar days={contributionDays} synced={contributionMeta?.synced} />
-              </section>
-
-              <GitHubActivityOverview
-                repositoryActivity={repositoryActivity}
-                activity={activity}
-                viewerLogin={GITHUB_PROFILE.username}
               />
 
               <section className="github-section" aria-labelledby="github-repos-heading">

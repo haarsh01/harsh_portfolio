@@ -5,7 +5,7 @@
 // gradients. This is an honest reading of "local assets": no image bytes to
 // download, nothing to preload but the one real photo.
 export const WALLPAPERS = [
-  { id: "sequoia", label: "Sequoia", kind: "image", value: "url('/images/wallpaper.jpg')", textColor: "light" },
+  { id: "sequoia", label: "Twilight Bridge", kind: "image", value: "url('/images/wallpaper.jpg')", textColor: "light" },
   { id: "morning", label: "Morning", kind: "gradient", value: "linear-gradient(160deg, #ffd89b 0%, #f6a97a 45%, #a390e4 100%)", textColor: "dark", phase: "morning" },
   { id: "afternoon", label: "Afternoon", kind: "gradient", value: "linear-gradient(160deg, #6dd5ed 0%, #2193b0 100%)", textColor: "light", phase: "afternoon" },
   { id: "sunset", label: "Sunset", kind: "gradient", value: "linear-gradient(160deg, #ff9a56 0%, #ff6a88 45%, #6a3093 100%)", textColor: "light", phase: "sunset" },

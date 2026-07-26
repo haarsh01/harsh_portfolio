@@ -9,7 +9,6 @@ import executePortfolioAction from '#utils/executePortfolioAction.js';
 import useWindowStore from '#store/window.js';
 
 const SUGGESTED_QUESTIONS = [
-  'What is NexAI?',
   "What is Harsh's education?",
   'What has Harsh published?',
   'Tell me about his work and research experience.',

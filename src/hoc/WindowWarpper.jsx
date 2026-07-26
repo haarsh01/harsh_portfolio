@@ -222,9 +222,30 @@ const WindowWarpper = (Component, windowKey) => {
           return;
         }
 
-        const rect = el.getBoundingClientRect();
         const vw = window.innerWidth;
         const vh = window.innerHeight;
+
+        // A prior manual resize (drag-resize handle) leaves explicit inline
+        // width/height that a CSS-only window (e.g. `max-w-[90vw]`) never
+        // has — those never reconcile against the viewport shrinking later,
+        // so a window resized to use most of a large screen can end up
+        // wider/taller than a since-shrunk viewport can show. Reclamped
+        // here with the same minWidth/minHeight floor and edge margins the
+        // resize handles themselves use, before the reachability nudge
+        // below (which needs the POST-clamp box, not the stale one).
+        if (el.style.width || el.style.height) {
+          const preClampRect = el.getBoundingClientRect();
+          if (el.style.width) {
+            const maxWidth = Math.max(minWidth, vw - SCREEN_EDGE_MARGIN - preClampRect.left);
+            if (preClampRect.width > maxWidth) el.style.width = `${maxWidth}px`;
+          }
+          if (el.style.height) {
+            const maxHeight = Math.max(minHeight, vh - BOTTOM_SAFE_MARGIN - preClampRect.top);
+            if (preClampRect.height > maxHeight) el.style.height = `${maxHeight}px`;
+          }
+        }
+
+        const rect = el.getBoundingClientRect();
         const minVisible = 96; // enough of the window must stay reachable to grab/close it
 
         let dx = 0;
@@ -244,7 +265,7 @@ const WindowWarpper = (Component, windowKey) => {
 
       window.addEventListener("resize", handleViewportResize);
       return () => window.removeEventListener("resize", handleViewportResize);
-    }, [isOpen, isMinimized, isMaximized]);
+    }, [isOpen, isMinimized, isMaximized, minWidth, minHeight]);
 
     // Cleanup any in-flight resize gesture if the window is closed, minimized
     // or maximized mid-drag, so listeners and rAF callbacks never leak.

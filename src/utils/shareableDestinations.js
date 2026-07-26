@@ -4,8 +4,10 @@
 // structure. Parsing is equally strict: unknown app ids or invalid
 // sub-params are silently ignored rather than executed.
 import { locations, photosLinks } from "#constants/index.js";
+import { PHOTOS } from "#constants/photos.js";
 import { TIMELINE_EVENTS } from "#constants/timeline.js";
 import { TOUR_STEPS } from "#constants/tour.js";
+import { getAlbums } from "#utils/photoLibrary.js";
 
 // URL-facing app ids are kebab-case and deliberately distinct from internal
 // camelCase window keys — the URL should read as a destination, not leak
@@ -31,8 +33,11 @@ const LETTERBOXD_SECTION_IDS = ["overview", "reviews", "films", "lists"];
 const WINDOW_TO_APP = Object.fromEntries(Object.entries(APP_TO_WINDOW).map(([app, win]) => [win, app]));
 
 export const APP_IDS = [...Object.keys(APP_TO_WINDOW), "tour"];
-const FINDER_LOCATION_IDS = Object.keys(locations).filter((key) => key !== "trash"); // Trash is not a meaningful shareable destination
+const FINDER_LOCATION_IDS = Object.keys(locations);
 const PHOTOS_SECTION_IDS = photosLinks.map((link) => link.title.toLowerCase());
+// Computed once from the real manifest — only genuine (year-based) albums
+// are ever valid deep-link targets, never an arbitrary/invented id.
+const PHOTO_ALBUM_IDS = getAlbums(PHOTOS).map((album) => album.id);
 const TOUR_STEP_IDS = TOUR_STEPS.map((step) => step.id);
 
 export function slugify(text) {
@@ -73,9 +78,11 @@ export function getShareableFinderItemDestination(locationKey, item) {
   return { app: "finder", location: locationKey, item: slugify(item.name) };
 }
 
-export function getShareablePhotosDestination(sectionTitle) {
+export function getShareablePhotosDestination(sectionTitle, albumId) {
   const slug = slugify(sectionTitle);
-  return PHOTOS_SECTION_IDS.includes(slug) ? { app: "photos", section: slug } : { app: "photos" };
+  if (!PHOTOS_SECTION_IDS.includes(slug)) return { app: "photos" };
+  if (albumId && PHOTO_ALBUM_IDS.includes(albumId)) return { app: "photos", section: slug, album: albumId };
+  return { app: "photos", section: slug };
 }
 
 export function getShareableTimelineEventDestination(event) {
@@ -139,8 +146,6 @@ export function getShareableItemDestination(item) {
       const child = locations.about.children?.find((c) => c.name === item.name);
       return child ? getShareableFinderItemDestination("about", child) : { app: "photos" };
     }
-    case item.id?.startsWith("gallery-image-"):
-      return { app: "photos", section: "library" };
     case item.id?.startsWith("project-"): {
       const project = locations.work.children?.find((p) => `project-${p.id}` === item.id);
       return project ? getShareableFinderItemDestination("work", project) : { app: "finder", location: "work" };
@@ -201,7 +206,12 @@ export function getDestinationTitle(destination) {
     case "photos":
       if (destination.section) {
         const match = photosLinks.find((link) => link.title.toLowerCase() === destination.section);
-        if (match) return `Photos — ${match.title}`;
+        if (match) {
+          if (destination.album && PHOTO_ALBUM_IDS.includes(destination.album)) {
+            return `Photos — ${match.title} — ${destination.album.replace("year-", "")}`;
+          }
+          return `Photos — ${match.title}`;
+        }
       }
       return "Photos";
     case "safari": return "Field Notes";
@@ -221,7 +231,7 @@ export function getDestinationTitle(destination) {
 
 // ---------- URL encode / decode ----------
 
-const PARAM_KEYS = ["app", "location", "item", "section", "post", "event", "step"];
+const PARAM_KEYS = ["app", "location", "item", "section", "album", "post", "event", "step"];
 
 export function encodeDestination(destination) {
   const params = new URLSearchParams();
@@ -256,7 +266,11 @@ export function parseDestinationFromSearch(search) {
     }
   } else if (app === "photos") {
     const section = params.get("section");
-    if (section && PHOTOS_SECTION_IDS.includes(section)) destination.section = section;
+    if (section && PHOTOS_SECTION_IDS.includes(section)) {
+      destination.section = section;
+      const album = params.get("album");
+      if (album && PHOTO_ALBUM_IDS.includes(album)) destination.album = album;
+    }
   } else if (app === "letterboxd") {
     const section = params.get("section");
     if (section && LETTERBOXD_SECTION_IDS.includes(section)) destination.section = section;

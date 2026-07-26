@@ -1,8 +1,15 @@
 import { ABOUT_CONTENT } from "#constants/about.js";
 import { NEXAI } from "#constants/nexai.js";
+import { AUDITLM } from "#constants/auditlm.js";
 import { GITHUB_PROFILE } from "#constants/github.js";
+import { Image as ImageIcon, Images, Clock, MapPin, Star, History } from "lucide-react";
 
 const navLinks = [
+    {
+      id: 0,
+      name: "Portfolio",
+      type: "finder",
+    },
     {
       id: 1,
       name: "Projects",
@@ -82,12 +89,6 @@ const navLinks = [
       icon: "harshbot.svg",
       canOpen: true,
     },
-    {
-      id: "trash",
-      name: "Archive", // was "Trash"
-      icon: "trash.png",
-      canOpen: false,
-    },
   ];
 
   const SPOTIFY_PLAYLIST = {
@@ -104,30 +105,27 @@ const navLinks = [
   // blog. Removed entirely — Field Notes (src/windows/Safari.jsx) now
   // renders an honest empty state instead of implying they were his work.
 
+  // Mirrors the "Skills" section of the current CV (public/files/
+  // cv_harsh_kaushik.pdf) verbatim — same four categories, same items,
+  // nothing invented and nothing from the old template's stack (Next.js,
+  // React Native, NestJS, etc., none of which are real skills) carried
+  // over. Update this whenever the CV's own Skills section changes.
   const techStack = [
     {
-      category: "Frontend",
-      items: ["React.js", "Next.js", "TypeScript"],
+      category: "Languages",
+      items: ["Python", "C/C++", "Java", "JavaScript", "SQL"],
     },
     {
-      category: "Mobile",
-      items: ["React Native", "Expo"],
+      category: "Machine Learning & Computer Vision",
+      items: ["Scikit-learn", "NumPy", "Pandas", "TensorFlow", "PyTorch", "Pillow"],
     },
     {
-      category: "Styling",
-      items: ["Tailwind CSS", "Sass", "CSS"],
+      category: "Web & Backend",
+      items: ["React", "Node.js", "Express.js", "FastAPI", "REST APIs"],
     },
     {
-      category: "Backend",
-      items: ["Node.js", "Express", "NestJS", "Hono"],
-    },
-    {
-      category: "Database",
-      items: ["MongoDB", "PostgreSQL"],
-    },
-    {
-      category: "Dev Tools",
-      items: ["Git", "GitHub", "Docker"],
+      category: "Databases & Cloud",
+      items: ["PostgreSQL", "MySQL", "MongoDB", "AWS (EC2, S3)"],
     },
   ];
   
@@ -157,51 +155,42 @@ const navLinks = [
   // duplicated or replaced with an invented address.
   const CONTACT_EMAIL = "hr424144@dal.ca";
   
+  // Drives both the Photos sidebar (Photos.jsx) and Photos' search entries
+  // (searchRegistry.js) — every section here is backed by real derived data
+  // (src/utils/photoLibrary.js) or an honest empty state, never a fake one.
   const photosLinks = [
     {
       id: 1,
-      icon: "/icons/gicon1.svg",
+      icon: ImageIcon,
       title: "Library",
     },
     {
       id: 2,
-      icon: "/icons/gicon2.svg",
+      icon: Images,
+      title: "Albums",
+    },
+    {
+      id: 3,
+      icon: Clock,
       title: "Memories",
     },
     {
-      id: 3,
-      icon: "/icons/file.svg",
+      id: 4,
+      icon: MapPin,
       title: "Places",
     },
     {
-      id: 4,
-      icon: "/icons/gicon4.svg",
-      title: "People",
-    },
-    {
       id: 5,
-      icon: "/icons/gicon5.svg",
+      icon: Star,
       title: "Favorites",
     },
-  ];
-  
-  // The JS Mastery template-branding tile (formerly gal2.png) has been
-  // removed — only verified personal photographs remain here.
-  const gallery = [
     {
-      id: 1,
-      img: "/images/gal1.png",
-    },
-    {
-      id: 2,
-      img: "/images/gal3.png",
-    },
-    {
-      id: 3,
-      img: "/images/gal4.png",
+      id: 6,
+      icon: History,
+      title: "Recents",
     },
   ];
-  
+
   export {
     navLinks,
     dockApps,
@@ -209,7 +198,6 @@ const navLinks = [
     socials,
     CONTACT_EMAIL,
     photosLinks,
-    gallery,
     SPOTIFY_PLAYLIST,
   };
   
@@ -245,30 +233,31 @@ const navLinks = [
             kind: "file",
             fileType: "txt",
             position: "top-5 left-10",
-            description: [NEXAI.shortDescription, ...NEXAI.whyItMatters],
+            // Deliberately neutral — see src/constants/nexai.js. No
+            // research/product detail is published anywhere while this
+            // project is still under development.
+            description: [NEXAI.body, NEXAI.supportingLine],
           },
         ],
       },
       {
-        id: 6,
-        name: "Portfolio OS",
+        id: 7,
+        name: "AuditLM",
         icon: "/images/folder.png",
         kind: "app",
-        windowId: "aboutPortfolio",
-        position: "top-52 right-80",
+        windowId: "auditlm",
+        position: "top-10 left-44",
         children: [
           {
             id: 1,
-            name: "Portfolio OS.txt",
+            name: "AuditLM.txt",
             icon: "/images/txt.png",
             kind: "file",
             fileType: "txt",
-            position: "top-5 right-10",
-            description: [
-              "This portfolio is itself a real piece of product engineering — a macOS-inspired interface built from scratch, not a template with a theme applied.",
-              "It includes centralized window management, a Mission Control that animates real live windows, an accessible weighted-search Spotlight, a Control Center with persisted settings, and a shareable-state Handoff system.",
-              "See About This Portfolio for the full breakdown of what's actually running under the hood.",
-            ],
+            position: "top-5 left-10",
+            // Same neutral-placeholder policy as NexAI — see
+            // src/constants/auditlm.js. Nothing invented here.
+            description: [AUDITLM.body, AUDITLM.supportingLine],
           },
         ],
       },
@@ -284,30 +273,19 @@ const navLinks = [
     children: [
       {
         id: 1,
-        name: "me.png",
+        name: "DSCF0390-3.webp",
         icon: "/images/image.png",
         kind: "file",
         fileType: "img",
         position: "top-10 left-5",
-        imageUrl: "/images/adrian.jpg",
-      },
-      {
-        id: 2,
-        name: "casual-me.png",
-        icon: "/images/image.png",
-        kind: "file",
-        fileType: "img",
-        position: "top-28 right-72",
-        imageUrl: "/images/adrian-2.jpg",
-      },
-      {
-        id: 3,
-        name: "conference-me.png",
-        icon: "/images/image.png",
-        kind: "file",
-        fileType: "img",
-        position: "top-52 left-80",
-        imageUrl: "/images/adrian-3.jpeg",
+        // A real photo — the same file used as about-me.txt's hero image
+        // below. Replaced the old "me.png" stand-in that pointed at the
+        // template's stock adrian.jpg placeholder. The "casual-me.png"/
+        // "conference-me.png" stand-ins that used to sit alongside this
+        // (pointing at the template's other stock adrian-2.jpg/adrian-3.jpeg
+        // placeholders) were removed outright rather than replaced —
+        // there was no second/third real photo to put in their place.
+        imageUrl: "/images/about/DSCF0390-3.webp",
       },
       {
         id: 4,
@@ -316,7 +294,7 @@ const navLinks = [
         kind: "file",
         fileType: "txt",
         position: "top-60 left-5",
-        image: "/images/adrian.jpg",
+        image: "/images/about/DSCF0390-3.webp",
         // Quick Look's preview reuses the same verbatim biography as the
         // full editorial page (components/AboutBiography.jsx) — one real
         // source of truth (src/constants/about.js), never a second,
@@ -363,65 +341,19 @@ const navLinks = [
     children: [],
   };
 
-  // A real, browsable Finder location for utility windows that don't
-  // belong in the Dock or on the desktop but still deserve a genuine
-  // navigation path beyond Spotlight alone (see searchRegistry.js's
-  // "action-activity-monitor" entry for the Spotlight side of this).
-  const UTILITIES_LOCATION = {
-    id: 10,
-    type: "utilities",
-    name: "Utilities",
-    icon: "/icons/atom.svg",
-    kind: "folder",
-    children: [
-      {
-        id: 1,
-        name: "Activity Monitor",
-        icon: "/images/terminal.png",
-        kind: "app",
-        windowId: "activityMonitor",
-        position: "top-10 left-10",
-        children: [],
-      },
-    ],
-  };
+  // Note: Activity Monitor used to also be reachable via a Finder
+  // "Utilities" location — removed (see the Dock/Finder cleanup this
+  // comment survived from) since it's a genuine, still-reachable feature
+  // via Spotlight (searchRegistry.js's "action-activity-monitor" entry)
+  // and the About This Portfolio tour button, neither of which depended on
+  // this Finder folder existing.
 
-  const TRASH_LOCATION = {
-    id: 4,
-    type: "trash",
-    name: "Trash",
-    icon: "/icons/trash.svg",
-    kind: "folder",
-    children: [
-      {
-        id: 1,
-        name: "trash1.png",
-        icon: "/images/image.png",
-        kind: "file",
-        fileType: "img",
-        position: "top-10 left-10",
-        imageUrl: "/images/trash-1.png",
-      },
-      {
-        id: 2,
-        name: "trash2.png",
-        icon: "/images/image.png",
-        kind: "file",
-        fileType: "img",
-        position: "top-40 left-80",
-        imageUrl: "/images/trash-2.png",
-      },
-    ],
-  };
-  
   export const locations = {
     work: WORK_LOCATION,
     about: ABOUT_LOCATION,
     resume: RESUME_LOCATION,
     publications: PUBLICATIONS_LOCATION,
     talks: TALKS_LOCATION,
-    utilities: UTILITIES_LOCATION,
-    trash: TRASH_LOCATION,
   };
   
   const INITIAL_Z_INDEX = 1000;
@@ -443,7 +375,8 @@ const navLinks = [
     talks: { isOpen: false, isMinimized: false, isMaximized: false, zIndex: INITIAL_Z_INDEX, data: null, resizable: true, minWidth: 520, minHeight: 480 },
     letterboxd: { isOpen: false, isMinimized: false, isMaximized: false, zIndex: INITIAL_Z_INDEX, data: null, resizable: true, minWidth: 520, minHeight: 460 },
     github: { isOpen: false, isMinimized: false, isMaximized: false, zIndex: INITIAL_Z_INDEX, data: null, resizable: true, minWidth: 540, minHeight: 440 },
-    nexai: { isOpen: false, isMinimized: false, isMaximized: false, zIndex: INITIAL_Z_INDEX, data: null, resizable: true, minWidth: 560, minHeight: 480 },
+    nexai: { isOpen: false, isMinimized: false, isMaximized: false, zIndex: INITIAL_Z_INDEX, data: null, resizable: true, minWidth: 380, minHeight: 320 },
+    auditlm: { isOpen: false, isMinimized: false, isMaximized: false, zIndex: INITIAL_Z_INDEX, data: null, resizable: true, minWidth: 380, minHeight: 320 },
     harshbot: { isOpen: false, isMinimized: false, isMaximized: false, zIndex: INITIAL_Z_INDEX, data: null, resizable: true, minWidth: 420, minHeight: 480 },
   };
   

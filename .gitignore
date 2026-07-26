@@ -5,6 +5,17 @@ node_modules/
 dist/
 dist-ssr/
 
+# Raw photo originals (preserved locally for reprocessing, never served —
+# see scripts/build-photo-manifest.mjs). Optimized/thumbnail derivatives
+# under public/images/photos/ are committed; these are not.
+/photos-originals/
+
+# Same reasoning as photos-originals/ above, for the handful of one-off
+# images used in About/Field Notes (public/images/about/,
+# public/images/field-notes/) — raw camera originals kept locally, never
+# served; only the optimized .webp derivatives are committed.
+/image-originals/
+
 # Vite
 *.local
 
@@ -27,3 +38,4 @@ yarn-error.log*
 # OS
 .DS_Store
 Thumbs.db
+.env.local

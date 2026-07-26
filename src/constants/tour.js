@@ -13,7 +13,7 @@ const featuredProject = locations.work.children.find((project) => project.featur
   ?? locations.work.children[0]
   ?? null;
 
-// A `kind: "app"` Work entry (NexAI, Portfolio OS) is a direct launch point
+// A `kind: "app"` Work entry (NexAI, AuditLM) is a direct launch point
 // for a real window — open that window itself on the tour's featured step
 // rather than navigating Finder into its (single-file) folder.
 const featuredProjectAction = featuredProject

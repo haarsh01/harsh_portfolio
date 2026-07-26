@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-07-08T12:26:12.967Z",
+  "generatedAt": "2026-07-26T18:32:21.521Z",
   "owner": "Harsh Kaushik",
   "chunks": [
     {
@@ -25,7 +25,7 @@
         "Tell me about Harsh."
       ],
       "priority": 100,
-      "lastVerified": "2026-07-08",
+      "lastVerified": "2026-07-26",
       "source": {
         "label": "About Me",
         "action": {
@@ -42,15 +42,14 @@
       "id": "research-interests",
       "category": "research-interests",
       "title": "Harsh's research interests",
-      "text": "Beyond image authenticity, Harsh is interested in intelligent systems that have to earn the user's trust: machine-learning pipelines, multi-agent architectures, secure backends, distributed systems, and interfaces that turn complicated research into useful products. He enjoys the entire journey — from asking the research question and designing the experiment to engineering the system that eventually reaches someone's screen.",
+      "text": "Harsh is interested in intelligent systems that have to earn the user's trust — working at the intersection of research and engineering, building thoughtful solutions, and learning from real-world limitations. He's particularly interested in developing AI systems that are reliable, explainable, scalable, and genuinely useful.",
       "keywords": [
         "research interests",
         "interests",
         "what does he research",
         "machine learning",
-        "distributed systems",
-        "multi-agent",
-        "secure backends",
+        "trustworthy ai",
+        "explainable ai",
         "product engineering"
       ],
       "aliases": [
@@ -58,7 +57,7 @@
         "What kind of systems does he build?"
       ],
       "priority": 90,
-      "lastVerified": "2026-07-08",
+      "lastVerified": "2026-07-26",
       "source": {
         "label": "About Me",
         "action": {
@@ -75,23 +74,18 @@
       "id": "nexai-overview",
       "category": "nexai",
       "title": "What NexAI is",
-      "text": "NexAI is Harsh's flagship research project: An evidence-driven framework for investigating whether an image is human-captured, AI-generated, or manipulated. The research question driving it is: \"Can an image be trusted — and what evidence would make that judgment understandable to the person relying on it?\" Ongoing research, developed in collaboration with Nextria Inc. through Dalhousie University's NSERC CREATE Cybersecurity Program.",
+      "text": "NexAI is one of Harsh's ongoing projects. Product under development. More details will be shared when the project is ready.",
       "keywords": [
         "nexai",
-        "image authenticity",
-        "ai generated images",
-        "deepfake",
-        "image forensics",
-        "is this image real",
-        "trustworthy ai project"
+        "research project",
+        "under development"
       ],
       "aliases": [
         "What is NexAI?",
-        "What does Harsh do with AI images?",
-        "Tell me about his image authenticity research."
+        "Tell me about NexAI."
       ],
       "priority": 100,
-      "lastVerified": "2026-07-08",
+      "lastVerified": "2026-07-26",
       "source": {
         "label": "NexAI",
         "action": {
@@ -101,30 +95,27 @@
       }
     },
     {
-      "id": "nexai-evidence",
-      "category": "nexai",
-      "title": "How NexAI reasons about evidence",
-      "text": "NexAI evaluates an image using several categories of evidence: Visual patterns (Low-level and structural signals present in the image itself.); Forensic traces (Artifacts a capture device, an editing tool, or a generative model tends to leave behind.); Metadata (What the file itself claims about its own origin and history.); Provenance (Where an image came from and how it has moved before reaching this decision.); Transformation behaviour (How an image responds to controlled transformations — a signal genuine and generated images don't always share.); Calibrated uncertainty (How confident the framework actually is, and honest about it when it isn't.). Based on that evidence, it reaches one of these decision states: Human-captured, AI-generated, Manipulated, Unknown or uncertain. This overview describes the problem NexAI addresses and how it reasons about evidence — consistent with how the project has been presented publicly. Implementation-specific and model-architecture details are intentionally not published here.",
+      "id": "auditlm-overview",
+      "category": "projects",
+      "title": "What AuditLM is",
+      "text": "AuditLM is another of Harsh's ongoing projects. Product under development. More details will be shared when the project is ready.",
       "keywords": [
-        "nexai evidence",
-        "how nexai works",
-        "decision states",
-        "forensic traces",
-        "metadata",
-        "provenance",
-        "calibrated uncertainty"
+        "auditlm",
+        "audit lm",
+        "research project",
+        "under development"
       ],
       "aliases": [
-        "How does NexAI decide if an image is fake?",
-        "What evidence does NexAI look at?"
+        "What is AuditLM?",
+        "Tell me about AuditLM."
       ],
-      "priority": 80,
-      "lastVerified": "2026-07-08",
+      "priority": 90,
+      "lastVerified": "2026-07-26",
       "source": {
-        "label": "NexAI",
+        "label": "AuditLM",
         "action": {
           "type": "open-window",
-          "windowId": "nexai"
+          "windowId": "auditlm"
         }
       }
     },
@@ -132,10 +123,11 @@
       "id": "education",
       "category": "education",
       "title": "Harsh's education",
-      "text": "Harsh is a computer science researcher and engineer at Dalhousie University. The portfolio does not publish a specific degree name or enrollment dates — his full, structured education history is available in his downloadable résumé.",
+      "text": "Harsh recently completed his Master of Computer Science at Dalhousie University, focusing on applied artificial intelligence, computer vision, and trustworthy machine learning. His full, structured education history is available in his downloadable résumé.",
       "keywords": [
         "education",
         "degree",
+        "masters",
         "university",
         "dalhousie",
         "school",
@@ -148,7 +140,7 @@
         "What degree does Harsh have?"
       ],
       "priority": 100,
-      "lastVerified": "2026-07-08",
+      "lastVerified": "2026-07-26",
       "source": {
         "label": "Résumé",
         "action": {
@@ -161,14 +153,13 @@
       "id": "work-research-experience",
       "category": "work-research-experience",
       "title": "Work and research experience",
-      "text": "Harsh conducts research at Dalhousie University. His current research (NexAI) is developed in collaboration with Nextria Inc. through Dalhousie University's NSERC CREATE Cybersecurity Program. Full, structured work history is available in his downloadable résumé.",
+      "text": "Harsh conducts research at Dalhousie University, including as a Mitacs research intern applying machine learning to intrusion detection in IoT and network environments. Full, structured work history is available in his downloadable résumé.",
       "keywords": [
         "work experience",
         "research experience",
         "job",
         "employer",
-        "nextria",
-        "nserc create",
+        "mitacs",
         "career",
         "internship"
       ],
@@ -178,7 +169,7 @@
         "Who does he do research with?"
       ],
       "priority": 100,
-      "lastVerified": "2026-07-08",
+      "lastVerified": "2026-07-26",
       "source": {
         "label": "Résumé",
         "action": {
@@ -206,7 +197,7 @@
         "Can I download his CV?"
       ],
       "priority": 100,
-      "lastVerified": "2026-07-08",
+      "lastVerified": "2026-07-26",
       "source": {
         "label": "Résumé",
         "action": {
@@ -219,7 +210,7 @@
       "id": "technical-skills",
       "category": "technical-skills",
       "title": "Harsh's technical skills",
-      "text": "Frontend: React.js, Next.js, TypeScript. Mobile: React Native, Expo. Styling: Tailwind CSS, Sass, CSS. Backend: Node.js, Express, NestJS, Hono. Database: MongoDB, PostgreSQL. Dev Tools: Git, GitHub, Docker",
+      "text": "Languages: Python, C/C++, Java, JavaScript, SQL. Machine Learning & Computer Vision: Scikit-learn, NumPy, Pandas, TensorFlow, PyTorch, Pillow. Web & Backend: React, Node.js, Express.js, FastAPI, REST APIs. Databases & Cloud: PostgreSQL, MySQL, MongoDB, AWS (EC2, S3)",
       "keywords": [
         "technologies",
         "tech stack",
@@ -235,7 +226,7 @@
         "What programming languages does he know?"
       ],
       "priority": 90,
-      "lastVerified": "2026-07-08",
+      "lastVerified": "2026-07-26",
       "source": {
         "label": "Skills",
         "action": {
@@ -248,20 +239,22 @@
       "id": "projects-overview",
       "category": "projects",
       "title": "Harsh's featured projects",
-      "text": "The two projects Harsh features are NexAI, his image-authenticity research framework, and this portfolio itself — a macOS-inspired interface built from scratch, not a template with a theme applied, with its own window manager, Mission Control, Spotlight search, and Control Center. His full list of public repositories is on GitHub.",
+      "text": "The projects Harsh features are NexAI and AuditLM — both currently under development, with more detail to come once they are ready — and this portfolio itself, a macOS-inspired interface built from scratch, not a template with a theme applied, with its own window manager, Mission Control, Spotlight search, and Control Center. His full list of public repositories is on GitHub.",
       "keywords": [
         "projects",
         "what has he built",
         "featured projects",
         "portfolio project",
-        "built from scratch"
+        "built from scratch",
+        "nexai",
+        "auditlm"
       ],
       "aliases": [
         "What projects has Harsh built?",
         "What has he made?"
       ],
       "priority": 90,
-      "lastVerified": "2026-07-08",
+      "lastVerified": "2026-07-26",
       "source": {
         "label": "About This Portfolio",
         "action": {
@@ -291,7 +284,7 @@
         "Is this a real operating system?"
       ],
       "priority": 70,
-      "lastVerified": "2026-07-08",
+      "lastVerified": "2026-07-26",
       "source": {
         "label": "About This Portfolio",
         "action": {
@@ -319,7 +312,7 @@
         "Does Harsh have public repositories?"
       ],
       "priority": 90,
-      "lastVerified": "2026-07-08",
+      "lastVerified": "2026-07-26",
       "source": {
         "label": "GitHub",
         "action": {
@@ -346,7 +339,7 @@
         "Does he have LinkedIn?"
       ],
       "priority": 100,
-      "lastVerified": "2026-07-08",
+      "lastVerified": "2026-07-26",
       "source": {
         "label": "Contact",
         "action": {
@@ -370,7 +363,7 @@
         "Can I connect with him on LinkedIn?"
       ],
       "priority": 70,
-      "lastVerified": "2026-07-08",
+      "lastVerified": "2026-07-26",
       "source": {
         "label": "LinkedIn",
         "action": {
@@ -396,7 +389,7 @@
         "What city does he live in?"
       ],
       "priority": 90,
-      "lastVerified": "2026-07-08",
+      "lastVerified": "2026-07-26",
       "source": {
         "label": "About Me",
         "action": {
@@ -431,7 +424,7 @@
         "What does he do for fun?"
       ],
       "priority": 90,
-      "lastVerified": "2026-07-08",
+      "lastVerified": "2026-07-26",
       "source": {
         "label": "About Me",
         "action": {
@@ -461,7 +454,7 @@
         "Is he a photographer?"
       ],
       "priority": 60,
-      "lastVerified": "2026-07-08",
+      "lastVerified": "2026-07-26",
       "source": {
         "label": "Photos",
         "action": {
@@ -489,7 +482,7 @@
         "What does he read?"
       ],
       "priority": 50,
-      "lastVerified": "2026-07-08",
+      "lastVerified": "2026-07-26",
       "source": {
         "label": "About Me",
         "action": {
@@ -518,7 +511,7 @@
         "Does he write poetry?"
       ],
       "priority": 50,
-      "lastVerified": "2026-07-08",
+      "lastVerified": "2026-07-26",
       "source": {
         "label": "About Me",
         "action": {
@@ -547,7 +540,7 @@
         "Is he a runner?"
       ],
       "priority": 50,
-      "lastVerified": "2026-07-08",
+      "lastVerified": "2026-07-26",
       "source": {
         "label": "About Me",
         "action": {
@@ -576,7 +569,7 @@
         "What is his Letterboxd?"
       ],
       "priority": 50,
-      "lastVerified": "2026-07-08",
+      "lastVerified": "2026-07-26",
       "source": {
         "label": "Letterboxd",
         "action": {
@@ -602,7 +595,7 @@
         "Does he have a Spotify playlist?"
       ],
       "priority": 50,
-      "lastVerified": "2026-07-08",
+      "lastVerified": "2026-07-26",
       "source": {
         "label": "Spotify",
         "action": {
@@ -615,7 +608,7 @@
       "id": "publications-overview",
       "category": "publications",
       "title": "Harsh's publications",
-      "text": "Harsh has 3 verified publications, listed on his Google Scholar profile: \"Design and Development of a Solar-Based Wireless Electric Vehicle Charging System\" (2024); \"Hybrid Image Processing Device as Wearable Aide for Visually Impaired\" (2022); \"A Review of Technologies Trending Towards 5G Networks for Smart Healthcare Using IoT\" (2022).",
+      "text": "Harsh has 4 verified publications, listed on his Google Scholar profile: \"[Manuscript title to be finalized]\" (null); \"Design and Development of a Solar-Based Wireless Electric Vehicle Charging System\" (2024); \"Hybrid Image Processing Device as Wearable Aide for Visually Impaired\" (2022); \"A Review of Technologies Trending Towards 5G Networks for Smart Healthcare Using IoT\" (2022).",
       "keywords": [
         "publications",
         "papers",
@@ -628,12 +621,39 @@
         "Does he have research papers?"
       ],
       "priority": 100,
-      "lastVerified": "2026-07-08",
+      "lastVerified": "2026-07-26",
       "source": {
         "label": "Publications",
         "action": {
           "type": "open-window",
           "windowId": "publications"
+        }
+      }
+    },
+    {
+      "id": "publication-wifs-manuscript-submitted",
+      "category": "publications",
+      "title": "[Manuscript title to be finalized]",
+      "text": "\"[Manuscript title to be finalized]\" by Harsh Kaushik. Published in IEEE Workshop on Information Forensics and Security, null.",
+      "keywords": [
+        "[manuscript title to be finalized]",
+        "ieee workshop on information forensics and security",
+        "null",
+        "harsh kaushik"
+      ],
+      "aliases": [
+        "Tell me about \"[Manuscript title to be finalized]\"."
+      ],
+      "priority": 70,
+      "lastVerified": "2026-07-26",
+      "source": {
+        "label": "Publications",
+        "action": {
+          "type": "open-window",
+          "windowId": "publications",
+          "data": {
+            "publicationId": "wifs-manuscript-submitted"
+          }
         }
       }
     },
@@ -657,7 +677,7 @@
         "Tell me about \"Design and Development of a Solar-Based Wireless Electric Vehicle Charging System\"."
       ],
       "priority": 70,
-      "lastVerified": "2026-07-08",
+      "lastVerified": "2026-07-26",
       "source": {
         "label": "Publications",
         "action": {
@@ -685,7 +705,7 @@
         "Tell me about \"Hybrid Image Processing Device as Wearable Aide for Visually Impaired\"."
       ],
       "priority": 70,
-      "lastVerified": "2026-07-08",
+      "lastVerified": "2026-07-26",
       "source": {
         "label": "Publications",
         "action": {
@@ -714,7 +734,7 @@
         "Tell me about \"A Review of Technologies Trending Towards 5G Networks for Smart Healthcare Using IoT\"."
       ],
       "priority": 70,
-      "lastVerified": "2026-07-08",
+      "lastVerified": "2026-07-26",
       "source": {
         "label": "Publications",
         "action": {
@@ -744,7 +764,7 @@
         "What did he present at NSERC?"
       ],
       "priority": 100,
-      "lastVerified": "2026-07-08",
+      "lastVerified": "2026-07-26",
       "source": {
         "label": "Talks",
         "action": {
@@ -780,7 +800,7 @@
         "What did Harsh present at Dalhousie?"
       ],
       "priority": 80,
-      "lastVerified": "2026-07-08",
+      "lastVerified": "2026-07-26",
       "source": {
         "label": "NSERC Talk",
         "action": {

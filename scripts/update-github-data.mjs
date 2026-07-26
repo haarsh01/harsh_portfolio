@@ -505,7 +505,7 @@ async function main() {
   }
 
   // Compare ignoring only `generatedAt`, so a run that fetched byte-for-
-  // byte identical data doesn't still produce a commit every hour.
+  // byte identical data doesn't still produce a commit every 6 hours.
   const stripTimestamp = (text) => (text ?? '').replace(/"generatedAt":\s*"[^"]*"/, '"generatedAt":""');
   if (previous !== null && stripTimestamp(previous) === stripTimestamp(json)) {
     console.log('GitHub data unchanged since last run — skipping write.');

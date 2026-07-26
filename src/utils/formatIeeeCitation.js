@@ -74,6 +74,12 @@ function buildVenueSegment(pub) {
 }
 
 function buildDetailsSegment(pub) {
+  // A submitted-but-unpublished manuscript has no year/pages/volume to
+  // report honestly — standard IEEE practice for this case is exactly
+  // this phrase in place of the usual "<location/publisher>, <year>, pp.
+  // <pages>" tail, not a citation with invented publication details.
+  if (pub.status === "submitted") return "manuscript submitted for publication";
+
   const parts = [];
   if (pub.type === "conference" && pub.location) parts.push(pub.location);
   if (pub.type === "chapter" && pub.publisher) parts.push(pub.publisher);

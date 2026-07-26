@@ -149,12 +149,8 @@ const Contact = () => {
 
       <div className="contact-body">
         <div className="contact-identity">
-          <img src="/images/adrian.jpg" alt="Harsh Kaushik" className="contact-photo" />
-          <div>
-            <h3 className="contact-name">{ABOUT_CONTENT.name}</h3>
-            <p className="contact-role">{ABOUT_CONTENT.contactIntroduction}</p>
-            <p className="contact-invite">I'd love to hear from you — reach out directly, or send a message below.</p>
-          </div>
+          <h3 className="contact-name">{ABOUT_CONTENT.name.split(' ')[0]}</h3>
+          <p className="contact-invite">I'd love to hear from you — reach out directly, or send a message below.</p>
         </div>
 
         <ul className="contact-actions">

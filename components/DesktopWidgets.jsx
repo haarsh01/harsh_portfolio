@@ -8,7 +8,8 @@ import { GripVertical, X, Maximize2, Plus, ExternalLink } from 'lucide-react';
 import usePreferencesStore from '#store/preferences.js';
 import useWidgetsStore from '#store/widgets.js';
 import useSystemUIStore from '#store/systemUI.js';
-import { locations, techStack, gallery, SPOTIFY_PLAYLIST } from '#constants/index.js';
+import { locations, techStack, SPOTIFY_PLAYLIST } from '#constants/index.js';
+import { PHOTOS } from '#constants/photos.js';
 import { WIDGET_TYPES, WIDGET_SIZES, WIDGET_DIMENSIONS, getWidgetTypeMeta } from '#constants/widgets.js';
 import { TIMELINE_EVENTS } from '#constants/timeline.js';
 import { NEXAI } from '#constants/nexai.js';
@@ -22,7 +23,7 @@ const aboutTextFile = locations.about.children.find((child) => child.fileType ==
 const featuredProject = locations.work.children.find((project) => project.featured) ?? locations.work.children[0] ?? null;
 const latestJourneyEvent = TIMELINE_EVENTS.filter((event) => event.category !== 'Present').slice(-1)[0] ?? null;
 
-// A `kind: "app"` Work entry (NexAI, Portfolio OS) is a direct launch point
+// A `kind: "app"` Work entry (NexAI, AuditLM) is a direct launch point
 // for a real window — route to it directly rather than a Finder location.
 const featuredProjectAction = featuredProject
   ? (featuredProject.kind === 'app' && featuredProject.windowId
@@ -50,10 +51,10 @@ function WidgetContent({ type }) {
       return (
         <div className="widget-body">
           <p className="widget-eyebrow">Research Focus</p>
-          <p className="widget-title">{NEXAI.name} · Image authenticity</p>
-          <p className="widget-text">{NEXAI.shortDescription}</p>
+          <p className="widget-title">{NEXAI.name}</p>
+          <p className="widget-text">{NEXAI.body}</p>
           <button type="button" className="widget-action" onClick={() => executePortfolioAction({ type: 'open-window', windowId: 'nexai' })}>
-            Explore NexAI <ExternalLink size={11} aria-hidden="true" />
+            Open <ExternalLink size={11} aria-hidden="true" />
           </button>
         </div>
       );
@@ -89,10 +90,10 @@ function WidgetContent({ type }) {
       );
     }
     case 'photo': {
-      const photo = gallery[0];
+      const photo = PHOTOS[0];
       return (
         <div className="widget-body widget-body--photo">
-          {photo ? <img src={photo.img} alt="" className="widget-image widget-image--fill" /> : null}
+          {photo ? <img src={photo.thumbnailSrc} alt="" className="widget-image widget-image--fill" /> : null}
           <button type="button" className="widget-action widget-action--overlay" onClick={() => executePortfolioAction({ type: 'open-photos-section', section: 'library' })}>
             Photos <ExternalLink size={11} aria-hidden="true" />
           </button>

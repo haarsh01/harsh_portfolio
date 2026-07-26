@@ -8,14 +8,17 @@
 // (Applications, Skills, Photos *sections*, Actions, Settings, Help) get
 // their own small builder here.
 import {
-  FileText, Folder, Terminal as TerminalIcon, Cpu, Image as ImageIcon,
-  Star, Clock, MapPin, Users, HelpCircle, LayoutGrid, Minimize2, Compass,
+  FileText, Folder, Terminal as TerminalIcon, Cpu, Images,
+  Clock, HelpCircle, LayoutGrid, Minimize2, Compass,
   Eye, Info, AppWindow, History,
   Pencil, Palette, GraduationCap, Mic, Film, Github, Activity, ShieldCheck, MessageCircleMore,
 } from "lucide-react";
 import { locations, techStack, photosLinks } from "#constants/index.js";
+import { PHOTOS } from "#constants/photos.js";
+import { getAlbums } from "#utils/photoLibrary.js";
 import { NEXAI } from "#constants/nexai.js";
 import { GITHUB_PROFILE } from "#constants/github.js";
+import { getFieldNotes } from "#constants/fieldNotes.js";
 import {
   getDesktopItems, getRegisteredApplications, KIND_LABEL,
 } from "#utils/portfolioItems.js";
@@ -25,32 +28,26 @@ import { getTalks } from "#constants/talks.js";
 import { getLetterboxdFilms, getLetterboxdReviews } from "#constants/letterboxd.js";
 
 const PHOTOS_SECTION_KEYWORDS = {
-  Library: ["photos", "photo", "gallery", "images", "pictures", "photography", "album", "albums", "photo library", "library"],
+  Library: ["photos", "photo", "gallery", "images", "pictures", "photography", "photo library", "library"],
+  Albums: ["albums", "album", "photo albums"],
   Memories: ["memories", "highlights", "moments", "photo memories"],
-  Places: ["places", "locations", "travel photos", "cities", "where"],
-  People: ["people", "portraits", "friends", "colleagues", "event photos"],
+  Places: ["places", "locations", "travel photos", "cities", "where", "map"],
   Favorites: ["favorites", "favourites", "favorite photos", "favourite photos", "liked photos", "best photos"],
-};
-
-const PHOTOS_SECTION_ICONS = {
-  Library: ImageIcon,
-  Memories: Clock,
-  Places: MapPin,
-  People: Users,
-  Favorites: Star,
+  Recents: ["recents", "recent photos", "recently added"],
 };
 
 // Aliases for tech-stack items whose display name differs from how people
 // actually type it (e.g. "React.js" vs. "react").
 const TECH_ALIASES = {
-  "react.js": ["react", "reactjs"],
-  "next.js": ["nextjs", "next js", "next"],
-  "react native": ["reactnative"],
-  "typescript": ["ts"],
+  "c/c++": ["c++", "cpp", "c plus plus", "c"],
+  "javascript": ["js"],
+  "react": ["react.js", "reactjs"],
   "node.js": ["nodejs", "node"],
-  "tailwind css": ["tailwind"],
-  "postgresql": ["postgres", "sql"],
+  "express.js": ["express", "expressjs"],
+  "fastapi": ["fast api"],
+  "postgresql": ["postgres"],
   "mongodb": ["mongo", "nosql"],
+  "aws (ec2, s3)": ["aws", "amazon web services", "ec2", "s3"],
 };
 
 // A handful of real, pre-existing curated keyword sets (originally authored
@@ -59,7 +56,8 @@ const TECH_ALIASES = {
 // verbatim, keyed by the item's stable id, rather than re-typed.
 const EXTRA_KEYWORDS = {
   "document-resume": ["cv", "résumé", "curriculum vitae", "experience", "work experience", "employment", "career", "download resume", "view resume", "pdf"],
-  "document-about-me": ["about", "about me", "bio", "biography", "profile", "introduction", "who is harsh", "background", "meet harsh"],
+  "document-about-me": ["about", "about me", "bio", "biography", "profile", "introduction", "who is harsh", "background", "meet harsh", "mitacs", "dalhousie university", "nserc", "nextria", "organizations"],
+  "document-thesis": ["thesis", "thesis blog", "field notes", "blog", "research journey", "image authenticity", "computer vision", "master's thesis", "masters thesis"],
   "contact-window": ["email", "mail", "message", "hire", "hire harsh", "collaborate", "opportunity", "job", "get in touch", "reach out", "email harsh"],
   "music-spotify-playlist": ["spotify", "music", "playlist", "songs", "listen", "audio", "play"],
   "contact-social-1": ["github", "git", "code", "source code", "repositories", "repository", "repos", "open source"],
@@ -99,7 +97,7 @@ export const HELP_TOPICS = [
     id: "opening-files-in-finder",
     title: "Opening files in Finder",
     body: [
-      "Choose Work, About me, Resume, or Trash from the Finder sidebar to browse its contents.",
+      "Choose Work, About me, Resume, Publications, or Talks from the Finder sidebar to browse its contents.",
       "Click a text file, image, or the résumé to open it in its own window.",
       "Right-click any item for Open, Quick Look, Get Info, and Copy Link.",
     ],
@@ -108,8 +106,9 @@ export const HELP_TOPICS = [
     id: "navigating-photos",
     title: "Navigating Photos",
     body: [
-      "Use the sidebar to switch between Library, Memories, Places, People, and Favorites.",
-      "Click any photo in Library to view it full-size with zoom controls.",
+      "Use the sidebar to switch between Library, Albums, Memories, Places, Favorites, and Recents.",
+      "Places and Memories only appear once a photo has real location or date metadata to back them.",
+      "Click any photo to view it full-size, with Previous/Next navigation and zoom controls.",
     ],
   },
   {
@@ -221,15 +220,30 @@ function buildSkillEntries() {
 function buildPhotoSectionEntries() {
   return photosLinks
     .filter(({ title }) => PHOTOS_SECTION_KEYWORDS[title])
-    .map(({ title }) => ({
+    .map(({ title, icon }) => ({
       id: `photos-${title.toLowerCase()}`,
       title,
       subtitle: `Photos › ${title}`,
       category: "Photos",
-      icon: PHOTOS_SECTION_ICONS[title] ?? ImageIcon,
+      icon,
       keywords: PHOTOS_SECTION_KEYWORDS[title],
       action: { type: "open-photos-section", section: title.toLowerCase() },
     }));
+}
+
+// Real albums only (src/utils/photoLibrary.js derives these strictly from
+// each photo's own dateTaken — see #constants/photos.js) — never a
+// hand-typed list that could drift from what Albums actually shows.
+function buildPhotoAlbumEntries() {
+  return getAlbums(PHOTOS).map((album) => ({
+    id: `photos-album-${album.id}`,
+    title: album.title,
+    subtitle: `Photos › Albums › ${album.title} (${album.count} photo${album.count === 1 ? "" : "s"})`,
+    category: "Photos",
+    icon: Images,
+    keywords: ["album", "albums", "photos", album.title],
+    action: { type: "open-photos-section", section: "albums", album: album.id },
+  }));
 }
 
 function buildShortcutEntries() {
@@ -321,6 +335,41 @@ function buildTalkEntries() {
   return [general, ...perTalk];
 }
 
+// Same pattern as buildTalkEntries — one general "Field Notes" entry plus
+// one per real post, derived from the single field-notes data source
+// (never a second hand-typed list). `action.data.noteId` deep-links
+// straight into the article (Safari.jsx reads it the same way GitHub/
+// Publications/Talks already read their own `windows.<key>.data`).
+function buildFieldNotesEntries() {
+  const notes = getFieldNotes();
+  const general = {
+    id: "action-field-notes",
+    title: "Field Notes",
+    subtitle: "Notes on research, engineering, and the work behind the work",
+    category: "Field Notes",
+    icon: Pencil,
+    keywords: ["field notes", "blog", "writing", "articles", "notes"],
+    action: { type: "open-window", windowId: "safari" },
+  };
+
+  const perNote = notes.map((note) => ({
+    id: `field-note-${note.id}`,
+    title: note.title,
+    subtitle: `Field Notes › ${note.readingTime}`,
+    category: "Field Notes",
+    icon: Pencil,
+    keywords: [
+      note.title.toLowerCase(), "thesis", "master's thesis", "masters thesis",
+      "image authenticity", "computer vision", "trustworthy ai", "research journey",
+      "dalhousie", "ai-generated images", "ai generated images", "manipulated images",
+      ...note.tags.map((tag) => tag.toLowerCase()),
+    ],
+    action: { type: "open-window", windowId: "safari", data: { noteId: note.id } },
+  }));
+
+  return [general, ...perNote];
+}
+
 // Mirrors buildTalkEntries/buildPublicationEntries: one general entry, one
 // per section (so "movie reviews"/"watched movies"/"movie lists" jump
 // straight to the right tab via `data.section`, the same deep-link
@@ -408,40 +457,23 @@ function buildLetterboxdEntries() {
 
 // NexAI's desktop/Finder icon (buildProjectItems, via getDesktopItems)
 // already produces a plain "NexAI" entry titled from Finder's own data —
-// this adds a richer, keyword-heavy dedicated entry on top of that with
-// `priority: -1` so it wins the exact-title tie and surfaces first,
-// exactly like buildGitHubEntries' own documented "GitHub" collision below.
-// Keywords are drawn directly from the authoritative NEXAI data (evidence
-// categories, research areas) rather than hand-typed a second time here.
+// this adds a dedicated entry on top of that with `priority: -1` so it
+// wins the exact-title tie and surfaces first, exactly like
+// buildGitHubEntries' own documented "GitHub" collision below. Subtitle and
+// keywords deliberately stay neutral (see src/constants/nexai.js) — no
+// research/product detail is surfaced through search while this project is
+// still under development.
 function buildNexAIEntries() {
-  const general = {
+  return [{
     id: "action-nexai",
     title: NEXAI.name,
-    subtitle: NEXAI.shortDescription,
+    subtitle: NEXAI.body,
     category: "Research",
     icon: ShieldCheck,
     priority: -1,
-    keywords: [
-      "nexai", "image authenticity", "ai image detection", "synthetic image detection",
-      "manipulated image", "trustworthy ai", "forensic image analysis", "image provenance",
-      "research project", "image forensics", "deepfake", "ai generated image",
-      ...NEXAI.evidenceCategories.map((e) => e.label.toLowerCase()),
-      ...NEXAI.researchAreas.map((area) => area.toLowerCase()),
-    ],
+    keywords: ["nexai", "research project", "under development"],
     action: { type: "open-window", windowId: "nexai" },
-  };
-
-  const evidenceMap = {
-    id: "action-nexai-evidence-map",
-    title: "NexAI Evidence Map",
-    subtitle: "NexAI › How the framework reasons about an image",
-    category: "Research",
-    icon: ShieldCheck,
-    keywords: ["evidence map", "decision states", "how nexai works", "reasoning"],
-    action: { type: "open-window", windowId: "nexai" },
-  };
-
-  return [general, evidenceMap];
+  }];
 }
 
 // The Dock (src/constants/index.js's dockApps) already registers a plain
@@ -700,9 +732,11 @@ export function getSearchRegistry() {
     ...buildPortfolioItemEntries(),
     ...buildSkillEntries(),
     ...buildPhotoSectionEntries(),
+    ...buildPhotoAlbumEntries(),
     ...buildActionEntries(),
     ...buildPublicationEntries(),
     ...buildTalkEntries(),
+    ...buildFieldNotesEntries(),
     ...buildNexAIEntries(),
     ...buildHarshBotEntries(),
     ...buildLetterboxdEntries(),

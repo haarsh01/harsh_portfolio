@@ -19,6 +19,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { ABOUT_CONTENT } from '../src/constants/about.js';
 import { NEXAI } from '../src/constants/nexai.js';
+import { AUDITLM } from '../src/constants/auditlm.js';
 import { PUBLICATIONS } from '../src/constants/publications.js';
 import { TALKS } from '../src/constants/talks.js';
 import { GITHUB_PROFILE } from '../src/constants/github.js';
@@ -55,13 +56,13 @@ const chunks = [
   {
     id: 'research-interests',
     category: 'research-interests',
-    // Restated in the third person from About Me's own first-person
-    // paragraph (ABOUT_CONTENT.intro[2]) — same facts, no invention, but
-    // never fed to the model as unattributed first-person text, which
-    // risks the model echoing "I" instead of "Harsh" in its answer.
+    // Restated in the third person from About Me's own first-person prose
+    // (ABOUT_CONTENT.intro) — same facts, no invention, but never fed to
+    // the model as unattributed first-person text, which risks the model
+    // echoing "I" instead of "Harsh" in its answer.
     title: "Harsh's research interests",
-    text: "Beyond image authenticity, Harsh is interested in intelligent systems that have to earn the user's trust: machine-learning pipelines, multi-agent architectures, secure backends, distributed systems, and interfaces that turn complicated research into useful products. He enjoys the entire journey — from asking the research question and designing the experiment to engineering the system that eventually reaches someone's screen.",
-    keywords: ['research interests', 'interests', 'what does he research', 'machine learning', 'distributed systems', 'multi-agent', 'secure backends', 'product engineering'],
+    text: "Harsh is interested in intelligent systems that have to earn the user's trust — working at the intersection of research and engineering, building thoughtful solutions, and learning from real-world limitations. He's particularly interested in developing AI systems that are reliable, explainable, scalable, and genuinely useful.",
+    keywords: ['research interests', 'interests', 'what does he research', 'machine learning', 'trustworthy ai', 'explainable ai', 'product engineering'],
     aliases: ['What is Harsh interested in researching?', 'What kind of systems does he build?'],
     priority: 90,
     lastVerified: TODAY,
@@ -71,30 +72,30 @@ const chunks = [
     id: 'nexai-overview',
     category: 'nexai',
     title: 'What NexAI is',
-    text: `NexAI is Harsh's flagship research project: ${NEXAI.shortDescription} The research question driving it is: "${NEXAI.researchQuestion}" ${NEXAI.status}`,
-    keywords: ['nexai', 'image authenticity', 'ai generated images', 'deepfake', 'image forensics', 'is this image real', 'trustworthy ai project'],
-    aliases: ['What is NexAI?', 'What does Harsh do with AI images?', 'Tell me about his image authenticity research.'],
+    text: `${NEXAI.name} is one of Harsh's ongoing projects. ${NEXAI.body} ${NEXAI.supportingLine}`,
+    keywords: ['nexai', 'research project', 'under development'],
+    aliases: ['What is NexAI?', 'Tell me about NexAI.'],
     priority: 100,
     lastVerified: TODAY,
     source: { label: 'NexAI', action: { type: 'open-window', windowId: 'nexai' } },
   },
   {
-    id: 'nexai-evidence',
-    category: 'nexai',
-    title: 'How NexAI reasons about evidence',
-    text: `NexAI evaluates an image using several categories of evidence: ${NEXAI.evidenceCategories.map((e) => `${e.label} (${e.description})`).join('; ')}. Based on that evidence, it reaches one of these decision states: ${NEXAI.decisionStates.map((d) => d.label).join(', ')}. ${NEXAI.confidentialityNote}`,
-    keywords: ['nexai evidence', 'how nexai works', 'decision states', 'forensic traces', 'metadata', 'provenance', 'calibrated uncertainty'],
-    aliases: ['How does NexAI decide if an image is fake?', 'What evidence does NexAI look at?'],
-    priority: 80,
+    id: 'auditlm-overview',
+    category: 'projects',
+    title: 'What AuditLM is',
+    text: `${AUDITLM.name} is another of Harsh's ongoing projects. ${AUDITLM.body} ${AUDITLM.supportingLine}`,
+    keywords: ['auditlm', 'audit lm', 'research project', 'under development'],
+    aliases: ['What is AuditLM?', 'Tell me about AuditLM.'],
+    priority: 90,
     lastVerified: TODAY,
-    source: { label: 'NexAI', action: { type: 'open-window', windowId: 'nexai' } },
+    source: { label: 'AuditLM', action: { type: 'open-window', windowId: 'auditlm' } },
   },
   {
     id: 'education',
     category: 'education',
     title: "Harsh's education",
-    text: 'Harsh is a computer science researcher and engineer at Dalhousie University. The portfolio does not publish a specific degree name or enrollment dates — his full, structured education history is available in his downloadable résumé.',
-    keywords: ['education', 'degree', 'university', 'dalhousie', 'school', 'academic background', 'where did he study'],
+    text: 'Harsh recently completed his Master of Computer Science at Dalhousie University, focusing on applied artificial intelligence, computer vision, and trustworthy machine learning. His full, structured education history is available in his downloadable résumé.',
+    keywords: ['education', 'degree', 'masters', 'university', 'dalhousie', 'school', 'academic background', 'where did he study'],
     aliases: ['Where did Harsh study?', "What is Harsh's education?", "What degree does Harsh have?"],
     priority: 100,
     lastVerified: TODAY,
@@ -104,8 +105,8 @@ const chunks = [
     id: 'work-research-experience',
     category: 'work-research-experience',
     title: 'Work and research experience',
-    text: "Harsh conducts research at Dalhousie University. His current research (NexAI) is developed in collaboration with Nextria Inc. through Dalhousie University's NSERC CREATE Cybersecurity Program. Full, structured work history is available in his downloadable résumé.",
-    keywords: ['work experience', 'research experience', 'job', 'employer', 'nextria', 'nserc create', 'career', 'internship'],
+    text: "Harsh conducts research at Dalhousie University, including as a Mitacs research intern applying machine learning to intrusion detection in IoT and network environments. Full, structured work history is available in his downloadable résumé.",
+    keywords: ['work experience', 'research experience', 'job', 'employer', 'mitacs', 'career', 'internship'],
     aliases: ['What is his work experience?', 'Where has Harsh worked?', 'Who does he do research with?'],
     priority: 100,
     lastVerified: TODAY,
@@ -137,8 +138,8 @@ const chunks = [
     id: 'projects-overview',
     category: 'projects',
     title: "Harsh's featured projects",
-    text: 'The two projects Harsh features are NexAI, his image-authenticity research framework, and this portfolio itself — a macOS-inspired interface built from scratch, not a template with a theme applied, with its own window manager, Mission Control, Spotlight search, and Control Center. His full list of public repositories is on GitHub.',
-    keywords: ['projects', 'what has he built', 'featured projects', 'portfolio project', 'built from scratch'],
+    text: 'The projects Harsh features are NexAI and AuditLM — both currently under development, with more detail to come once they are ready — and this portfolio itself, a macOS-inspired interface built from scratch, not a template with a theme applied, with its own window manager, Mission Control, Spotlight search, and Control Center. His full list of public repositories is on GitHub.',
+    keywords: ['projects', 'what has he built', 'featured projects', 'portfolio project', 'built from scratch', 'nexai', 'auditlm'],
     aliases: ['What projects has Harsh built?', 'What has he made?'],
     priority: 90,
     lastVerified: TODAY,

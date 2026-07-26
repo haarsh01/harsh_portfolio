@@ -8,12 +8,12 @@ name: Update GitHub profile data
 on:
   workflow_dispatch:
   schedule:
-    # Hourly, offset from the top of the hour (GitHub's own docs note that
-    # jobs scheduled exactly on the hour are the most congested and most
-    # likely to be delayed). A personal portfolio doesn't need anything
-    # more frequent than this — this is "updated hourly" sync, never
-    # real-time streaming.
-    - cron: "17 * * * *"
+    # Every 6 hours, offset from the top of the hour (GitHub's own docs
+    # note that jobs scheduled exactly on the hour are the most congested
+    # and most likely to be delayed). A personal portfolio doesn't need
+    # anything more frequent than this — this is an "updated every 6
+    # hours" sync, never real-time streaming.
+    - cron: "17 */6 * * *"
 
 # Minimum permissions for the whole workflow; the one job that needs to
 # write commits back to the repo re-declares `contents: write` itself.
@@ -44,7 +44,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: "22"
           cache: "npm"
 
       - name: Install dependencies
