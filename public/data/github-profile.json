@@ -177,12 +177,6 @@
         "days": [
           {
             "count": 0,
-            "date": "2025-07-27",
-            "level": "NONE",
-            "weekday": 0
-          },
-          {
-            "count": 0,
             "date": "2025-07-28",
             "level": "NONE",
             "weekday": 1
@@ -218,7 +212,7 @@
             "weekday": 6
           }
         ],
-        "firstDay": "2025-07-27"
+        "firstDay": "2025-07-28"
       },
       {
         "days": [
@@ -2630,16 +2624,22 @@
             "date": "2026-07-27",
             "level": "LOW",
             "weekday": 1
+          },
+          {
+            "count": 0,
+            "date": "2026-07-28",
+            "level": "NONE",
+            "weekday": 2
           }
         ],
         "firstDay": "2026-07-26"
       }
     ]
   },
-  "generatedAt": "2026-07-27T19:56:46.303Z",
+  "generatedAt": "2026-07-28T03:36:59.843Z",
   "period": {
-    "from": "2025-07-27",
-    "to": "2026-07-27"
+    "from": "2025-07-28",
+    "to": "2026-07-28"
   },
   "profile": {
     "avatarUrl": "https://avatars.githubusercontent.com/u/60865477?u=17a00bac7d641f36fec6599753ac4c510b540888&v=4",
@@ -2650,6 +2650,25 @@
     "profileUrl": "https://github.com/haarsh01"
   },
   "repositories": [
+    {
+      "createdAt": "2026-01-08T18:50:19Z",
+      "defaultBranch": "master",
+      "description": null,
+      "forksCount": 0,
+      "fullName": "haarsh01/harsh_portfolio",
+      "homepage": "https://harsh-portfolio-gray-xi.vercel.app",
+      "htmlUrl": "https://github.com/haarsh01/harsh_portfolio",
+      "id": 1130612464,
+      "isArchived": false,
+      "isFork": false,
+      "name": "harsh_portfolio",
+      "openIssuesCount": 0,
+      "primaryLanguage": "JavaScript",
+      "pushedAt": "2026-07-27T19:56:53Z",
+      "stargazersCount": 0,
+      "topics": [],
+      "updatedAt": "2026-07-27T19:56:57Z"
+    },
     {
       "createdAt": "2026-07-07T09:31:37Z",
       "defaultBranch": "main",
@@ -2668,25 +2687,6 @@
       "stargazersCount": 0,
       "topics": [],
       "updatedAt": "2026-07-27T19:32:22Z"
-    },
-    {
-      "createdAt": "2026-01-08T18:50:19Z",
-      "defaultBranch": "master",
-      "description": null,
-      "forksCount": 0,
-      "fullName": "haarsh01/harsh_portfolio",
-      "homepage": "https://harsh-portfolio-gray-xi.vercel.app",
-      "htmlUrl": "https://github.com/haarsh01/harsh_portfolio",
-      "id": 1130612464,
-      "isArchived": false,
-      "isFork": false,
-      "name": "harsh_portfolio",
-      "openIssuesCount": 0,
-      "primaryLanguage": "JavaScript",
-      "pushedAt": "2026-07-27T15:15:03Z",
-      "stargazersCount": 0,
-      "topics": [],
-      "updatedAt": "2026-07-27T15:16:35Z"
     },
     {
       "createdAt": "2021-04-15T05:50:28Z",
