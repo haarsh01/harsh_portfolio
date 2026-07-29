@@ -26,14 +26,14 @@
     },
     {
       "codeReviewCount": 0,
-      "commitCount": 7,
+      "commitCount": 9,
       "issueCount": 0,
       "nameWithOwner": "haarsh01/AuditLM",
       "ownerAvatarUrl": "https://avatars.githubusercontent.com/u/60865477?u=17a00bac7d641f36fec6599753ac4c510b540888&v=4",
       "ownerLogin": "haarsh01",
       "ownerUrl": "https://github.com/haarsh01",
       "pullRequestCount": 0,
-      "total": 7,
+      "total": 9,
       "url": "https://github.com/haarsh01/AuditLM"
     },
     {
@@ -52,6 +52,18 @@
       "codeReviewCount": 0,
       "commitCount": 5,
       "issueCount": 0,
+      "nameWithOwner": "haarsh01/haarsh01",
+      "ownerAvatarUrl": "https://avatars.githubusercontent.com/u/60865477?u=17a00bac7d641f36fec6599753ac4c510b540888&v=4",
+      "ownerLogin": "haarsh01",
+      "ownerUrl": "https://github.com/haarsh01",
+      "pullRequestCount": 0,
+      "total": 5,
+      "url": "https://github.com/haarsh01/haarsh01"
+    },
+    {
+      "codeReviewCount": 0,
+      "commitCount": 5,
+      "issueCount": 0,
       "nameWithOwner": "haarsh01/genweb",
       "ownerAvatarUrl": "https://avatars.githubusercontent.com/u/60865477?u=17a00bac7d641f36fec6599753ac4c510b540888&v=4",
       "ownerLogin": "haarsh01",
@@ -59,18 +71,6 @@
       "pullRequestCount": 0,
       "total": 5,
       "url": "https://github.com/haarsh01/genweb"
-    },
-    {
-      "codeReviewCount": 0,
-      "commitCount": 3,
-      "issueCount": 0,
-      "nameWithOwner": "haarsh01/haarsh01",
-      "ownerAvatarUrl": "https://avatars.githubusercontent.com/u/60865477?u=17a00bac7d641f36fec6599753ac4c510b540888&v=4",
-      "ownerLogin": "haarsh01",
-      "ownerUrl": "https://github.com/haarsh01",
-      "pullRequestCount": 0,
-      "total": 3,
-      "url": "https://github.com/haarsh01/haarsh01"
     },
     {
       "codeReviewCount": 0,
@@ -167,8 +167,8 @@
       }
     ],
     "restrictedContributionsCount": 0,
-    "totalCommitContributions": 127,
-    "totalContributions": 183,
+    "totalCommitContributions": 131,
+    "totalContributions": 187,
     "totalIssueContributions": 0,
     "totalPullRequestContributions": 49,
     "totalPullRequestReviewContributions": 0,
@@ -2626,9 +2626,9 @@
             "weekday": 2
           },
           {
-            "count": 2,
+            "count": 6,
             "date": "2026-07-29",
-            "level": "LOW",
+            "level": "MEDIUM",
             "weekday": 3
           }
         ],
@@ -2636,14 +2636,14 @@
       }
     ]
   },
-  "generatedAt": "2026-07-29T09:09:48.075Z",
+  "generatedAt": "2026-07-29T14:32:30.188Z",
   "period": {
     "from": "2025-07-29",
     "to": "2026-07-29"
   },
   "profile": {
     "avatarUrl": "https://avatars.githubusercontent.com/u/60865477?u=17a00bac7d641f36fec6599753ac4c510b540888&v=4",
-    "bio": null,
+    "bio": "Junior Software Developer",
     "location": "Halifax, Canada",
     "login": "haarsh01",
     "name": "Harsh Kaushik",
@@ -2664,29 +2664,10 @@
       "name": "AuditLM",
       "openIssuesCount": 0,
       "primaryLanguage": "Python",
-      "pushedAt": "2026-07-29T05:40:20Z",
+      "pushedAt": "2026-07-29T12:11:43Z",
       "stargazersCount": 0,
       "topics": [],
-      "updatedAt": "2026-07-29T05:40:52Z"
-    },
-    {
-      "createdAt": "2026-01-08T18:50:19Z",
-      "defaultBranch": "master",
-      "description": null,
-      "forksCount": 0,
-      "fullName": "haarsh01/harsh_portfolio",
-      "homepage": "https://harsh-portfolio-gray-xi.vercel.app",
-      "htmlUrl": "https://github.com/haarsh01/harsh_portfolio",
-      "id": 1130612464,
-      "isArchived": false,
-      "isFork": false,
-      "name": "harsh_portfolio",
-      "openIssuesCount": 0,
-      "primaryLanguage": "JavaScript",
-      "pushedAt": "2026-07-29T03:42:01Z",
-      "stargazersCount": 0,
-      "topics": [],
-      "updatedAt": "2026-07-29T03:42:04Z"
+      "updatedAt": "2026-07-29T12:15:11Z"
     },
     {
       "createdAt": "2021-04-15T05:50:28Z",
@@ -2702,10 +2683,29 @@
       "name": "haarsh01",
       "openIssuesCount": 0,
       "primaryLanguage": null,
-      "pushedAt": "2026-03-07T22:59:16Z",
+      "pushedAt": "2026-07-29T11:19:26Z",
       "stargazersCount": 1,
       "topics": [],
-      "updatedAt": "2026-03-07T22:59:19Z"
+      "updatedAt": "2026-07-29T11:22:38Z"
+    },
+    {
+      "createdAt": "2026-01-08T18:50:19Z",
+      "defaultBranch": "master",
+      "description": null,
+      "forksCount": 0,
+      "fullName": "haarsh01/harsh_portfolio",
+      "homepage": "https://harsh-portfolio-gray-xi.vercel.app",
+      "htmlUrl": "https://github.com/haarsh01/harsh_portfolio",
+      "id": 1130612464,
+      "isArchived": false,
+      "isFork": false,
+      "name": "harsh_portfolio",
+      "openIssuesCount": 0,
+      "primaryLanguage": "JavaScript",
+      "pushedAt": "2026-07-29T09:09:55Z",
+      "stargazersCount": 0,
+      "topics": [],
+      "updatedAt": "2026-07-29T09:12:18Z"
     },
     {
       "createdAt": "2026-02-18T22:27:14Z",
