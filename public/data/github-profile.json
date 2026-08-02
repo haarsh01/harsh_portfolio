@@ -90,7 +90,7 @@
       {
         "firstDay": "2025-08-01",
         "name": "Aug",
-        "totalWeeks": 6,
+        "totalWeeks": 5,
         "year": 2025
       },
       {
@@ -158,6 +158,12 @@
         "name": "Jul",
         "totalWeeks": 4,
         "year": 2026
+      },
+      {
+        "firstDay": "2026-08-01",
+        "name": "Aug",
+        "totalWeeks": 1,
+        "year": 2026
       }
     ],
     "restrictedContributionsCount": 0,
@@ -167,23 +173,6 @@
     "totalPullRequestContributions": 49,
     "totalPullRequestReviewContributions": 0,
     "weeks": [
-      {
-        "days": [
-          {
-            "count": 0,
-            "date": "2025-08-01",
-            "level": "NONE",
-            "weekday": 5
-          },
-          {
-            "count": 0,
-            "date": "2025-08-02",
-            "level": "NONE",
-            "weekday": 6
-          }
-        ],
-        "firstDay": "2025-08-01"
-      },
       {
         "days": [
           {
@@ -2627,13 +2616,24 @@
           }
         ],
         "firstDay": "2026-07-26"
+      },
+      {
+        "days": [
+          {
+            "count": 0,
+            "date": "2026-08-02",
+            "level": "NONE",
+            "weekday": 0
+          }
+        ],
+        "firstDay": "2026-08-02"
       }
     ]
   },
-  "generatedAt": "2026-08-01T19:35:28.814Z",
+  "generatedAt": "2026-08-02T03:54:23.396Z",
   "period": {
-    "from": "2025-08-01",
-    "to": "2026-08-01"
+    "from": "2025-08-02",
+    "to": "2026-08-02"
   },
   "profile": {
     "avatarUrl": "https://avatars.githubusercontent.com/u/60865477?u=17a00bac7d641f36fec6599753ac4c510b540888&v=4",
@@ -2644,6 +2644,25 @@
     "profileUrl": "https://github.com/haarsh01"
   },
   "repositories": [
+    {
+      "createdAt": "2026-01-08T18:50:19Z",
+      "defaultBranch": "master",
+      "description": null,
+      "forksCount": 0,
+      "fullName": "haarsh01/harsh_portfolio",
+      "homepage": "https://harsh-portfolio-gray-xi.vercel.app",
+      "htmlUrl": "https://github.com/haarsh01/harsh_portfolio",
+      "id": 1130612464,
+      "isArchived": false,
+      "isFork": false,
+      "name": "harsh_portfolio",
+      "openIssuesCount": 0,
+      "primaryLanguage": "JavaScript",
+      "pushedAt": "2026-08-01T19:35:36Z",
+      "stargazersCount": 0,
+      "topics": [],
+      "updatedAt": "2026-08-01T19:35:40Z"
+    },
     {
       "createdAt": "2026-07-07T09:31:37Z",
       "defaultBranch": "main",
@@ -2662,25 +2681,6 @@
       "stargazersCount": 0,
       "topics": [],
       "updatedAt": "2026-08-01T15:48:09Z"
-    },
-    {
-      "createdAt": "2026-01-08T18:50:19Z",
-      "defaultBranch": "master",
-      "description": null,
-      "forksCount": 0,
-      "fullName": "haarsh01/harsh_portfolio",
-      "homepage": "https://harsh-portfolio-gray-xi.vercel.app",
-      "htmlUrl": "https://github.com/haarsh01/harsh_portfolio",
-      "id": 1130612464,
-      "isArchived": false,
-      "isFork": false,
-      "name": "harsh_portfolio",
-      "openIssuesCount": 0,
-      "primaryLanguage": "JavaScript",
-      "pushedAt": "2026-08-01T13:56:27Z",
-      "stargazersCount": 0,
-      "topics": [],
-      "updatedAt": "2026-08-01T13:56:44Z"
     },
     {
       "createdAt": "2021-04-15T05:50:28Z",
