@@ -71,18 +71,6 @@
       "pullRequestCount": 0,
       "total": 5,
       "url": "https://github.com/haarsh01/genweb"
-    },
-    {
-      "codeReviewCount": 0,
-      "commitCount": 1,
-      "issueCount": 0,
-      "nameWithOwner": "haarsh01/harshkaushik",
-      "ownerAvatarUrl": "https://avatars.githubusercontent.com/u/60865477?u=17a00bac7d641f36fec6599753ac4c510b540888&v=4",
-      "ownerLogin": "haarsh01",
-      "ownerUrl": "https://github.com/haarsh01",
-      "pullRequestCount": 0,
-      "total": 1,
-      "url": "https://github.com/haarsh01/harshkaushik"
     }
   ],
   "contributions": {
@@ -161,20 +149,14 @@
       }
     ],
     "restrictedContributionsCount": 0,
-    "totalCommitContributions": 135,
-    "totalContributions": 191,
+    "totalCommitContributions": 134,
+    "totalContributions": 189,
     "totalIssueContributions": 0,
     "totalPullRequestContributions": 49,
     "totalPullRequestReviewContributions": 0,
     "weeks": [
       {
         "days": [
-          {
-            "count": 2,
-            "date": "2025-09-03",
-            "level": "LOW",
-            "weekday": 3
-          },
           {
             "count": 0,
             "date": "2025-09-04",
@@ -194,7 +176,7 @@
             "weekday": 6
           }
         ],
-        "firstDay": "2025-09-03"
+        "firstDay": "2025-09-04"
       },
       {
         "days": [
@@ -2624,16 +2606,22 @@
             "date": "2026-09-03",
             "level": "NONE",
             "weekday": 4
+          },
+          {
+            "count": 0,
+            "date": "2026-09-04",
+            "level": "NONE",
+            "weekday": 5
           }
         ],
         "firstDay": "2026-08-30"
       }
     ]
   },
-  "generatedAt": "2026-09-03T21:03:37.545Z",
+  "generatedAt": "2026-09-04T04:41:32.505Z",
   "period": {
-    "from": "2025-09-03",
-    "to": "2026-09-03"
+    "from": "2025-09-04",
+    "to": "2026-09-04"
   },
   "profile": {
     "avatarUrl": "https://avatars.githubusercontent.com/u/60865477?u=17a00bac7d641f36fec6599753ac4c510b540888&v=4",
@@ -2658,10 +2646,10 @@
       "name": "harsh_portfolio",
       "openIssuesCount": 0,
       "primaryLanguage": "JavaScript",
-      "pushedAt": "2026-09-03T16:26:57Z",
+      "pushedAt": "2026-09-03T21:03:44Z",
       "stargazersCount": 0,
       "topics": [],
-      "updatedAt": "2026-09-03T16:33:17Z"
+      "updatedAt": "2026-09-03T21:03:54Z"
     },
     {
       "createdAt": "2026-07-07T09:31:37Z",
