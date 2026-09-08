@@ -165,12 +165,6 @@
         "days": [
           {
             "count": 0,
-            "date": "2025-09-07",
-            "level": "NONE",
-            "weekday": 0
-          },
-          {
-            "count": 0,
             "date": "2025-09-08",
             "level": "NONE",
             "weekday": 1
@@ -206,7 +200,7 @@
             "weekday": 6
           }
         ],
-        "firstDay": "2025-09-07"
+        "firstDay": "2025-09-08"
       },
       {
         "days": [
@@ -2618,16 +2612,22 @@
             "date": "2026-09-07",
             "level": "NONE",
             "weekday": 1
+          },
+          {
+            "count": 0,
+            "date": "2026-09-08",
+            "level": "NONE",
+            "weekday": 2
           }
         ],
         "firstDay": "2026-09-06"
       }
     ]
   },
-  "generatedAt": "2026-09-07T21:32:05.353Z",
+  "generatedAt": "2026-09-08T04:38:47.392Z",
   "period": {
-    "from": "2025-09-07",
-    "to": "2026-09-07"
+    "from": "2025-09-08",
+    "to": "2026-09-08"
   },
   "profile": {
     "avatarUrl": "https://avatars.githubusercontent.com/u/60865477?u=17a00bac7d641f36fec6599753ac4c510b540888&v=4",
@@ -2652,10 +2652,10 @@
       "name": "harsh_portfolio",
       "openIssuesCount": 0,
       "primaryLanguage": "JavaScript",
-      "pushedAt": "2026-09-07T12:35:40Z",
+      "pushedAt": "2026-09-07T21:32:13Z",
       "stargazersCount": 0,
       "topics": [],
-      "updatedAt": "2026-09-07T12:36:00Z"
+      "updatedAt": "2026-09-07T21:32:16Z"
     },
     {
       "createdAt": "2026-07-07T09:31:37Z",
