@@ -26,14 +26,14 @@
     },
     {
       "codeReviewCount": 0,
-      "commitCount": 10,
+      "commitCount": 8,
       "issueCount": 0,
       "nameWithOwner": "haarsh01/planify",
       "ownerAvatarUrl": "https://avatars.githubusercontent.com/u/60865477?u=17a00bac7d641f36fec6599753ac4c510b540888&v=4",
       "ownerLogin": "haarsh01",
       "ownerUrl": "https://github.com/haarsh01",
       "pullRequestCount": 0,
-      "total": 10,
+      "total": 8,
       "url": "https://github.com/haarsh01/planify"
     },
     {
@@ -155,20 +155,14 @@
       }
     ],
     "restrictedContributionsCount": 0,
-    "totalCommitContributions": 140,
-    "totalContributions": 200,
+    "totalCommitContributions": 138,
+    "totalContributions": 197,
     "totalIssueContributions": 0,
     "totalPullRequestContributions": 54,
     "totalPullRequestReviewContributions": 0,
     "weeks": [
       {
         "days": [
-          {
-            "count": 3,
-            "date": "2025-09-18",
-            "level": "LOW",
-            "weekday": 4
-          },
           {
             "count": 0,
             "date": "2025-09-19",
@@ -182,7 +176,7 @@
             "weekday": 6
           }
         ],
-        "firstDay": "2025-09-18"
+        "firstDay": "2025-09-19"
       },
       {
         "days": [
@@ -2618,16 +2612,22 @@
             "date": "2026-09-18",
             "level": "NONE",
             "weekday": 5
+          },
+          {
+            "count": 0,
+            "date": "2026-09-19",
+            "level": "NONE",
+            "weekday": 6
           }
         ],
         "firstDay": "2026-09-13"
       }
     ]
   },
-  "generatedAt": "2026-09-18T20:55:12.476Z",
+  "generatedAt": "2026-09-19T04:39:34.719Z",
   "period": {
-    "from": "2025-09-18",
-    "to": "2026-09-18"
+    "from": "2025-09-19",
+    "to": "2026-09-19"
   },
   "profile": {
     "avatarUrl": "https://avatars.githubusercontent.com/u/60865477?u=17a00bac7d641f36fec6599753ac4c510b540888&v=4",
@@ -2652,10 +2652,10 @@
       "name": "harsh_portfolio",
       "openIssuesCount": 0,
       "primaryLanguage": "JavaScript",
-      "pushedAt": "2026-09-18T16:25:24Z",
+      "pushedAt": "2026-09-18T20:55:19Z",
       "stargazersCount": 0,
       "topics": [],
-      "updatedAt": "2026-09-18T16:25:28Z"
+      "updatedAt": "2026-09-18T20:55:23Z"
     },
     {
       "createdAt": "2026-07-07T09:31:37Z",
