@@ -50,27 +50,15 @@
     },
     {
       "codeReviewCount": 0,
-      "commitCount": 5,
+      "commitCount": 4,
       "issueCount": 0,
       "nameWithOwner": "haarsh01/genweb",
       "ownerAvatarUrl": "https://avatars.githubusercontent.com/u/60865477?u=17a00bac7d641f36fec6599753ac4c510b540888&v=4",
       "ownerLogin": "haarsh01",
       "ownerUrl": "https://github.com/haarsh01",
       "pullRequestCount": 0,
-      "total": 5,
+      "total": 4,
       "url": "https://github.com/haarsh01/genweb"
-    },
-    {
-      "codeReviewCount": 0,
-      "commitCount": 1,
-      "issueCount": 0,
-      "nameWithOwner": "haarsh01/planify",
-      "ownerAvatarUrl": "https://avatars.githubusercontent.com/u/60865477?u=17a00bac7d641f36fec6599753ac4c510b540888&v=4",
-      "ownerLogin": "haarsh01",
-      "ownerUrl": "https://github.com/haarsh01",
-      "pullRequestCount": 0,
-      "total": 1,
-      "url": "https://github.com/haarsh01/planify"
     }
   ],
   "contributions": {
@@ -155,20 +143,14 @@
       }
     ],
     "restrictedContributionsCount": 0,
-    "totalCommitContributions": 134,
-    "totalContributions": 196,
+    "totalCommitContributions": 132,
+    "totalContributions": 193,
     "totalIssueContributions": 0,
     "totalPullRequestContributions": 57,
     "totalPullRequestReviewContributions": 0,
     "weeks": [
       {
         "days": [
-          {
-            "count": 3,
-            "date": "2025-09-23",
-            "level": "LOW",
-            "weekday": 2
-          },
           {
             "count": 0,
             "date": "2025-09-24",
@@ -194,7 +176,7 @@
             "weekday": 6
           }
         ],
-        "firstDay": "2025-09-23"
+        "firstDay": "2025-09-24"
       },
       {
         "days": [
@@ -2618,16 +2600,22 @@
             "date": "2026-09-23",
             "level": "LOW",
             "weekday": 3
+          },
+          {
+            "count": 0,
+            "date": "2026-09-24",
+            "level": "NONE",
+            "weekday": 4
           }
         ],
         "firstDay": "2026-09-20"
       }
     ]
   },
-  "generatedAt": "2026-09-23T21:31:10.925Z",
+  "generatedAt": "2026-09-24T04:53:33.669Z",
   "period": {
-    "from": "2025-09-23",
-    "to": "2026-09-23"
+    "from": "2025-09-24",
+    "to": "2026-09-24"
   },
   "profile": {
     "avatarUrl": "https://avatars.githubusercontent.com/u/60865477?u=17a00bac7d641f36fec6599753ac4c510b540888&v=4",
@@ -2652,10 +2640,10 @@
       "name": "harsh_portfolio",
       "openIssuesCount": 0,
       "primaryLanguage": "JavaScript",
-      "pushedAt": "2026-09-23T17:02:04Z",
+      "pushedAt": "2026-09-23T21:31:18Z",
       "stargazersCount": 0,
       "topics": [],
-      "updatedAt": "2026-09-23T17:02:08Z"
+      "updatedAt": "2026-09-23T21:32:34Z"
     },
     {
       "createdAt": "2026-07-07T09:31:37Z",
