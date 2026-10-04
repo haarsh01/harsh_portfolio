@@ -54,7 +54,7 @@
       {
         "firstDay": "2025-10-01",
         "name": "Oct",
-        "totalWeeks": 5,
+        "totalWeeks": 4,
         "year": 2025
       },
       {
@@ -122,6 +122,12 @@
         "name": "Sep",
         "totalWeeks": 4,
         "year": 2026
+      },
+      {
+        "firstDay": "2026-10-01",
+        "name": "Oct",
+        "totalWeeks": 1,
+        "year": 2026
       }
     ],
     "restrictedContributionsCount": 0,
@@ -131,23 +137,6 @@
     "totalPullRequestContributions": 60,
     "totalPullRequestReviewContributions": 0,
     "weeks": [
-      {
-        "days": [
-          {
-            "count": 0,
-            "date": "2025-10-03",
-            "level": "NONE",
-            "weekday": 5
-          },
-          {
-            "count": 0,
-            "date": "2025-10-04",
-            "level": "NONE",
-            "weekday": 6
-          }
-        ],
-        "firstDay": "2025-10-03"
-      },
       {
         "days": [
           {
@@ -2591,13 +2580,24 @@
           }
         ],
         "firstDay": "2026-09-27"
+      },
+      {
+        "days": [
+          {
+            "count": 0,
+            "date": "2026-10-04",
+            "level": "NONE",
+            "weekday": 0
+          }
+        ],
+        "firstDay": "2026-10-04"
       }
     ]
   },
-  "generatedAt": "2026-10-03T21:17:36.775Z",
+  "generatedAt": "2026-10-04T05:55:26.326Z",
   "period": {
-    "from": "2025-10-03",
-    "to": "2026-10-03"
+    "from": "2025-10-04",
+    "to": "2026-10-04"
   },
   "profile": {
     "avatarUrl": "https://avatars.githubusercontent.com/u/60865477?u=17a00bac7d641f36fec6599753ac4c510b540888&v=4",
@@ -2622,10 +2622,10 @@
       "name": "harsh_portfolio",
       "openIssuesCount": 0,
       "primaryLanguage": "JavaScript",
-      "pushedAt": "2026-10-03T16:19:00Z",
+      "pushedAt": "2026-10-03T21:17:43Z",
       "stargazersCount": 0,
       "topics": [],
-      "updatedAt": "2026-10-03T16:19:03Z"
+      "updatedAt": "2026-10-03T21:17:46Z"
     },
     {
       "createdAt": "2026-07-07T09:31:37Z",
