@@ -54,7 +54,7 @@
       {
         "firstDay": "2025-10-01",
         "name": "Oct",
-        "totalWeeks": 3,
+        "totalWeeks": 2,
         "year": 2025
       },
       {
@@ -126,7 +126,7 @@
       {
         "firstDay": "2026-10-01",
         "name": "Oct",
-        "totalWeeks": 2,
+        "totalWeeks": 3,
         "year": 2026
       }
     ],
@@ -137,23 +137,6 @@
     "totalPullRequestContributions": 67,
     "totalPullRequestReviewContributions": 0,
     "weeks": [
-      {
-        "days": [
-          {
-            "count": 0,
-            "date": "2025-10-17",
-            "level": "NONE",
-            "weekday": 5
-          },
-          {
-            "count": 0,
-            "date": "2025-10-18",
-            "level": "NONE",
-            "weekday": 6
-          }
-        ],
-        "firstDay": "2025-10-17"
-      },
       {
         "days": [
           {
@@ -2597,13 +2580,24 @@
           }
         ],
         "firstDay": "2026-10-11"
+      },
+      {
+        "days": [
+          {
+            "count": 0,
+            "date": "2026-10-18",
+            "level": "NONE",
+            "weekday": 0
+          }
+        ],
+        "firstDay": "2026-10-18"
       }
     ]
   },
-  "generatedAt": "2026-10-17T20:37:59.493Z",
+  "generatedAt": "2026-10-18T04:36:05.556Z",
   "period": {
-    "from": "2025-10-17",
-    "to": "2026-10-17"
+    "from": "2025-10-18",
+    "to": "2026-10-18"
   },
   "profile": {
     "avatarUrl": "https://avatars.githubusercontent.com/u/60865477?u=17a00bac7d641f36fec6599753ac4c510b540888&v=4",
@@ -2628,10 +2622,10 @@
       "name": "harsh_portfolio",
       "openIssuesCount": 0,
       "primaryLanguage": "JavaScript",
-      "pushedAt": "2026-10-17T15:37:09Z",
+      "pushedAt": "2026-10-17T20:38:07Z",
       "stargazersCount": 0,
       "topics": [],
-      "updatedAt": "2026-10-17T15:37:13Z"
+      "updatedAt": "2026-10-17T20:38:10Z"
     },
     {
       "createdAt": "2026-07-07T09:31:37Z",
